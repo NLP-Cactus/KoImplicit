@@ -1,0 +1,50 @@
+{
+  "project": "KoImplicit",
+  "design_version": "2.0",
+  "stage": "scaffold",
+  "source": {
+    "corpus": "NIKL Zero Anaphora Resolution Corpus 2025",
+    "subset": "spoken",
+    "acquired": false,
+    "structure_audited": false
+  },
+  "scope": {
+    "language": "ko",
+    "participants": 2,
+    "argument_type": "subject",
+    "referent_scope": "singular_human",
+    "context_end": "target_utterance_end",
+    "turn_unit": "unverified"
+  },
+  "budget": {
+    "natural_development": 40,
+    "natural_heldout": 80,
+    "controlled_A_pairs": 12,
+    "controlled_B_pairs": 12,
+    "qa_subset": 24
+  },
+  "conditions": {
+    "N": ["full_mcq", "local_mcq", "full_qa_subset"],
+    "A": "referent_changing_context",
+    "B": "gold_preserving_recency"
+  },
+  "models": [
+    {"label": "model_a", "model_id": null},
+    {"label": "model_b", "model_id": null}
+  ],
+  "primary_metrics": ["natural_full_entity_accuracy", "A_pair_accuracy", "B_paired_harm"],
+  "cluster_units": {"natural": "conversation", "controlled": "family"},
+  "paths": {
+    "raw": "data/raw",
+    "interim": "data/interim",
+    "processed": "data/processed",
+    "manifests": "data/manifests",
+    "development_annotations": "annotations/development",
+    "heldout_annotations": "annotations/heldout",
+    "controlled_annotations": "annotations/controlled",
+    "prompts": "prompts",
+    "runs": "results/runs",
+    "analysis": "results/analysis",
+    "figures": "results/figures"
+  }
+}

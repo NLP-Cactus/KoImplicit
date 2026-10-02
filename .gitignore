@@ -1,0 +1,28 @@
+# Python / local environment
+.venv/
+__pycache__/
+*.py[cod]
+*.egg-info/
+build/
+dist/
+.pytest_cache/
+.env
+.env.*
+!.env.example
+.DS_Store
+Thumbs.db
+
+# Corpus text, derived annotations, source IDs and model outputs are private
+# until the applicable agreement and publication scope have been checked.
+data/**/*
+!data/**/
+!data/**/.gitkeep
+!data/**/README.md
+annotations/**/*
+!annotations/**/
+!annotations/**/.gitkeep
+!annotations/**/README.md
+results/**/*
+!results/**/
+!results/**/.gitkeep
+!results/**/README.md
