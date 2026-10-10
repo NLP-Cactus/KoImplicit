@@ -220,8 +220,7 @@ class Annotation(unittest.TestCase):
             for s in self.samples:
                 gold = s.label.gold_referent_id
                 row = {"annotator": name, "sample_id": s.sample_id, "naturalness_1to5": "4", "referent_id": gold or "",
-                       "referent_role": "", "context_sufficient": "yes", "ambiguity": "unambiguous" if gold else "ambiguous",
-                       "previous_referent_id": s.label.anchor_referent_id or "", "previous_referent_turn": "", "notes": ""}
+                       "addressee_id": "", "context_sufficient": "yes", "ambiguity": "unambiguous" if gold else "ambiguous", "notes": ""}
                 row.update(overrides.get(s.sample_id, {}))
                 rows.append(row)
         return rows
@@ -242,17 +241,19 @@ class Annotation(unittest.TestCase):
         self.assertEqual(by_id["S04-distractor"].annotation_status, "accepted")
         self.assertEqual(by_id["S03-novocative"].annotation_status, "rejected")  # 전원 모호 → 제외
         self.assertEqual(len(by_id["S01-base"].validation_metadata["annotator_votes"]), 2)
-        self.assertIn("previous_referent_turn", by_id["S01-base"].validation_metadata["annotator_votes"][0])
+        self.assertIn("addressee_id", by_id["S01-base"].validation_metadata["annotator_votes"][0])
+        self.assertIn("determinable", report["fields"])
 
-    def test_adjudication_reflects_anchor_and_rejects_bad_sheets(self):
+    def test_adjudication_reflects_addressee_and_rejects_bad_sheets(self):
         rows = self._rows({})
-        for r in rows:  # 두 검수자 모두 S01-base의 anchor를 2번 발화 P2로 판정
-            if r["sample_id"] == "S01-base":
-                r["previous_referent_id"], r["previous_referent_turn"] = "P2", "2"
+        for r in rows:  # 두 검수자 모두 S03-vocative의 청자를 P2로 판정(작성자 P3과 다름)
+            if r["sample_id"] == "S03-vocative":
+                r["addressee_id"] = "P2"
         labels, _ = A.adjudicate(self.samples, rows, {})
-        lab = {l.sample_id: l for l in labels}["S01-base"]
-        self.assertEqual((lab.anchor_turn, lab.anchor_referent_id), (2, "P2"))
-        self.assertIn("anchor_turn", lab.validation_metadata["author_values_overridden"])
+        lab = {l.sample_id: l for l in labels}["S03-vocative"]
+        self.assertEqual(lab.addressee_id, "P2")
+        self.assertIn("addressee_id", lab.validation_metadata["author_values_overridden"])
+        self.assertEqual(lab.anchor_turn, 4)  # anchor는 작성자 값 유지
         with self.assertRaises(ValueError):  # 같은 검수자 중복 행
             A.adjudicate(self.samples, rows + [rows[0]], {})
         with self.assertRaises(ValueError):  # 후보 밖 ID

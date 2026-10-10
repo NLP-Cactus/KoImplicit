@@ -84,7 +84,7 @@ KoImplicit/
 ## 핵심 규칙
 
 - 역할(speaker / addressee / third_party)은 항상 **목표 발화의 화자 기준**으로 계산한다. 3인 대화의 청자는 호격·2인칭 표현 또는 인접쌍+내용으로 확정하고, 못 하면 비운다.
-- `speaker_changed`와 `referent_changed`는 별개 변수다. anchor(이전 참조 대상)는 경험자·대주어를 포함하는 사람 주어 규칙으로 찾고, 없으면 `None`이지 `False`가 아니다.
+- `speaker_changed`와 `referent_changed`는 별개 변수다. anchor(이전 참조 대상)는 작성자가 시나리오에서 선언하며(경험자·대주어 포함 규칙), 없으면 `None`이지 `False`가 아니다. 검수자는 인물·청자·확정 여부·충분성·자연스러움만 판정한다.
 - 정답이 불명확하면 `gold_referent_id`를 비운다(S03-novocative가 그 예다).
 - `dialogues.jsonl`과 `items.jsonl`에는 정답·anchor·distractor·작성 근거가 없다. 후보는 중립 ID(E1..)로 노출되고 `payload`가 실제 파일로 누수를 검사한다.
 - `annotation_status=accepted`가 아닌 표본은 공식 평가셋에 들어가지 않는다. `--allow-unreviewed` 실행은 결과에 `contains_unreviewed`로 표시된다.
