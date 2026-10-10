@@ -20,20 +20,38 @@ FIRST_PERSON = re.compile(rf"^(나|내|저|제|난|전){_PARTICLE}$")
 SECOND_PERSON = re.compile(rf"^(너|네|니|넌){_PARTICLE}$")
 NAME_PLACEHOLDER = re.compile(r"^name\d+")
 _STEM_SUFFIX = re.compile(r"(께서|이가|이|가|은|는|도)$")
+_POSSESSIVE_PREFIX = re.compile(r"^(우리|저희|내|제|그|저|이) ")
 
-# TODO(자료): 초기 어휘 목록이다. filter 실행 후 MANUAL_CHECK 빈도표를 보고 보강한다 (가이드 3.2).
+# Word lists decided 2026-10-10 from the dyad frequency table (guide §3.2).
+# Exact restored forms counted as generic or plural.
 GENERIC_OR_PLURAL = frozenset({
     "누군가가", "무언가가", "우리가", "저희가", "사람들이", "사람이", "애들이",
     "친구들이", "가족이", "부모님이", "그게", "그것이",
 })
+# Stems of singular people other than the two participants: included as third-party candidates.
 THIRD_PARTY_RELATION = frozenset({
-    "선생님", "친구", "엄마", "아빠", "그분", "남편", "아내", "오빠", "언니",
-    "형", "누나", "동생", "시어머니", "그 친구", "그 사람", "상대방",
+    "엄마", "아빠", "어머니", "어머님", "아버지", "아버님", "언니", "오빠", "형", "누나",
+    "동생", "이모", "고모", "고모부", "고모부님", "삼촌", "할머니", "할아버지", "남편", "아내",
+    "와이프", "집사람", "시어머니", "남자친구", "여자친구", "남친", "여친", "친구", "선배",
+    "후배", "선생님", "교수님", "사장님", "그분", "걔", "그 친구", "그 사람", "상대방",
 })
+# Stems left to a person on purpose (category stays "other"):
+# occupations are often generic (연예인이 ...); 자기/본인/지 may be the addressee or reflexive.
+MANUAL_STEMS = frozenset({"배우", "연예인", "사진사", "유튜버", "코미디언", "대학생", "알바",
+                          "학생", "직원", "가수", "자기", "본인", "지"})
+# Not human, outside the singular-human scope: excluded by the candidate filter.
+NONHUMAN_STEMS = frozenset({"강아지", "고양이"})
+_PLURAL_STEMS = frozenset({"걔네", "얘네", "부모님"})
+
+
+def noun_stem(form: str) -> tuple:
+    """(stem, bare): particle-stripped form, and the same without a possessive/demonstrative prefix."""
+    stem = _STEM_SUFFIX.sub("", form.strip().rstrip(".,?!"))
+    return stem, _POSSESSIVE_PREFIX.sub("", stem)
 
 
 def person(form: str) -> str:
-    form = form.strip()
+    form = form.strip().rstrip(".,?!")  # some restored forms keep sentence punctuation (나는.)
     if FIRST_PERSON.match(form):
         return "1p"
     if SECOND_PERSON.match(form):
@@ -100,12 +118,15 @@ def role_hint(restored_form: str, antecedents: list, target_speaker: str, roster
     """
     form = restored_form.strip()
     if form.startswith("화자"):
-        return {"hint_category": "speaker_deictic", "hint_basis": "label", "perspective_conflict": False}
+        return {"hint_category": "speaker_deictic", "hint_basis": "label", "perspective_conflict": False,
+                "pronoun_antecedent_conflict": False}
     if form.startswith("청자"):
-        return {"hint_category": "addressee_deictic", "hint_basis": "label", "perspective_conflict": False}
+        return {"hint_category": "addressee_deictic", "hint_basis": "label", "perspective_conflict": False,
+                "pronoun_antecedent_conflict": False}
 
-    # TODO(자료): 대명사 선행어가 여러 개이고 서로 다른 인물을 가리키면 지금은 첫 번째만 쓴다.
-    # 그런 사례가 몇 건인지 parse_report에 세어 보고, 사람 확인으로 돌릴지 정한다.
+    # Every pronoun antecedent is resolved; the first decides the hint. Antecedents that
+    # point at different people are flagged for a person to check (pronoun_antecedent_conflict).
+    resolved = []
     for antecedent in antecedents:
         if antecedent["relation"] in ("none", "missing_sentence"):
             continue
@@ -115,12 +136,15 @@ def role_hint(restored_form: str, antecedents: list, target_speaker: str, roster
         anchor = speaker_of[antecedent["sentence_id"]]
         others = [s for s in roster if s != anchor]
         referent = anchor if grammatical == "1p" else (others[0] if len(others) == 1 else None)
-        if referent is None:
-            break  # monologue or roster problem: fall back to the restored form
+        if referent is not None:  # None: monologue or roster problem
+            resolved.append((anchor, referent))
+    if resolved:
+        anchor, referent = resolved[0]
         return {
             "hint_category": "speaker_pronoun" if referent == target_speaker else "addressee_pronoun",
             "hint_basis": "antecedent_speaker",
             "perspective_conflict": anchor != target_speaker,
+            "pronoun_antecedent_conflict": len({r for _, r in resolved}) > 1,
         }
 
     grammatical = person(form)
@@ -132,11 +156,16 @@ def role_hint(restored_form: str, antecedents: list, target_speaker: str, roster
         category = "name_placeholder"
     elif form in GENERIC_OR_PLURAL:
         category = "generic_or_plural"
-    elif _STEM_SUFFIX.sub("", form) in THIRD_PARTY_RELATION:
-        category = "third_party_relation"
     else:
-        category = "other"  # 자기가 lands here on purpose: addressee or reflexive, a person decides
-    return {"hint_category": category, "hint_basis": "restored_form", "perspective_conflict": False}
+        stem, bare = noun_stem(form)
+        if stem in THIRD_PARTY_RELATION or bare in THIRD_PARTY_RELATION:
+            category = "third_party_relation"
+        elif bare.endswith("들") or bare in _PLURAL_STEMS:
+            category = "generic_or_plural"
+        else:
+            category = "other"  # includes MANUAL_STEMS and NONHUMAN_STEMS; the filter tells them apart
+    return {"hint_category": category, "hint_basis": "restored_form", "perspective_conflict": False,
+                "pronoun_antecedent_conflict": False}
 
 
 def flatten_targets(doc: dict, utterances: list) -> tuple:
@@ -238,6 +267,7 @@ def parse_release(release: dict) -> tuple:
     report["duplicate_target_ids"] = len(targets) - len({t["target_id"] for t in targets})
     report["hint_category"] = dict(Counter(h["hint_category"] for h in hints))
     report["perspective_conflict"] = sum(h["perspective_conflict"] for h in hints)
+    report["pronoun_antecedent_conflict"] = sum(h["pronoun_antecedent_conflict"] for h in hints)
     return utterances, targets, hints, report
 
 
