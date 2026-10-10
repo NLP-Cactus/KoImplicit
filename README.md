@@ -31,6 +31,12 @@ ZA 2025 구어 JSON을 `data/raw/` 아래에 풀어 두면 구조 audit을 실�
 .venv\Scripts\python -m koimplicit audit --cases data\interim\cross_speaker_pronoun_links.json
 ```
 
+`parse`는 같은 파일을 `data/interim/`의 `utterances.jsonl`, `targets.jsonl`, `gold_hints.jsonl`로 평탄화한다. 세부 규약은 [말뭉치 활용 구현 가이드](docs/말뭉치_활용_구현가이드.md) 2절을 따른다.
+
+```powershell
+.venv\Scripts\python -m koimplicit parse
+```
+
 ## 폴더 구조
 
 ```text

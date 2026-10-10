@@ -9,31 +9,11 @@ import re
 from collections import Counter
 from pathlib import Path
 
-DEFAULT_CORPUS_PATTERN = "SXZA25*.json"  # 2025 spoken file, anywhere under data/raw
+from .corpus import find_spoken_release as find_corpus
+from .corpus import load_spoken_release, person
 
-# Singular first/second person pronoun with an optional particle.
-# 우리/저희 and kinship or title address terms are not covered.
-_PARTICLE = r"(가|는|도|만|랑|한테|를)?"
-FIRST_PERSON = re.compile(rf"^(나|내|저|제|난|전){_PARTICLE}$")
-SECOND_PERSON = re.compile(rf"^(너|네|니|넌){_PARTICLE}$")
 PARTICIPANT_LABEL = re.compile(r"^(화자|청자)")
 NONREFERENTIAL = re.compile(r"^(누군가|무언가|무엇|어딘가)")
-
-
-def person(form: str) -> str:
-    form = form.strip()
-    if FIRST_PERSON.match(form):
-        return "1p"
-    if SECOND_PERSON.match(form):
-        return "2p"
-    return "other"
-
-
-def find_corpus(root: Path) -> Path:
-    matches = sorted((root / "data" / "raw").rglob(DEFAULT_CORPUS_PATTERN))
-    if len(matches) != 1:
-        raise FileNotFoundError(f"Expected one {DEFAULT_CORPUS_PATTERN} under data/raw, found {len(matches)}")
-    return matches[0]
 
 
 def is_two_party(document: dict) -> bool:
@@ -177,7 +157,7 @@ def audit(corpus: dict) -> dict:
 def run_audit(root: Path, corpus_path: Path = None, cases_path: Path = None) -> dict:
     root = root.resolve()
     corpus_path = (corpus_path or find_corpus(root)).resolve()
-    report = audit(json.loads(corpus_path.read_text(encoding="utf-8")))
+    report = audit(load_spoken_release(corpus_path))
     cases = report.pop("_cases")
     report["corpus_file"] = corpus_path.name
     if cases_path is not None:
