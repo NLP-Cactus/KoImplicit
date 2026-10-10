@@ -31,6 +31,26 @@
       "price_per_million": {"input": 0.10, "output": 0.50},
       "seed_supported": false
     },
+    "claude_code_cli": {
+      "provider": "claude_cli",
+      "model_id": "claude-haiku-5-5",
+      "decoding": {"effort": "low", "timeout": 300},
+      "adapter_options": {},
+      "system": "사용자의 질문에 요구된 형식으로만 답한다. 설명을 덧붙이지 않는다.",
+      "price_per_million": {"input": null, "output": null},
+      "seed_supported": false,
+      "note": "Claude Code 구독 CLI(claude -p). 개발·pilot 점검용. system이 있으면 Claude Code 기본 시스템 프롬프트를 대체한다. 비용은 CLI가 보고한 cli_cost_usd를 responses.jsonl에서 본다"
+    },
+    "codex_cli": {
+      "provider": "codex_cli",
+      "model_id": "gpt-6.1-sol",
+      "decoding": {"reasoning_effort": "low", "timeout": 300},
+      "adapter_options": {},
+      "system": "사용자의 질문에 요구된 형식으로만 답한다. 파일을 읽거나 명령을 실행하지 않는다.",
+      "price_per_million": {"input": null, "output": null},
+      "seed_supported": false,
+      "note": "Codex 구독 CLI(codex exec --json). 개발·pilot 점검용. Codex 에이전트 시스템 프롬프트가 항상 붙어 입력 토큰에 포함된다. model_id는 ~/.codex/config.toml 기본값 기준이며 실행 전에 확인한다"
+    },
     "openai_candidate": {
       "provider": "openai",
       "model_id": null,
