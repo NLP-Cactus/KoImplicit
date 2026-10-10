@@ -25,6 +25,12 @@ python -m venv .venv
 .venv\Scripts\python -m unittest discover -s tests
 ```
 
+ZA 2025 구어 JSON을 `data/raw/` 아래에 풀어 두면 구조 audit을 실행할 수 있다. 출력은 개수만 담고 문장 원문은 출력하지 않는다. `--cases`는 화자가 바뀐 대명사 연결의 source ID 목록을 쓰며 `data/` 아래 경로만 허용한다.
+
+```powershell
+.venv\Scripts\python -m koimplicit audit --cases data\interim\cross_speaker_pronoun_links.json
+```
+
 ## 폴더 구조
 
 ```text

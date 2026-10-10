@@ -1,8 +1,10 @@
-"""Read-only workspace status; corpus contents are never opened."""
+"""Workspace utilities. `status` never opens corpus files; `audit` prints counts only."""
 
 import argparse
 import json
 from pathlib import Path
+
+from .audit import run_audit
 
 
 def workspace_status(root: Path) -> dict:
@@ -33,7 +35,18 @@ def main(argv=None) -> int:
     status = commands.add_parser("status", help="Show configuration and folder availability")
     status.add_argument("--root", type=Path, default=Path.cwd())
     status.add_argument("--json", action="store_true", help="Print machine-readable status")
+    audit = commands.add_parser("audit", help="Count corpus structure and annotation patterns")
+    audit.add_argument("--root", type=Path, default=Path.cwd())
+    audit.add_argument("--corpus", type=Path, help="ZA 2025 spoken JSON (default: found under data/raw)")
+    audit.add_argument("--cases", type=Path, help="Write cross-speaker pronoun links under data/")
     args = parser.parse_args(argv)
+    if args.command == "audit":
+        try:
+            report = run_audit(args.root, args.corpus, args.cases)
+        except (OSError, ValueError, KeyError, TypeError) as error:
+            parser.exit(2, f"Audit error: {error}\n")
+        print(json.dumps(report, ensure_ascii=False, indent=2))
+        return 0
     try:
         report = workspace_status(args.root)
     except (OSError, ValueError, KeyError, TypeError) as error:
