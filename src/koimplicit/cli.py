@@ -1,10 +1,12 @@
-"""Workspace utilities. `status` never opens corpus files; `audit` prints counts only."""
+"""Workspace utilities. `status` never opens corpus files; `audit` prints counts only;
+`parse` writes corpus-derived files under data/ only."""
 
 import argparse
 import json
 from pathlib import Path
 
 from .audit import run_audit
+from .corpus import run_parse
 
 
 def workspace_status(root: Path) -> dict:
@@ -39,7 +41,18 @@ def main(argv=None) -> int:
     audit.add_argument("--root", type=Path, default=Path.cwd())
     audit.add_argument("--corpus", type=Path, help="ZA 2025 spoken JSON (default: found under data/raw)")
     audit.add_argument("--cases", type=Path, help="Write cross-speaker pronoun links under data/")
+    parse = commands.add_parser("parse", help="Flatten the ZA 2025 spoken release into data/interim JSONL")
+    parse.add_argument("--root", type=Path, default=Path.cwd())
+    parse.add_argument("--raw", type=Path, help="ZA 2025 spoken JSON (default: found under data/raw)")
+    parse.add_argument("--out", type=Path, help="Output folder under data/ (default: data/interim)")
     args = parser.parse_args(argv)
+    if args.command == "parse":
+        try:
+            report = run_parse(args.root, args.raw, args.out)
+        except (OSError, ValueError, KeyError, TypeError) as error:
+            parser.exit(2, f"Parse error: {error}\n")
+        print(json.dumps(report, ensure_ascii=False, indent=2))
+        return 0
     if args.command == "audit":
         try:
             report = run_audit(args.root, args.corpus, args.cases)
