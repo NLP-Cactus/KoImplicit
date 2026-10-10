@@ -115,10 +115,10 @@ def build_pairs(rows: Iterable[dict], first_version: str, second_version: str) -
         version = r.get("version")
         if pair_id is None or version not in (first_version, second_version):
             continue
-        by_pair.setdefault(pair_id, {})[version] = r
+        by_pair.setdefault((pair_id, r.get("_draw")), {})[version] = r
     pairs: list[Pair] = []
     dropped: list[str] = []
-    for pair_id, versions in sorted(by_pair.items()):
+    for (pair_id, _draw), versions in sorted(by_pair.items(), key=lambda kv: str(kv[0])):
         if first_version not in versions or second_version not in versions:
             dropped.append(pair_id)
             continue
@@ -156,10 +156,10 @@ def pair_transition_counts(pairs: Iterable[Pair]) -> dict:
 
 def paired_condition_difference(rows: Iterable[dict], condition_a: str, condition_b: str) -> Metric:
     """같은 item_id가 두 조건 모두에 있는 행만 써서 정답 여부 차이(a - b)의 평균을 구한다."""
-    by_item: dict[str, dict[str, dict]] = {}
+    by_item: dict = {}
     for r in rows:
         if r.get("condition") in (condition_a, condition_b):
-            by_item.setdefault(r["item_id"], {})[r["condition"]] = r
+            by_item.setdefault((r["item_id"], r.get("_draw")), {})[r["condition"]] = r
     diffs = [
         int(is_correct(v[condition_a])) - int(is_correct(v[condition_b]))
         for v in by_item.values() if condition_a in v and condition_b in v
@@ -244,20 +244,38 @@ def distractor_error_rate(rows: Iterable[dict]) -> Metric:
     return _ratio(hits, len(subset))
 
 
+def _pair_sides(pair_id: str) -> tuple[str, str]:
+    """pair_id '{scenario}:{a}~{b}' → (a, b). a가 비교 기준(base 쪽), b가 변형 쪽."""
+    names = pair_id.split(":", 1)[1] if ":" in pair_id else pair_id
+    a, _, b = names.partition("~")
+    return a, b
+
+
 def pair_consistency(rows: Iterable[dict]) -> dict:
-    """같은 pair_id의 두 항목이 모두 정답인 비율과 전이 개수. 한쪽이 없는 pair는 제외한다."""
+    """같은 pair_id의 두 항목(a: 기준, b: 변형)이 모두 정답인 비율과 방향별 전이. bootstrap 재표집의 _draw를 보존한다."""
     groups: dict = {}
     for r in rows:
         for pid in (r.get("pair_ids") or ([r["pair_id"]] if r.get("pair_id") else [])):
-            groups.setdefault(pid, []).append(r)
-    complete = {k: v for k, v in groups.items() if len(v) == 2}
-    both = sum(all(is_correct(r) for r in v) for v in complete.values())
-    counts = Counter(tuple(sorted(int(is_correct(r)) for r in v)) for v in complete.values())
+            groups.setdefault((pid, r.get("_draw")), []).append(r)
+    complete, dropped = {}, set()
+    for (pid, draw), members in groups.items():
+        a_name, b_name = _pair_sides(pid)
+        a = [r for r in members if r.get("version") == a_name]
+        b = [r for r in members if r.get("version") == b_name]
+        if len(a) == 1 and len(b) == 1:
+            complete[(pid, draw)] = (a[0], b[0])
+        else:
+            dropped.add(pid)
+    counts = Counter((int(is_correct(a)), int(is_correct(b))) for a, b in complete.values())
+    n = len(complete)
     return {
-        "pair_accuracy": _ratio(both, len(complete)).as_dict(),
-        "n_pairs": len(complete),
-        "dropped_pairs": sorted(k for k, v in groups.items() if len(v) != 2),
-        "transitions": {"both_correct": counts.get((1, 1), 0), "one_correct": counts.get((0, 1), 0), "both_wrong": counts.get((0, 0), 0)},
+        "pair_accuracy": _ratio(counts.get((1, 1), 0), n).as_dict(),
+        "paired_harm": _ratio(counts.get((1, 0), 0), n).as_dict(),
+        "paired_recovery": _ratio(counts.get((0, 1), 0), n).as_dict(),
+        "n_pairs": n,
+        "dropped_pairs": sorted(dropped),
+        "transitions": {"both_correct": counts.get((1, 1), 0), "base_correct_only": counts.get((1, 0), 0),
+                        "variant_correct_only": counts.get((0, 1), 0), "both_wrong": counts.get((0, 0), 0)},
     }
 
 
@@ -269,7 +287,7 @@ def benchmark_summary(rows: Iterable[dict]) -> dict:
         out["by_model_condition"][f"{model}|{condition}"] = {
             "overall_accuracy": entity_accuracy(subset).as_dict(),
             "role_accuracy": role_accuracy(subset).as_dict(),
-            "chance_level": chance_level(subset).as_dict(),
+            "chance_level": chance_level(subset).as_dict() if "qa" not in str(condition) else None,
             "status_counts": status_counts(subset),
             "by_referent_type": metric_table(subset, "gold_role", entity_accuracy),
             "by_referent_changed": metric_table(subset, "referent_changed", entity_accuracy),
@@ -278,9 +296,12 @@ def benchmark_summary(rows: Iterable[dict]) -> dict:
             "by_distractor_present": metric_table(subset, "distractor_present", entity_accuracy),
             "by_turn_distance": metric_table(subset, "turn_distance", entity_accuracy),
             "by_dataset": metric_table(subset, "dataset", entity_accuracy),
+            "by_creation_method": metric_table(subset, "creation_method", entity_accuracy),
+            "by_context_need": metric_table(subset, "context_need", entity_accuracy),
+            "by_linguistic_cue": metric_table([{**r, "_cue": c} for r in subset for c in (r.get("linguistic_cues") or ["none"])], "_cue", entity_accuracy),
             "distractor_error_rate": distractor_error_rate(subset).as_dict(),
             "role_confusion": confusion_matrix(subset),
-            "entity_confusion": entity_confusion(subset),
+            "candidate_slot_confusion": entity_confusion(subset),  # 중립 ID 슬롯 기준. 시나리오마다 다른 인물이므로 인물 혼동이 아니다
             "pair_consistency": pair_consistency(subset),
             "n_rows": len(subset),
             "n_clusters": len({r.get("conversation_id") for r in subset}),

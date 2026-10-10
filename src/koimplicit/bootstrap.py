@@ -61,7 +61,8 @@ def cluster_bootstrap(
     undefined = 0
     for _ in range(n_boot):
         drawn = [cluster_ids[rng.randrange(len(cluster_ids))] for _ in cluster_ids]
-        resampled = [row for cid in drawn for row in clusters[cid]]
+        # 같은 cluster가 여러 번 뽑히면 행이 중복된다. paired 통계가 중복 추출을 잃지 않도록 추출 회차를 붙인다.
+        resampled = [{**row, "_draw": k} for k, cid in enumerate(drawn) for row in clusters[cid]]
         value = _value(statistic(resampled))
         if value is None:
             undefined += 1
@@ -105,10 +106,10 @@ def paired_item_difference(condition_a: str, condition_b: str):
     """같은 item의 두 조건 정답 차이 평균. 두 조건 모두 있는 item만 쓴다."""
 
     def statistic(rows: list[dict]) -> float | None:
-        by_item: dict[str, dict[str, dict]] = {}
+        by_item: dict = {}
         for r in rows:
             if r.get("condition") in (condition_a, condition_b):
-                by_item.setdefault(r["item_id"], {})[r["condition"]] = r
+                by_item.setdefault((r["item_id"], r.get("_draw")), {})[r["condition"]] = r
         diffs = [
             int(is_correct(v[condition_a])) - int(is_correct(v[condition_b]))
             for v in by_item.values() if condition_a in v and condition_b in v

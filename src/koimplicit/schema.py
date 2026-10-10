@@ -146,7 +146,7 @@ class LabelRecord(BaseModel):
     sample_id: str = Field(min_length=1)
     addressee_id: Optional[str] = None  # 다자 대화에서 식별 불가면 None
     gold_referent_id: Optional[str] = None  # 의미상 불명확하면 None
-    anchor_turn: Optional[int] = None  # 이전 참조 대상이 주어인 가장 가까운 선행 발화
+    anchor_turn: Optional[int] = Field(default=None, ge=1)  # 이전 참조 대상이 주어인 가장 가까운 선행 발화
     anchor_referent_id: Optional[str] = None
     anchor_addressee_id: Optional[str] = None
     distractor_id: Optional[str] = None  # 작성자가 지정한 경쟁 개체
@@ -155,6 +155,7 @@ class LabelRecord(BaseModel):
     linguistic_cues: list[str] = Field(default_factory=list)
     manipulated_variables: list[str] = Field(default_factory=list)  # base 대비 바꾼 변수
     pair_claims: dict[str, list[str]] = Field(default_factory=dict)  # pair_id별 주장 조작(base가 아닌 변형끼리 비교할 때)
+    pair_expected_gold_change: dict[str, Optional[bool]] = Field(default_factory=dict)  # pair_id별 정답 변경 의도
     expected_gold_change: Optional[bool] = None  # 변형이면 base 대비 정답 변경 의도
     author_rationale: Optional[str] = None
     validation_metadata: dict = Field(default_factory=dict)
@@ -182,7 +183,7 @@ class Derived(BaseModel):
     gold_last_mention_turn: Optional[int] = None
     turn_distance: Optional[int] = None  # 목표 발화와 정답의 마지막 명시 언급 사이 거리. 언급 없으면 None
     most_recent_mentioned_id: Optional[str] = None
-    distractor_present: bool = False
+    distractor_present: Optional[bool] = None  # gold가 없으면 None
     distractor_last_mention_turn: Optional[int] = None
     n_turns: int = 0
     n_participants: int = 0
@@ -209,11 +210,42 @@ class Sample(BaseModel):
 
 # --------------------------------------------------------------------------- 파생 변수
 
+def surface_forms_of(participants: Iterable) -> list[tuple[str, str]]:
+    """모든 참여자의 (표면형, entity_id)를 긴 표현부터 정렬한다. 참여자별이 아니라 전체 기준이라 '형'이 '형수님'을 가로채지 않는다."""
+    forms = []
+    for p in participants:
+        if isinstance(p, Participant):
+            names, eid = p.surface_forms(), p.entity_id
+        else:  # item candidates: {entity_id, label, aliases}
+            names, eid = sorted({p.get("label"), *(p.get("aliases") or [])} - {None, ""}, key=len, reverse=True), p["entity_id"]
+        forms += [(f, eid) for f in names if f]
+    return sorted(forms, key=lambda fe: (-len(fe[0]), fe[0]))
+
+
+def find_mentions(text: str, forms: list[tuple[str, str]]) -> list[tuple[int, str]]:
+    """(위치, entity_id). 긴 표면형부터 찾고 한 번 잡힌 구간은 다시 쓰지 않는다."""
+    consumed = [False] * len(text)
+    found = []
+    for form, eid in forms:
+        start = 0
+        while True:
+            pos = text.find(form, start)
+            if pos == -1:
+                break
+            if not any(consumed[pos: pos + len(form)]):
+                found.append((pos, eid))
+                for i in range(pos, pos + len(form)):
+                    consumed[i] = True
+            start = pos + len(form)
+    return sorted(found)
+
+
 def mentions_by_turn(record: DialogueRecord, up_to_target_predicate: bool = True) -> list[tuple[int, int, str]]:
     """(turn_index, position, entity_id) 목록. 목표 발화는 서술어 앞까지만 본다.
 
     발화자 라벨("이름:")은 언급이 아니므로 세지 않는다. 텍스트 안의 표면형만 찾는다.
     """
+    forms = surface_forms_of(record.participants)
     found = []
     for turn in record.dialogue:
         if turn.turn_index > record.target_turn:
@@ -221,19 +253,7 @@ def mentions_by_turn(record: DialogueRecord, up_to_target_predicate: bool = True
         text = turn.text
         if turn.turn_index == record.target_turn and up_to_target_predicate and record.target_predicate_span:
             text = text[: record.target_predicate_span[0]]
-        consumed = [False] * len(text)
-        for p in record.participants:
-            for form in p.surface_forms():
-                start = 0
-                while True:
-                    pos = text.find(form, start)
-                    if pos == -1:
-                        break
-                    if not any(consumed[pos: pos + len(form)]):
-                        found.append((turn.turn_index, pos, p.entity_id))
-                        for i in range(pos, pos + len(form)):
-                            consumed[i] = True
-                    start = pos + len(form)
+        found += [(turn.turn_index, pos, eid) for pos, eid in find_mentions(text, forms)]
     return sorted(found)
 
 
@@ -266,6 +286,8 @@ def derive(record: DialogueRecord, label: LabelRecord) -> Derived:
 
     anchor_role = speaker_changed = referent_changed = role_changed = None
     if label.anchor_turn is not None and label.anchor_referent_id is not None:
+        if not 1 <= label.anchor_turn < record.target_turn:
+            raise ValueError(f"anchor_turn {label.anchor_turn} must be in [1, target_turn)")
         anchor_turn = record.dialogue[label.anchor_turn - 1]
         anchor_addressee = infer_addressee(record, anchor_turn.speaker_id, label.anchor_addressee_id)
         anchor_role = role_of(label.anchor_referent_id, anchor_turn.speaker_id, anchor_addressee, record)
@@ -283,7 +305,9 @@ def derive(record: DialogueRecord, label: LabelRecord) -> Derived:
     most_recent = mentions[-1][2] if mentions else None
 
     distractor_last = last_turn_of.get(label.distractor_id) if label.distractor_id else None
-    if label.distractor_id is not None:
+    if gold is None:
+        present = None
+    elif label.distractor_id is not None:
         present = distractor_last is not None and (gold_last is None or _after(mentions, label.distractor_id, gold))
     else:
         present = most_recent is not None and most_recent != gold
@@ -296,7 +320,7 @@ def derive(record: DialogueRecord, label: LabelRecord) -> Derived:
         gold_last_mention_turn=gold_last,
         turn_distance=(record.target_turn - gold_last) if gold_last is not None else None,
         most_recent_mentioned_id=most_recent,
-        distractor_present=bool(present),
+        distractor_present=present,
         distractor_last_mention_turn=distractor_last,
         n_turns=len(record.dialogue),
         n_participants=len(record.in_dialogue_ids()),
@@ -356,6 +380,8 @@ def load_dataset(folder: Path, dialogue_file: str = DIALOGUE_FILE, label_file: s
     for row in read_jsonl(folder / label_file):
         try:
             lab = LabelRecord.model_validate(row)
+            if lab.sample_id in labels:
+                errors.append(f"duplicate label sample_id {lab.sample_id}")
             labels[lab.sample_id] = lab
         except Exception as e:
             errors.append(f"label {row.get('sample_id')}: {e}")

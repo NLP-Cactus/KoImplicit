@@ -136,7 +136,7 @@ def command_pairs(args, parser) -> int:
     if args.out:
         Path(args.out).write_text(json.dumps(manifest, ensure_ascii=False, indent=2), encoding="utf-8")
     _print({k: v for k, v in manifest.items() if k != "pairs"} if args.quiet else manifest)
-    return 0
+    return 1 if manifest["problems"] else 0
 
 
 def command_annotate(args, parser) -> int:
@@ -144,7 +144,7 @@ def command_annotate(args, parser) -> int:
     from .schema import load_dataset, write_jsonl
 
     if args.step == "sheets":
-        paths = A.make_sheets(load_dataset(Path(args.dataset)), args.annotators.split(","), Path(args.out), seed=args.seed)
+        paths = A.make_sheets(load_dataset(Path(args.dataset)), args.annotators.split(","), Path(args.out), seed=args.seed, condition=args.condition)
         print("\n".join(str(p) for p in paths))
     elif args.step == "pair-sheet":
         print(A.make_pair_sheet(load_dataset(Path(args.dataset)), Path(args.out)))
@@ -167,14 +167,21 @@ def command_payload(args, parser) -> int:
     from .payload import build_payload
     from .schema import load_dataset, write_jsonl
 
+    from .benchmark import load_model_config
+    from .validate import check_payload
+
     items, gold, skipped = build_payload(load_dataset(Path(args.dataset)), seed=args.seed, include_unreviewed=args.include_unreviewed)
     out = Path(args.out)
     write_jsonl(items, out / "items.jsonl")
     write_jsonl(gold, out / "gold.jsonl")
+    # 실제로 쓴 파일과 실제 모델 설정으로 누수 검사
+    written_items, written_gold = _read_jsonl(out / "items.jsonl"), _read_jsonl(out / "gold.jsonl")
+    model = load_model_config(Path(args.models), args.model)
+    leaks = check_payload(written_items, written_gold, model, Path(args.mcq_prompt), Path(args.qa_prompt))
     (out / "payload_manifest.json").write_text(json.dumps({"seed": args.seed, "n_items": len(items), "include_unreviewed": args.include_unreviewed,
-                                                           "skipped": skipped, "dataset": str(args.dataset)}, ensure_ascii=False, indent=2), encoding="utf-8")
-    _print({"n_items": len(items), "n_skipped": len(skipped), "out": str(out)})
-    return 0
+                                                           "skipped": skipped, "dataset": str(args.dataset), "leak_check": leaks}, ensure_ascii=False, indent=2), encoding="utf-8")
+    _print({"n_items": len(items), "n_skipped": len(skipped), "leak_issues": leaks, "out": str(out)})
+    return 1 if leaks else 0
 
 
 def command_benchmark(args, parser) -> int:
@@ -188,8 +195,14 @@ def command_benchmark(args, parser) -> int:
     except Exception as e:  # 키 없음 등
         parser.exit(2, f"provider error: {e}\n")
     items, gold = _read_jsonl(args.items), _read_jsonl(args.gold)
-    report = run_benchmark(items, gold, args.conditions.split(","), adapter, load_prompt(Path(args.prompt)), model,
-                           Path(args.run_dir), seed=args.seed, items_path=Path(args.items), prompt_path=Path(args.prompt))
+    try:
+        report = run_benchmark(items, gold, args.conditions.split(","), adapter, load_prompt(Path(args.prompt)), model,
+                               Path(args.run_dir), seed=args.seed, items_path=Path(args.items), prompt_path=Path(args.prompt),
+                               allow_unreviewed=args.allow_unreviewed)
+    except ValueError as e:
+        parser.exit(2, f"benchmark refused: {e}\n")
+    if report["contains_unreviewed"]:
+        print("WARNING: run contains unreviewed samples (pilot check only; not an official evaluation)")
     _print({k: v for k, v in report.items() if k != "metrics"})
     _print({k: {kk: vv["overall_accuracy"] for kk, vv in v.items()} if k == "by_model_condition" else v for k, v in report["metrics"].items()})
     return 0
@@ -296,6 +309,7 @@ def main(argv=None) -> int:
 
     p = commands.add_parser("annotate", help="사람 검수 시트·일치도·조정")
     p.add_argument("step", choices=["sheets", "pair-sheet", "agreement", "adjudicate"])
+    p.add_argument("--condition", choices=["full", "local"], default="full", help="sheets: full(전체 문맥) 또는 local(목표 발화만)")
     p.add_argument("--dataset")
     p.add_argument("--annotators", default="annotator1,annotator2")
     p.add_argument("--sheets", nargs="*", default=[])
@@ -309,6 +323,10 @@ def main(argv=None) -> int:
     p.add_argument("--out", required=True)
     p.add_argument("--seed", type=int, default=20261010)
     p.add_argument("--include-unreviewed", action="store_true", help="검수 전 후보도 포함(pilot 점검용)")
+    p.add_argument("--models", default="configs/models.json")
+    p.add_argument("--model", default="mock", help="누수 검사에 쓸 system/output_schema 설정의 모델 라벨")
+    p.add_argument("--mcq-prompt", default="prompts/mcq_v1.json")
+    p.add_argument("--qa-prompt", default="prompts/qa_v1.json")
     p.set_defaults(func=command_payload)
 
     p = commands.add_parser("benchmark", help="모델 실행 + 파싱 + 지표")
@@ -320,6 +338,7 @@ def main(argv=None) -> int:
     p.add_argument("--prompt", default="prompts/mcq_v1.json")
     p.add_argument("--run-dir", required=True)
     p.add_argument("--seed", type=int, default=20261010)
+    p.add_argument("--allow-unreviewed", action="store_true", help="검수 전 표본 포함 허용(pilot 점검용, 결과에 표시됨)")
     p.set_defaults(func=command_benchmark)
 
     p = commands.add_parser("baselines", help="휴리스틱 기준선 평가")

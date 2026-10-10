@@ -38,16 +38,20 @@ def check_structure(s: Sample) -> list[dict]:
         if lab.addressee_id not in rec.in_dialogue_ids() or lab.addressee_id == rec.speaker_id:
             out.append(issue("error", s.sample_id, "ADDRESSEE_INVALID", "addressee_id must be another in-dialogue participant"))
     if lab.anchor_turn is not None:
-        if lab.anchor_turn >= rec.target_turn:
-            out.append(issue("error", s.sample_id, "ANCHOR_AFTER_TARGET", "anchor_turn must precede target_turn"))
+        if not 1 <= lab.anchor_turn < rec.target_turn:
+            out.append(issue("error", s.sample_id, "ANCHOR_OUT_OF_RANGE", "anchor_turn must be in [1, target_turn)"))
         if lab.anchor_referent_id not in ids:
             out.append(issue("error", s.sample_id, "ANCHOR_NOT_CANDIDATE", "anchor_referent_id not in participants"))
+        if lab.anchor_addressee_id is not None:
+            anchor_speaker = rec.dialogue[lab.anchor_turn - 1].speaker_id if 1 <= lab.anchor_turn <= len(rec.dialogue) else None
+            if lab.anchor_addressee_id not in rec.in_dialogue_ids() or lab.anchor_addressee_id == anchor_speaker:
+                out.append(issue("error", s.sample_id, "ANCHOR_ADDRESSEE_INVALID", "anchor_addressee_id must be another in-dialogue participant"))
     if lab.distractor_id is not None:
         if lab.distractor_id not in ids:
             out.append(issue("error", s.sample_id, "DISTRACTOR_NOT_CANDIDATE", "distractor_id not in participants"))
         elif lab.distractor_id == lab.gold_referent_id:
             out.append(issue("error", s.sample_id, "DISTRACTOR_IS_GOLD", "distractor_id equals gold"))
-        elif not der.distractor_present:
+        elif der.distractor_present is False:
             out.append(issue("warning", s.sample_id, "DISTRACTOR_NOT_RECENT", "declared distractor is not mentioned more recently than the gold referent"))
     if lab.gold_referent_id is None and lab.ambiguity_status in ("unreviewed",):
         out.append(issue("warning", s.sample_id, "NO_GOLD_UNREVIEWED", "no gold and ambiguity_status unreviewed; mark ambiguous/uncertain or add gold"))
@@ -116,13 +120,66 @@ def check_links(samples: list[Sample], scenarios: Optional[list[Scenario]]) -> l
     return out
 
 
+FORBIDDEN_ITEM_KEYS = set(GOLD_KEYS) | {"addressee_id", "anchor_turn", "anchor_addressee_id", "entity_roles", "context_need",
+                                        "manipulated_variables", "pair_claims", "expected_gold_change", "linguistic_cues",
+                                        "ambiguity_status", "annotation_status", "validation_metadata", "id_map"}
+
+
+def _forbidden_keys(obj, path: str = "") -> list[str]:
+    """중첩 구조 안의 금지 키를 재귀적으로 찾는다."""
+    found = []
+    if isinstance(obj, dict):
+        for k, v in obj.items():
+            if k in FORBIDDEN_ITEM_KEYS:
+                found.append(f"{path}{k}")
+            found += _forbidden_keys(v, f"{path}{k}.")
+    elif isinstance(obj, list):
+        for i, v in enumerate(obj):
+            found += _forbidden_keys(v, f"{path}[{i}].")
+    return found
+
+
+def check_payload(items: list[dict], gold_rows: list[dict], model_config: dict, mcq_prompt_path: Path, qa_prompt_path: Optional[Path] = None) -> list[dict]:
+    """실제 items 파일과 실제 모델 설정(system, output_schema)으로 조건별 요청을 만들어 누수를 검사한다."""
+    out = []
+    gold_by = {g["item_id"]: g for g in gold_rows}
+    prompts = {"full_mcq": load_prompt(mcq_prompt_path), "target_only_mcq": load_prompt(mcq_prompt_path)}
+    if qa_prompt_path:
+        prompts["full_qa"] = load_prompt(qa_prompt_path)
+    config = {"model_id": "leak-check", "model_label": "leak-check", "system": model_config.get("system", ""),
+              "output_schema": model_config.get("output_schema", ""), "qa_output_schema": model_config.get("qa_output_schema", "")}
+    for item in items:
+        keys = _forbidden_keys(item)
+        if keys:
+            out.append(issue("error", item["item_id"], "ITEM_FORBIDDEN_KEY", f"item carries {keys}"))
+        g = gold_by.get(item["item_id"]) or {}
+        original_ids = set((g.get("id_map") or {}).values())
+        serialized = json.dumps(item, ensure_ascii=False)
+        leaked_ids = sorted(o for o in original_ids if f'"{o}"' in serialized)
+        if leaked_ids:
+            out.append(issue("error", item["item_id"], "ITEM_ORIGINAL_ID", f"original entity ids {leaked_ids} appear in item"))
+        if item["full_text"].count("\n") + 1 != item.get("target_turn"):
+            out.append(issue("error", item["item_id"], "FUTURE_CONTEXT", "full_text must end at the target turn"))
+        for condition, prompt in prompts.items():
+            text = (config["system"] + "\n" + build_request(strip_gold(item), condition, prompt, config)["user"]).lower()
+            hits = [w for w in ROLE_WORDS if w in text] + (["role"] if "role" in text else [])
+            if hits:
+                out.append(issue("error", item["item_id"], "PROMPT_ROLE_WORD", f"{condition}: {hits}"))
+            if g.get("gold_entity_id") and condition == "target_only_mcq":
+                # 정답 ID가 후보 목록에만 있어야 한다(본문에 ID 문자열이 끼어들면 안 됨)
+                body = text.split("[후보]")[0] if "[후보]" in text else text
+                if f'"{g["gold_entity_id"].lower()}"' in body:
+                    out.append(issue("error", item["item_id"], "PROMPT_GOLD_ID", f"{condition}: gold id string outside candidate list"))
+    return out
+
+
 def check_leakage(samples: list[Sample], prompt_path: Optional[Path]) -> list[dict]:
     """평가 입력 item과 렌더링된 프롬프트에 gold 정보가 없는지 확인한다."""
     out = []
     prompt = load_prompt(prompt_path) if prompt_path else None
     for s in samples:
         item = to_item(s, seed=0)
-        present = [k for k in GOLD_KEYS if k in item]
+        present = _forbidden_keys(item)
         if present:
             out.append(issue("error", s.sample_id, "ITEM_HAS_GOLD_KEY", f"item carries {present}"))
         serialized = json.dumps(item, ensure_ascii=False)

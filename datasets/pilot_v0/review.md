@@ -12,8 +12,8 @@
 | by_role | {"None": 1, "addressee": 4, "speaker": 4, "third_party": 11} |
 | by_referent_changed | {"False": 13, "None": 3, "True": 4} |
 | by_speaker_changed | {"False": 1, "None": 2, "True": 17} |
-| by_distractor_present | {"False": 15, "True": 5} |
-| by_turn_distance | {"0": 2, "1": 5, "3": 3, "5": 1, "None": 9} |
+| by_distractor_present | {"False": 16, "None": 1, "True": 3} |
+| by_turn_distance | {"0": 2, "1": 6, "3": 3, "5": 1, "None": 8} |
 | by_n_participants | {"2": 17, "3": 3} |
 
 ## S01
@@ -210,14 +210,14 @@
 
 - gold: None (없음) / role=None
 - anchor: turn 4 → P2; speaker_changed=True, referent_changed=None, role_changed=None
-- distractor: None present=True; turn_distance=None; most_recent=P2
+- distractor: None present=None; turn_distance=None; most_recent=P2
 - cues: imperative(-해 줘); manipulated: linguistic_cue; expected_gold_change=None
 - 상태: ambiguity=ambiguous, annotation=candidate, creation=llm_authored
 - 근거: 호격이 없으면 청자가 직전 화자 태양(인접쌍)일 수도, 보라일 수도 있다. 임의로 정답을 주지 않고 모호 사례로 둔다. 평가셋에서 제외된다.
 
 </details>
 
-검증 표시: review:HUMAN_REVIEW(multi_party_addressee,distractor_check_gold_still_unique)
+검증 표시: review:HUMAN_REVIEW(multi_party_addressee)
 
 ## S04
 
@@ -519,11 +519,11 @@
 
 - gold: T2 형수 / role=third_party
 - anchor: turn 5 → T2; speaker_changed=True, referent_changed=False, role_changed=False
-- distractor: None present=True; turn_distance=None; most_recent=T1
+- distractor: None present=False; turn_distance=1; most_recent=T2
 - cues: lexical(친정), hearsay_ending(-대); manipulated: -; expected_gold_change=None
 - 상태: ambiguity=unreviewed, annotation=candidate, creation=llm_authored
 - 근거: 5번 발화가 형수의 상태를 물었고 6번 발화가 답이다. '친정'이 강한 어휘 단서라 문맥 추적 없이도 풀릴 수 있음을 기록한다.
 
 </details>
 
-검증 표시: review:HUMAN_REVIEW(gold_unverified,distractor_check_gold_still_unique)
+검증 표시: review:HUMAN_REVIEW(gold_unverified)

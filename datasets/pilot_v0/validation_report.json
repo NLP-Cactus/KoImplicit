@@ -31,15 +31,16 @@
       "True": 9
     },
     "by_distractor_present": {
-      "False": 15,
-      "True": 5
+      "False": 16,
+      "None": 1,
+      "True": 3
     },
     "by_turn_distance": {
       "0": 2,
-      "1": 5,
+      "1": 6,
       "3": 3,
       "5": 1,
-      "None": 9
+      "None": 8
     },
     "by_n_participants": {
       "2": 17,
@@ -118,7 +119,7 @@
       "level": "review",
       "sample_id": "S03-novocative",
       "code": "HUMAN_REVIEW",
-      "message": "multi_party_addressee,distractor_check_gold_still_unique"
+      "message": "multi_party_addressee"
     },
     {
       "level": "review",
@@ -196,7 +197,7 @@
       "level": "review",
       "sample_id": "N03-01",
       "code": "HUMAN_REVIEW",
-      "message": "gold_unverified,distractor_check_gold_still_unique"
+      "message": "gold_unverified"
     },
     {
       "level": "info",

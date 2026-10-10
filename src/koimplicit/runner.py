@@ -25,7 +25,11 @@ MAX_RETRIES = 2
 
 
 class TransientError(Exception):
-    """timeout, 연결 실패, 5xx 등 같은 payload로 재시도할 수 있는 오류."""
+    """timeout, 연결 실패, 5xx 등 같은 payload로 재시도할 수 있는 오류. retry_after(초)를 붙일 수 있다."""
+
+    def __init__(self, message: str = "", retry_after: float | None = None):
+        super().__init__(message)
+        self.retry_after = retry_after
 
 
 class PermanentError(Exception):
@@ -134,7 +138,7 @@ def build_request(item: dict, condition: str, prompt: dict, run_config: dict) ->
         "system": run_config.get("system", ""),
         "user": user,
         "decoding": run_config.get("decoding", {}),
-        "output_schema": run_config.get("output_schema"),
+        "output_schema": values["output_schema"],
         "seed": run_config.get("seed"),
         "prompt_version": prompt["version"],
     }
@@ -155,9 +159,24 @@ def call_with_retry(adapter: ProviderAdapter, request: dict, max_retries: int = 
             if retries >= max_retries:
                 return None, retries, f"transient: {error}"
             retries += 1
-            sleep(min(2 ** retries, 8))
+            sleep(max(min(2 ** retries, 8), float(getattr(error, "retry_after", None) or 0)))
         except PermanentError as error:
             return None, retries, f"permanent: {error}"
+
+
+RUN_IDENTITY_KEYS = ("model_id", "prompt_version", "items_sha256", "prompt_sha256", "system", "output_schema", "decoding")
+
+
+def _check_same_run(run_dir: Path, run_config: dict, prompt: dict) -> None:
+    """같은 run_dir를 다른 모델·프롬프트·입력으로 재사용하면 거부한다."""
+    path = run_dir / "config.json"
+    if not path.exists():
+        return
+    previous = json.loads(path.read_text(encoding="utf-8"))
+    current = {**run_config, "prompt_version": prompt["version"]}
+    differing = [k for k in RUN_IDENTITY_KEYS if previous.get(k) != current.get(k)]
+    if differing:
+        raise ValueError(f"run_dir {run_dir} was used with a different configuration ({differing}); use a new run_dir")
 
 
 def _append_jsonl(path: Path, row: dict) -> None:
@@ -185,6 +204,10 @@ def run_items(
     run_dir = Path(run_dir)
     cache_dir = run_dir / "cache"
     cache_dir.mkdir(parents=True, exist_ok=True)
+    _check_same_run(run_dir, run_config, prompt)
+    # requests/responses는 이번 실행의 기록이다. 재개는 cache/가 담당하므로 로그는 새로 쓴다.
+    for name in ("requests.jsonl", "responses.jsonl"):
+        (run_dir / name).write_text("", encoding="utf-8")
     items = [strip_gold(i) for i in items]
     jobs = [(item, condition) for item in items for condition in conditions]
     random.Random(seed).shuffle(jobs)
@@ -224,6 +247,9 @@ def run_items(
                 "finish_reason": response.get("finish_reason") if response else None,
                 "response_model": response.get("model") if response else None,
                 "request_id": response.get("request_id") if response else None,
+                "system_fingerprint": response.get("system_fingerprint") if response else None,
+                "stop_details": response.get("stop_details") if response else None,
+                "cache_read_input_tokens": response.get("cache_read_input_tokens") if response else None,
                 "status": "ok" if response and response.get("raw_text") is not None else "missing",
             }
             if response is not None:

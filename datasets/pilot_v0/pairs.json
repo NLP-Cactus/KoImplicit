@@ -1,7 +1,8 @@
 {
+  "check_level": "automatic_structural_only",
   "n_pairs": 10,
-  "n_single_variable": 7,
-  "n_compound": 3,
+  "n_single_variable": 5,
+  "n_compound": 5,
   "problems": [],
   "pairs": [
     {
@@ -40,12 +41,14 @@
       ],
       "same_target_utterance": true,
       "same_candidate_set": true,
+      "structural_conditions_met": true,
       "expected_gold_change": false,
       "observed_gold_change": false,
       "gold_change_matches_expectation": true,
       "unclaimed_differences": [],
       "evaluable": true,
-      "is_single_variable_pair": true
+      "is_single_variable_pair": true,
+      "check_level": "automatic_structural_only"
     },
     {
       "pair_id": "S01:distractor~shift",
@@ -94,12 +97,14 @@
       ],
       "same_target_utterance": true,
       "same_candidate_set": true,
+      "structural_conditions_met": true,
       "expected_gold_change": true,
       "observed_gold_change": true,
       "gold_change_matches_expectation": true,
       "unclaimed_differences": [],
       "evaluable": true,
-      "is_single_variable_pair": true
+      "is_single_variable_pair": true,
+      "check_level": "automatic_structural_only"
     },
     {
       "pair_id": "S02:base~speaker",
@@ -151,6 +156,7 @@
       ],
       "same_target_utterance": false,
       "same_candidate_set": true,
+      "structural_conditions_met": false,
       "expected_gold_change": true,
       "observed_gold_change": true,
       "gold_change_matches_expectation": true,
@@ -159,7 +165,8 @@
         "n_turns"
       ],
       "evaluable": true,
-      "is_single_variable_pair": false
+      "is_single_variable_pair": false,
+      "check_level": "automatic_structural_only"
     },
     {
       "pair_id": "S02:speaker~third",
@@ -232,6 +239,7 @@
       ],
       "same_target_utterance": false,
       "same_candidate_set": true,
+      "structural_conditions_met": false,
       "expected_gold_change": true,
       "observed_gold_change": true,
       "gold_change_matches_expectation": true,
@@ -240,7 +248,8 @@
         "speaker_changed"
       ],
       "evaluable": true,
-      "is_single_variable_pair": false
+      "is_single_variable_pair": false,
+      "check_level": "automatic_structural_only"
     },
     {
       "pair_id": "S03:base~novocative",
@@ -288,7 +297,7 @@
           "P3"
         ],
         "distractor_present": [
-          true,
+          null,
           false
         ],
         "linguistic_cues": [
@@ -306,12 +315,14 @@
       ],
       "same_target_utterance": false,
       "same_candidate_set": true,
+      "structural_conditions_met": true,
       "expected_gold_change": null,
       "observed_gold_change": null,
       "gold_change_matches_expectation": true,
       "unclaimed_differences": [],
       "evaluable": false,
-      "is_single_variable_pair": true
+      "is_single_variable_pair": true,
+      "check_level": "automatic_structural_only"
     },
     {
       "pair_id": "S04:base~distractor",
@@ -358,12 +369,17 @@
       ],
       "same_target_utterance": true,
       "same_candidate_set": true,
+      "structural_conditions_met": true,
       "expected_gold_change": false,
       "observed_gold_change": false,
       "gold_change_matches_expectation": true,
-      "unclaimed_differences": [],
+      "unclaimed_differences": [
+        "gold_last_mention_turn",
+        "turn_distance"
+      ],
       "evaluable": true,
-      "is_single_variable_pair": true
+      "is_single_variable_pair": false,
+      "check_level": "automatic_structural_only"
     },
     {
       "pair_id": "S05:base~speaker",
@@ -427,6 +443,7 @@
       ],
       "same_target_utterance": false,
       "same_candidate_set": true,
+      "structural_conditions_met": false,
       "expected_gold_change": true,
       "observed_gold_change": true,
       "gold_change_matches_expectation": true,
@@ -435,7 +452,8 @@
         "n_turns"
       ],
       "evaluable": true,
-      "is_single_variable_pair": false
+      "is_single_variable_pair": false,
+      "check_level": "automatic_structural_only"
     },
     {
       "pair_id": "S06:base~d5",
@@ -476,12 +494,16 @@
       ],
       "same_target_utterance": false,
       "same_candidate_set": true,
+      "structural_conditions_met": false,
       "expected_gold_change": false,
       "observed_gold_change": false,
       "gold_change_matches_expectation": true,
-      "unclaimed_differences": [],
+      "unclaimed_differences": [
+        "speaker_changed"
+      ],
       "evaluable": true,
-      "is_single_variable_pair": true
+      "is_single_variable_pair": false,
+      "check_level": "automatic_structural_only"
     },
     {
       "pair_id": "S07:base~plain",
@@ -514,12 +536,14 @@
       ],
       "same_target_utterance": false,
       "same_candidate_set": true,
+      "structural_conditions_met": true,
       "expected_gold_change": false,
       "observed_gold_change": false,
       "gold_change_matches_expectation": true,
       "unclaimed_differences": [],
       "evaluable": true,
-      "is_single_variable_pair": true
+      "is_single_variable_pair": true,
+      "check_level": "automatic_structural_only"
     },
     {
       "pair_id": "S07:speaker~plain",
@@ -568,12 +592,14 @@
       ],
       "same_target_utterance": true,
       "same_candidate_set": true,
+      "structural_conditions_met": true,
       "expected_gold_change": true,
       "observed_gold_change": true,
       "gold_change_matches_expectation": true,
       "unclaimed_differences": [],
       "evaluable": true,
-      "is_single_variable_pair": true
+      "is_single_variable_pair": true,
+      "check_level": "automatic_structural_only"
     }
   ]
 }

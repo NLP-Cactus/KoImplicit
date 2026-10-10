@@ -35,15 +35,30 @@ def load_model_config(models_file: Path, model_label: str) -> dict:
     return model
 
 
+def addressee_label(item: dict) -> Optional[str]:
+    """2인 대화면 상대 참여자의 이름. 3인 대화는 청자를 알 수 없으므로 None(청자 대명사 매핑 안 함)."""
+    others = [p for p in item.get("dialogue_participants") or [] if p != item.get("target_speaker_id")]
+    if len(others) != 1:
+        return None
+    for c in item.get("candidates") or []:
+        if c["entity_id"] == others[0]:
+            return c.get("label")
+    return None
+
+
 def normalize_responses(responses: Iterable[dict], items: list[dict], structured: bool) -> list[dict]:
+    """응답을 파싱한다. 같은 (item, condition)의 응답이 여러 번 기록되어 있으면 마지막 것만 쓴다."""
     by_item = {i["item_id"]: i for i in items}
-    rows = []
+    latest: dict = {}
     for r in responses:
+        latest[(r["item_id"], r["condition"], r.get("model_label"))] = r
+    rows = []
+    for r in latest.values():
         item = by_item.get(r["item_id"])
         if item is None:
             continue
         if "qa" in r["condition"]:
-            parsed = map_qa_answer(r.get("raw_text"), item["candidates"], item["target_speaker_label"])
+            parsed = map_qa_answer(r.get("raw_text"), item["candidates"], item["target_speaker_label"], addressee_label(item))
         else:
             parsed = parse_mcq(r.get("raw_text"), item["candidates"], structured=structured)
         if r.get("status") == "missing":
@@ -60,13 +75,42 @@ def normalize_responses(responses: Iterable[dict], items: list[dict], structured
     return rows
 
 
+def check_alignment(items: list[dict], gold_rows: list[dict], require_accepted: bool = True) -> None:
+    """items와 gold의 ID 집합·유일성·검수 상태를 확인한다. 어긋나면 ValueError."""
+    item_ids = [i["item_id"] for i in items]
+    gold_ids = [g["item_id"] for g in gold_rows]
+    problems = []
+    if len(set(item_ids)) != len(item_ids):
+        problems.append("duplicate item_id in items")
+    if len(set(gold_ids)) != len(gold_ids):
+        problems.append("duplicate item_id in gold")
+    if set(item_ids) != set(gold_ids):
+        problems.append(f"items/gold id mismatch: only_items={sorted(set(item_ids) - set(gold_ids))[:5]} only_gold={sorted(set(gold_ids) - set(item_ids))[:5]}")
+    by_item = {i["item_id"]: i for i in items}
+    for g in gold_rows:
+        i = by_item.get(g["item_id"])
+        if i is None:
+            continue
+        cand = {c["entity_id"] for c in i["candidates"]}
+        if g.get("gold_entity_id") not in cand:
+            problems.append(f"{g['item_id']}: gold_entity_id not in candidates")
+        if require_accepted and g.get("annotation_status") != "accepted":
+            problems.append(f"{g['item_id']}: annotation_status={g.get('annotation_status')} (use allow_unreviewed for pilot checks)")
+    if problems:
+        raise ValueError("items/gold alignment problems:\n- " + "\n- ".join(problems[:20]))
+
+
 def join_gold(rows: Iterable[dict], gold_rows: Iterable[dict]) -> list[dict]:
+    """정답을 붙인다. gold가 없는 행은 조용히 버리지 않고 ValueError."""
+    gold_rows = list(gold_rows)
     by_item = {g["item_id"]: g for g in gold_rows}
+    if len(by_item) != len(gold_rows):
+        raise ValueError("duplicate item_id in gold rows")
     out = []
     for r in rows:
         g = by_item.get(r["item_id"])
         if g is None:
-            continue
+            raise ValueError(f"no gold for item {r['item_id']}")
         joined = {**r, **{k: v for k, v in g.items() if k != "item_id"}}
         joined["predicted_role"] = (g.get("entity_roles") or {}).get(r.get("predicted_entity_id"))
         out.append(joined)
@@ -88,7 +132,7 @@ def estimate_cost(rows: Iterable[dict], price: Optional[dict]) -> dict:
 def write_per_sample(rows: list[dict], path: Path) -> None:
     fields = ["item_id", "condition", "model_label", "gold_entity_id", "predicted_entity_id", "correct", "parse_status",
               "gold_role", "predicted_role", "referent_changed", "speaker_changed", "referent_role_changed", "distractor_present",
-              "designated_distractor_id", "turn_distance", "pair_id", "dataset", "raw_text"]
+              "designated_distractor_id", "turn_distance", "context_need", "pair_id", "dataset", "annotation_status", "raw_text"]
     with Path(path).open("w", encoding="utf-8-sig", newline="") as f:
         writer = csv.DictWriter(f, fieldnames=fields, extrasaction="ignore")
         writer.writeheader()
@@ -96,12 +140,22 @@ def write_per_sample(rows: list[dict], path: Path) -> None:
             writer.writerow({**r, "correct": int(r.get("parse_status") == "ok" and r.get("predicted_entity_id") == r.get("gold_entity_id"))})
 
 
+CONDITIONS = ("full_mcq", "target_only_mcq", "full_qa")
+
+
 def run_benchmark(items: list[dict], gold_rows: list[dict], conditions: list[str], adapter, prompt: dict, model_config: dict,
-                  run_dir: Path, seed: int = 0, items_path: Optional[Path] = None, prompt_path: Optional[Path] = None, sleep=None) -> dict:
+                  run_dir: Path, seed: int = 0, items_path: Optional[Path] = None, prompt_path: Optional[Path] = None, sleep=None,
+                  allow_unreviewed: bool = False) -> dict:
+    unknown = [c for c in conditions if c not in CONDITIONS]
+    if unknown:
+        raise ValueError(f"unknown conditions {unknown}; allowed: {CONDITIONS}")
+    check_alignment(items, gold_rows, require_accepted=not allow_unreviewed)
     run_dir = Path(run_dir)
     run_dir.mkdir(parents=True, exist_ok=True)
     config = {**model_config, "seed": seed, "items_sha256": file_sha256(items_path), "prompt_sha256": file_sha256(prompt_path),
-              "conditions": conditions, "run_date": dt.datetime.now(dt.timezone.utc).isoformat(timespec="seconds")}
+              "conditions": conditions, "allow_unreviewed": allow_unreviewed,
+              "contains_unreviewed": any(g.get("annotation_status") != "accepted" for g in gold_rows),
+              "run_date": dt.datetime.now(dt.timezone.utc).isoformat(timespec="seconds")}
     kwargs = {"sleep": sleep} if sleep else {}
     run_summary = run_items(items, conditions, adapter, prompt, config, run_dir, seed=seed, **kwargs)
     responses = read_jsonl(run_dir / "responses.jsonl")
@@ -113,6 +167,7 @@ def run_benchmark(items: list[dict], gold_rows: list[dict], conditions: list[str
     cost = estimate_cost(normalized, model_config.get("price_per_million"))
     report = {"run": run_summary, "model_label": model_config.get("model_label"), "model_id": model_config.get("model_id"),
               "provider": model_config.get("provider"), "prompt_version": prompt["version"], "conditions": conditions,
+              "contains_unreviewed": config["contains_unreviewed"],
               "n_items": len(items), "cost": cost, "metrics": metrics}
     (run_dir / "metrics.json").write_text(json.dumps(report, ensure_ascii=False, indent=2), encoding="utf-8")
     return report

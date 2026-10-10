@@ -33,21 +33,10 @@ def _participant_for_role(item: dict, role: str) -> str | None:
 
 
 def _mentions_in_text(text: str, roster: Iterable[dict]) -> list[tuple[int, str]]:
-    """(위치, entity_id) 목록. roster의 label과 aliases가 텍스트에 나타난 모든 자리."""
-    found = []
-    for entry in roster:
-        names = [entry.get("label")] + list(entry.get("aliases") or [])
-        for name in names:
-            if not name:
-                continue
-            start = 0
-            while True:
-                pos = text.find(name, start)
-                if pos == -1:
-                    break
-                found.append((pos, entry["entity_id"]))
-                start = pos + len(name)
-    return sorted(found)
+    """(위치, entity_id) 목록. 긴 표면형부터 겹침 없이 찾는다(schema.find_mentions와 같은 규칙)."""
+    from .schema import find_mentions, surface_forms_of
+
+    return find_mentions(text, surface_forms_of(list(roster)))
 
 
 def majority_role_prior(item: dict, fitted: dict) -> dict:

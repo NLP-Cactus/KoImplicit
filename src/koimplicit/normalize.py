@@ -86,11 +86,13 @@ def parse_mcq(raw_text: str | None, candidates: Iterable, structured: bool = Fal
     return {"predicted_entity_id": None, "parse_status": "invalid", "note": "no candidate id"}
 
 
-def build_alias_map(roster: Iterable[dict], target_speaker_label: str, participant_labels: tuple[str, str] = ("A", "B")) -> dict[str, str]:
+def build_alias_map(roster: Iterable[dict], target_speaker_label: str, addressee_label: str | None = None,
+                    participant_labels: tuple[str, str] = ("A", "B")) -> dict[str, str]:
     """QA 매핑 표. alias 문자열 -> entity_id.
 
-    roster 항목: {entity_id, label, aliases?: [..], role?: speaker|addressee|third_party}
-    화자·청자 대명사는 목표 발화의 화자 라벨과 다른 참여자 라벨로 연결한다.
+    roster 항목: {entity_id, label, aliases?: [..]}
+    화자 대명사는 목표 발화의 화자 라벨에, 청자 대명사는 addressee_label(있을 때)에 연결한다.
+    addressee_label이 없으면 예전 A/B 라벨 규칙을 쓰고, 그래도 못 찾으면 청자 대명사는 매핑하지 않는다.
     """
     alias_map: dict[str, str] = {}
     by_label = {}
@@ -103,8 +105,11 @@ def build_alias_map(roster: Iterable[dict], target_speaker_label: str, participa
         for alias in entry.get("aliases") or []:
             alias_map[alias] = entity_id
     speaker_entity = by_label.get(target_speaker_label)
-    other_label = participant_labels[1] if target_speaker_label == participant_labels[0] else participant_labels[0]
-    addressee_entity = by_label.get(other_label)
+    if addressee_label is not None:
+        addressee_entity = by_label.get(addressee_label)
+    else:
+        other_label = participant_labels[1] if target_speaker_label == participant_labels[0] else participant_labels[0]
+        addressee_entity = by_label.get(other_label)
     if speaker_entity:
         for p in SPEAKER_PRONOUNS:
             alias_map.setdefault(p, speaker_entity)
@@ -114,14 +119,16 @@ def build_alias_map(roster: Iterable[dict], target_speaker_label: str, participa
     return alias_map
 
 
-def map_qa_answer(raw_text: str | None, roster: Iterable[dict], target_speaker_label: str) -> dict:
-    """QA 응답을 entity ID로 매핑한다. 인물 하나로 정해지지 않으면 unmapped."""
+def map_qa_answer(raw_text: str | None, roster: Iterable[dict], target_speaker_label: str, addressee_label: str | None = None) -> dict:
+    """QA 응답을 entity ID로 매핑한다. 거부 표현이 있으면 먼저 abstain, 인물 하나로 정해지지 않으면 unmapped."""
     if raw_text is None:
         return {"predicted_entity_id": None, "parse_status": "missing", "matched": [], "note": "no response"}
     text = raw_text.strip()
     if not text:
         return {"predicted_entity_id": None, "parse_status": "invalid", "matched": [], "note": "empty"}
-    alias_map = build_alias_map(list(roster), target_speaker_label)
+    if any(p in text for p in ABSTAIN_PATTERNS):
+        return {"predicted_entity_id": None, "parse_status": "abstain", "matched": [], "note": "abstain pattern"}
+    alias_map = build_alias_map(list(roster), target_speaker_label, addressee_label)
     matched: dict[str, list[str]] = {}
     remaining = text
     for alias in sorted(alias_map, key=len, reverse=True):
@@ -133,8 +140,6 @@ def map_qa_answer(raw_text: str | None, roster: Iterable[dict], target_speaker_l
     if len(matched) == 1:
         entity_id = next(iter(matched))
         return {"predicted_entity_id": entity_id, "parse_status": "ok", "matched": matched[entity_id], "note": ""}
-    if any(p in text for p in ABSTAIN_PATTERNS) and not matched:
-        return {"predicted_entity_id": None, "parse_status": "abstain", "matched": [], "note": "abstain pattern"}
     note = "no alias matched" if not matched else "multiple entities"
     return {"predicted_entity_id": None, "parse_status": "unmapped", "matched": sorted(a for v in matched.values() for a in v), "note": note}
 

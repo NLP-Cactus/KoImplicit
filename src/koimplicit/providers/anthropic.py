@@ -10,6 +10,7 @@
 
 from __future__ import annotations
 
+import http.client
 import json
 import os
 import socket
@@ -22,6 +23,14 @@ from ..runner import PermanentError, TransientError
 API_URL = "https://api.anthropic.com/v1/messages"
 API_VERSION = "2023-06-01"
 RETRYABLE = {408, 409, 429}
+
+
+def _retry_after(error: urllib.error.HTTPError) -> float | None:
+    try:
+        value = error.headers.get("retry-after") if error.headers else None
+        return float(value) if value else None
+    except (TypeError, ValueError):
+        return None
 
 
 class Adapter:
@@ -58,27 +67,32 @@ class Adapter:
     def complete(self, request: dict) -> dict:
         body = self.build_body(request)
         data = json.dumps(body, ensure_ascii=False).encode("utf-8")
-        http = urllib.request.Request(self.api_url, data=data, method="POST", headers={
+        req = urllib.request.Request(self.api_url, data=data, method="POST", headers={
             "x-api-key": self.api_key,
             "anthropic-version": API_VERSION,
             "content-type": "application/json",
         })
         started = time.perf_counter()
         try:
-            with urllib.request.urlopen(http, timeout=self.timeout) as resp:
+            with urllib.request.urlopen(req, timeout=self.timeout) as resp:
                 payload = json.loads(resp.read().decode("utf-8"))
                 request_id = resp.headers.get("request-id")
         except urllib.error.HTTPError as error:
             text = error.read().decode("utf-8", errors="replace")[:300]
             if error.code in RETRYABLE or error.code >= 500:
-                raise TransientError(f"HTTP {error.code}: {text}") from None
+                raise TransientError(f"HTTP {error.code}: {text}", retry_after=_retry_after(error)) from None
             raise PermanentError(f"HTTP {error.code}: {text}") from None
-        except (urllib.error.URLError, socket.timeout, TimeoutError, ConnectionError) as error:
+        except (urllib.error.URLError, socket.timeout, TimeoutError, ConnectionError, http.client.IncompleteRead, http.client.HTTPException) as error:
             raise TransientError(f"connection: {error}") from None
+        except (json.JSONDecodeError, UnicodeDecodeError) as error:
+            raise TransientError(f"invalid json response: {error}") from None
         latency = int((time.perf_counter() - started) * 1000)
-        text = "".join(block.get("text", "") for block in payload.get("content", []) if block.get("type") == "text")
-        stop = payload.get("stop_reason")
-        usage = payload.get("usage") or {}
+        try:
+            text = "".join(block.get("text", "") for block in payload.get("content", []) if block.get("type") == "text")
+            stop = payload.get("stop_reason")
+            usage = payload.get("usage") or {}
+        except (AttributeError, TypeError) as error:
+            raise PermanentError(f"unexpected response structure: {error}") from None
         return {
             "raw_text": "" if stop == "refusal" else text,
             "input_tokens": usage.get("input_tokens"),
