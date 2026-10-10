@@ -115,10 +115,10 @@ def build_pairs(rows: Iterable[dict], first_version: str, second_version: str) -
         version = r.get("version")
         if pair_id is None or version not in (first_version, second_version):
             continue
-        by_pair.setdefault(pair_id, {})[version] = r
+        by_pair.setdefault((pair_id, r.get("_draw")), {})[version] = r
     pairs: list[Pair] = []
     dropped: list[str] = []
-    for pair_id, versions in sorted(by_pair.items()):
+    for (pair_id, _draw), versions in sorted(by_pair.items(), key=lambda kv: str(kv[0])):
         if first_version not in versions or second_version not in versions:
             dropped.append(pair_id)
             continue
@@ -156,10 +156,10 @@ def pair_transition_counts(pairs: Iterable[Pair]) -> dict:
 
 def paired_condition_difference(rows: Iterable[dict], condition_a: str, condition_b: str) -> Metric:
     """같은 item_id가 두 조건 모두에 있는 행만 써서 정답 여부 차이(a - b)의 평균을 구한다."""
-    by_item: dict[str, dict[str, dict]] = {}
+    by_item: dict = {}
     for r in rows:
         if r.get("condition") in (condition_a, condition_b):
-            by_item.setdefault(r["item_id"], {})[r["condition"]] = r
+            by_item.setdefault((r["item_id"], r.get("_draw")), {})[r["condition"]] = r
     diffs = [
         int(is_correct(v[condition_a])) - int(is_correct(v[condition_b]))
         for v in by_item.values() if condition_a in v and condition_b in v
@@ -214,3 +214,100 @@ def controlled_summary(rows: Iterable[dict], first_version: str, second_version:
     if any(r.get("designated_distractor_id") for r in rows):
         summary["distractor_rate_by_version"] = metric_table(rows, "version", distractor_rate)
     return summary
+
+
+# --------------------------------------------------------------------------- 벤치마크 요약(독립 창작 데이터셋)
+
+def confusion_matrix(rows: Iterable[dict], gold_key: str = "gold_role", pred_key: str = "predicted_role") -> dict:
+    """gold 역할 × 예측 역할. parse_status가 ok가 아니면 예측 칸에 상태를 적는다."""
+    matrix: dict = {}
+    for r in rows:
+        gold = str(r.get(gold_key))
+        pred = str(r.get(pred_key)) if r.get("parse_status") == "ok" else str(r.get("parse_status"))
+        matrix.setdefault(gold, {})
+        matrix[gold][pred] = matrix[gold].get(pred, 0) + 1
+    return {g: dict(sorted(v.items())) for g, v in sorted(matrix.items())}
+
+
+def entity_confusion(rows: Iterable[dict]) -> dict:
+    return confusion_matrix(rows, gold_key="gold_entity_id", pred_key="predicted_entity_id")
+
+
+def distractor_error_rate(rows: Iterable[dict]) -> Metric:
+    """distractor_present인 항목 중 경쟁 개체(지정값 또는 가장 최근 언급 개체)를 고른 비율."""
+    subset = [r for r in rows if r.get("distractor_present")]
+    hits = 0
+    for r in subset:
+        target = r.get("designated_distractor_id") or r.get("most_recent_mentioned_id")
+        if r.get("parse_status") == "ok" and target and r.get("predicted_entity_id") == target and target != r.get("gold_entity_id"):
+            hits += 1
+    return _ratio(hits, len(subset))
+
+
+def _pair_sides(pair_id: str) -> tuple[str, str]:
+    """pair_id '{scenario}:{a}~{b}' → (a, b). a가 비교 기준(base 쪽), b가 변형 쪽."""
+    names = pair_id.split(":", 1)[1] if ":" in pair_id else pair_id
+    a, _, b = names.partition("~")
+    return a, b
+
+
+def pair_consistency(rows: Iterable[dict]) -> dict:
+    """같은 pair_id의 두 항목(a: 기준, b: 변형)이 모두 정답인 비율과 방향별 전이. bootstrap 재표집의 _draw를 보존한다."""
+    groups: dict = {}
+    for r in rows:
+        for pid in (r.get("pair_ids") or ([r["pair_id"]] if r.get("pair_id") else [])):
+            groups.setdefault((pid, r.get("_draw")), []).append(r)
+    complete, dropped = {}, set()
+    for (pid, draw), members in groups.items():
+        a_name, b_name = _pair_sides(pid)
+        a = [r for r in members if r.get("version") == a_name]
+        b = [r for r in members if r.get("version") == b_name]
+        if len(a) == 1 and len(b) == 1:
+            complete[(pid, draw)] = (a[0], b[0])
+        else:
+            dropped.add(pid)
+    counts = Counter((int(is_correct(a)), int(is_correct(b))) for a, b in complete.values())
+    n = len(complete)
+    return {
+        "pair_accuracy": _ratio(counts.get((1, 1), 0), n).as_dict(),
+        "paired_harm": _ratio(counts.get((1, 0), 0), n).as_dict(),
+        "paired_recovery": _ratio(counts.get((0, 1), 0), n).as_dict(),
+        "n_pairs": n,
+        "dropped_pairs": sorted(dropped),
+        "transitions": {"both_correct": counts.get((1, 1), 0), "base_correct_only": counts.get((1, 0), 0),
+                        "variant_correct_only": counts.get((0, 1), 0), "both_wrong": counts.get((0, 0), 0)},
+    }
+
+
+def benchmark_summary(rows: Iterable[dict]) -> dict:
+    """모델×조건별 요약. 행은 benchmark.join_gold 결과다."""
+    rows = list(rows)
+    out: dict = {"by_model_condition": {}, "context_benefit": {}}
+    for (model, condition), subset in sorted(group_by(rows, lambda r: (r.get("model_label"), r.get("condition"))).items(), key=lambda kv: str(kv[0])):
+        out["by_model_condition"][f"{model}|{condition}"] = {
+            "overall_accuracy": entity_accuracy(subset).as_dict(),
+            "role_accuracy": role_accuracy(subset).as_dict(),
+            "chance_level": chance_level(subset).as_dict() if "qa" not in str(condition) else None,
+            "status_counts": status_counts(subset),
+            "by_referent_type": metric_table(subset, "gold_role", entity_accuracy),
+            "by_referent_changed": metric_table(subset, "referent_changed", entity_accuracy),
+            "by_speaker_changed": metric_table(subset, "speaker_changed", entity_accuracy),
+            "by_role_changed": metric_table(subset, "referent_role_changed", entity_accuracy),
+            "by_distractor_present": metric_table(subset, "distractor_present", entity_accuracy),
+            "by_turn_distance": metric_table(subset, "turn_distance", entity_accuracy),
+            "by_dataset": metric_table(subset, "dataset", entity_accuracy),
+            "by_creation_method": metric_table(subset, "creation_method", entity_accuracy),
+            "by_context_need": metric_table(subset, "context_need", entity_accuracy),
+            "by_linguistic_cue": metric_table([{**r, "_cue": c} for r in subset for c in (r.get("linguistic_cues") or ["none"])], "_cue", entity_accuracy),
+            "distractor_error_rate": distractor_error_rate(subset).as_dict(),
+            "role_confusion": confusion_matrix(subset),
+            "candidate_slot_confusion": entity_confusion(subset),  # 중립 ID 슬롯 기준. 시나리오마다 다른 인물이므로 인물 혼동이 아니다
+            "pair_consistency": pair_consistency(subset),
+            "n_rows": len(subset),
+            "n_clusters": len({r.get("conversation_id") for r in subset}),
+        }
+    for model, subset in group_by(rows, "model_label").items():
+        conditions = {r.get("condition") for r in subset}
+        if "full_mcq" in conditions and "target_only_mcq" in conditions:
+            out["context_benefit"][str(model)] = paired_condition_difference(subset, "full_mcq", "target_only_mcq").as_dict()
+    return out

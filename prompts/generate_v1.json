@@ -1,0 +1,8 @@
+{
+  "version": "generate_v1",
+  "created": "2026-10-10",
+  "status": "pilot",
+  "note": "시나리오 → 대화 초안 생성용. 평가 프롬프트가 아니므로 의도한 지시 대상을 포함한다. 생성 결과의 gold는 검수 전까지 후보값이다.",
+  "slots": ["scenario", "variant", "constraints", "output_schema"],
+  "template": "당신은 한국어 일상 대화를 쓰는 작가입니다. 아래 시나리오 명세에 맞는 짧은 다중턴 대화를 쓰세요.\n\n[시나리오]\n{scenario}\n\n[변형]\n{variant}\n\n[요구 사항]\n- 2~6턴, 각 턴은 한두 문장. 구어체로 자연스럽게.\n- 지정한 발화(target)에서 서술어의 주어를 생략하되, 앞 문맥을 읽은 한국어 화자라면 intended_referent를 하나로 특정할 수 있어야 합니다.\n- 종결어미·높임 표현·특정 어휘만으로 답이 드러나지 않게 하세요.\n- 참여자 이름만 쓰고 ID를 쓰지 마세요. 실제 인물·작품의 문장을 옮기지 마세요.\n{constraints}\n\n{output_schema}"
+}

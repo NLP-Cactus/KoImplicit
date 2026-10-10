@@ -1,0 +1,209 @@
+{
+  "n_samples": 20,
+  "n_errors": 0,
+  "n_warnings": 2,
+  "n_review_flags": 20,
+  "balance": {
+    "n": 20,
+    "by_dataset": {
+      "controlled": 17,
+      "naturalistic": 3
+    },
+    "by_role": {
+      "None": 1,
+      "addressee": 4,
+      "speaker": 4,
+      "third_party": 11
+    },
+    "by_referent_changed": {
+      "False": 13,
+      "None": 3,
+      "True": 4
+    },
+    "by_speaker_changed": {
+      "False": 1,
+      "None": 2,
+      "True": 17
+    },
+    "by_role_changed": {
+      "False": 8,
+      "None": 3,
+      "True": 9
+    },
+    "by_distractor_present": {
+      "False": 16,
+      "None": 1,
+      "True": 3
+    },
+    "by_turn_distance": {
+      "0": 2,
+      "1": 6,
+      "3": 3,
+      "5": 1,
+      "None": 8
+    },
+    "by_n_participants": {
+      "2": 17,
+      "3": 3
+    },
+    "by_n_turns": {
+      "2": 7,
+      "3": 2,
+      "4": 6,
+      "5": 2,
+      "6": 3
+    },
+    "by_annotation_status": {
+      "candidate": 20
+    },
+    "by_ambiguity_status": {
+      "ambiguous": 1,
+      "unreviewed": 19
+    },
+    "by_creation_method": {
+      "llm_authored": 20
+    },
+    "n_pairs": 10,
+    "n_scenarios": 10
+  },
+  "issues": [
+    {
+      "level": "review",
+      "sample_id": "S01-base",
+      "code": "HUMAN_REVIEW",
+      "message": "gold_unverified"
+    },
+    {
+      "level": "review",
+      "sample_id": "S01-distractor",
+      "code": "HUMAN_REVIEW",
+      "message": "gold_unverified,distractor_check_gold_still_unique"
+    },
+    {
+      "level": "review",
+      "sample_id": "S01-shift",
+      "code": "HUMAN_REVIEW",
+      "message": "gold_unverified"
+    },
+    {
+      "level": "review",
+      "sample_id": "S02-addressee",
+      "code": "HUMAN_REVIEW",
+      "message": "gold_unverified,deictic_no_text_mention"
+    },
+    {
+      "level": "review",
+      "sample_id": "S02-speaker",
+      "code": "HUMAN_REVIEW",
+      "message": "gold_unverified,deictic_no_text_mention"
+    },
+    {
+      "level": "warning",
+      "sample_id": "S02-third",
+      "code": "ANCHOR_MISSING",
+      "message": "controlled sample without anchor: shift variables are None"
+    },
+    {
+      "level": "review",
+      "sample_id": "S02-third",
+      "code": "HUMAN_REVIEW",
+      "message": "gold_unverified"
+    },
+    {
+      "level": "review",
+      "sample_id": "S03-vocative",
+      "code": "HUMAN_REVIEW",
+      "message": "gold_unverified,multi_party_addressee"
+    },
+    {
+      "level": "review",
+      "sample_id": "S03-novocative",
+      "code": "HUMAN_REVIEW",
+      "message": "multi_party_addressee"
+    },
+    {
+      "level": "review",
+      "sample_id": "S04-base",
+      "code": "HUMAN_REVIEW",
+      "message": "gold_unverified"
+    },
+    {
+      "level": "review",
+      "sample_id": "S04-distractor",
+      "code": "HUMAN_REVIEW",
+      "message": "gold_unverified,distractor_check_gold_still_unique"
+    },
+    {
+      "level": "review",
+      "sample_id": "S05-addressee",
+      "code": "HUMAN_REVIEW",
+      "message": "gold_unverified,deictic_no_text_mention"
+    },
+    {
+      "level": "warning",
+      "sample_id": "S05-speaker",
+      "code": "ANCHOR_MISSING",
+      "message": "controlled sample without anchor: shift variables are None"
+    },
+    {
+      "level": "review",
+      "sample_id": "S05-speaker",
+      "code": "HUMAN_REVIEW",
+      "message": "gold_unverified,deictic_no_text_mention"
+    },
+    {
+      "level": "review",
+      "sample_id": "S06-d1",
+      "code": "HUMAN_REVIEW",
+      "message": "gold_unverified"
+    },
+    {
+      "level": "review",
+      "sample_id": "S06-d5",
+      "code": "HUMAN_REVIEW",
+      "message": "gold_unverified"
+    },
+    {
+      "level": "review",
+      "sample_id": "S07-hearsay",
+      "code": "HUMAN_REVIEW",
+      "message": "gold_unverified"
+    },
+    {
+      "level": "review",
+      "sample_id": "S07-speaker",
+      "code": "HUMAN_REVIEW",
+      "message": "gold_unverified,deictic_no_text_mention"
+    },
+    {
+      "level": "review",
+      "sample_id": "S07-plain",
+      "code": "HUMAN_REVIEW",
+      "message": "gold_unverified"
+    },
+    {
+      "level": "review",
+      "sample_id": "N01-01",
+      "code": "HUMAN_REVIEW",
+      "message": "gold_unverified,deictic_no_text_mention,distractor_check_gold_still_unique"
+    },
+    {
+      "level": "review",
+      "sample_id": "N02-01",
+      "code": "HUMAN_REVIEW",
+      "message": "gold_unverified,deictic_no_text_mention,multi_party_addressee"
+    },
+    {
+      "level": "review",
+      "sample_id": "N03-01",
+      "code": "HUMAN_REVIEW",
+      "message": "gold_unverified"
+    },
+    {
+      "level": "info",
+      "sample_id": null,
+      "code": "NO_ACCEPTED",
+      "message": "no accepted samples yet; evaluation payload will be empty without --include-unreviewed"
+    }
+  ]
+}

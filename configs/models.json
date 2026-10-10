@@ -1,0 +1,44 @@
+{
+  "note": "모델별 설정. provider별 키는 환경 변수(ANTHROPIC_API_KEY, OPENAI_API_KEY)에서 읽는다. price_per_million은 2026-10 기준 공개 단가(USD)이며 실행 전에 재확인한다. openai_candidate의 model_id는 팀이 정한 뒤 채운다.",
+  "structured": true,
+  "system": "",
+  "output_schema": "후보 중 하나의 ID만 골라 다음 JSON 형식으로만 답하세요: {\"entity_id\": \"<ID>\"}",
+  "qa_output_schema": "대화에 나온 인물의 이름이나 표현으로 한 사람만 답하세요. 설명은 쓰지 마세요.",
+  "models": {
+    "mock": {
+      "provider": "mock",
+      "model_id": "mock-hash",
+      "decoding": {},
+      "adapter_options": {"strategy": "hash"},
+      "price_per_million": {"input": 0, "output": 0},
+      "seed_supported": true,
+      "note": "payload 해시로 후보를 고르는 결정적 가짜 모델. 파이프라인 검증 전용"
+    },
+    "claude_opus_5_5": {
+      "provider": "anthropic",
+      "model_id": "claude-opus-5-5",
+      "decoding": {"max_tokens": 256, "effort": "low"},
+      "adapter_options": {},
+      "price_per_million": {"input": 4.0, "output": 20.0},
+      "seed_supported": false,
+      "note": "temperature 미지원. 재현성은 payload 캐시로 확보"
+    },
+    "claude_haiku_5_5": {
+      "provider": "anthropic",
+      "model_id": "claude-haiku-5-5",
+      "decoding": {"max_tokens": 256, "effort": "low"},
+      "adapter_options": {},
+      "price_per_million": {"input": 0.10, "output": 0.50},
+      "seed_supported": false
+    },
+    "openai_candidate": {
+      "provider": "openai",
+      "model_id": null,
+      "decoding": {"temperature": 0, "max_tokens": 256},
+      "adapter_options": {},
+      "price_per_million": {"input": null, "output": null},
+      "seed_supported": true,
+      "note": "model_id와 단가를 확인한 뒤 채운다"
+    }
+  }
+}

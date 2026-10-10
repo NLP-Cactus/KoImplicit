@@ -1,86 +1,96 @@
 # KoImplicit
 
-한국어 대화의 생략 주어 해소에서 참여자 기준과 문맥 의존성을 평가하는 자연어처리 팀 프로젝트다.
+한국어 다중턴 대화에서 화자·청자·담화 대상 전환에 따른 LLM의 생략 주어 추적 능력을 평가하는 연구 저장소다.
 
-현재는 **설계 v2.0에 맞춘 프로젝트 기본 구조**다. 원자료·주석·문항·평가 프롬프트·모델 결과는 아직 없다. 기본 CLI는 폴더와 설정 상태만 확인하며 모델 호출이나 데이터 다운로드를 하지 않는다.
+**데이터 원칙(2026-10-10 확정)**: 국립국어원 말뭉치를 사용하지 않는다. 모든 평가 대화는 독립 설계한 시나리오로 새로 작성하고, 생성 출처·검수 이력을 기록한다. 절차는 [docs/데이터셋_구축방법.md](docs/데이터셋_구축방법.md)를 따른다.
 
-- 실행 기준: [최종설계안.md](최종설계안.md)
-- 조사 근거: [독립검증_2026-10.md](독립검증_2026-10.md)
-- 기존 연구 문서는 `docs/`에 보존했다.
+현재 상태: **Pilot v0 후보 20개**(`datasets/pilot_v0/`)가 자동 검증을 통과했고 모두 `annotation_status=candidate`(사람 검수 전)다. 외부 모델 평가는 아직 수행하지 않았고 mock provider로 파이프라인만 검증했다.
 
-## 시작
+## 설치와 검증
 
-Python 3.10 이상을 사용한다. 실행 코드는 Python 표준 라이브러리만 사용한다.
+Python 3.10 이상, 의존성은 `pydantic`뿐이다. 실제 API provider는 표준 라이브러리 `urllib`로 호출한다.
 
 ```powershell
 python -m venv .venv
 .venv\Scripts\python -m pip install -e .
 .venv\Scripts\python -m koimplicit status
-```
-
-설치 후에는 `koimplicit status`도 사용할 수 있다. 프로젝트 루트 밖에서 실행하면 `--root`로 작업 폴더를 지정한다.
-
-```powershell
-.venv\Scripts\python -m koimplicit status --json
 .venv\Scripts\python -m unittest discover -s tests
-.venv\Scripts\python -m koimplicit check-prompts
 ```
 
-ZA 2025 구어 JSON을 `data/raw/` 아래에 풀어 두면 구조 audit을 실행할 수 있다. 출력은 개수만 담고 문장 원문은 출력하지 않는다. `--cases`는 화자가 바뀐 대명사 연결의 source ID 목록을 쓰며 `data/` 아래 경로만 허용한다.
+## 파이프라인 실행 순서
 
 ```powershell
-.venv\Scripts\python -m koimplicit audit --cases data\interim\cross_speaker_pronoun_links.json
+# 1. 시나리오 명세 확인
+python -m koimplicit scenarios --file datasets/scenarios/pilot_v0.jsonl --list
+
+# 2. (선택) 시나리오로 대화 초안 생성. API 키 없이 mock으로 형식 검증 가능
+python -m koimplicit generate --scenarios datasets/scenarios/pilot_v0.jsonl --model mock --out data/generated/mock_test
+
+# 3. 자동 검증과 변형 pair 대조 (오류·문제가 있으면 종료 코드 1)
+python -m koimplicit validate --dataset datasets/pilot_v0 --scenarios datasets/scenarios/pilot_v0.jsonl --out datasets/pilot_v0/validation_report.json --strict
+python -m koimplicit pairs --dataset datasets/pilot_v0 --out datasets/pilot_v0/pairs.json
+
+# 4. 사람이 읽는 Pilot Review 문서
+python -m koimplicit review-doc --dataset datasets/pilot_v0 --scenarios datasets/scenarios/pilot_v0.jsonl --out datasets/pilot_v0/review.md
+
+# 5. 사람 검수 (검수 파일은 Git 제외). sample_id는 시트에 나오지 않고 id_map.json에만 있다
+python -m koimplicit annotate sheets --dataset datasets/pilot_v0 --annotators 검수자1,검수자2 --condition local --out annotations/controlled/pilot_v0   # Local 먼저
+python -m koimplicit annotate sheets --dataset datasets/pilot_v0 --annotators 검수자1,검수자2 --condition full  --out annotations/controlled/pilot_v0
+python -m koimplicit annotate agreement --sheets annotations/controlled/pilot_v0/sheet_full_검수자1.csv annotations/controlled/pilot_v0/sheet_full_검수자2.csv annotations/controlled/pilot_v0/sheet_local_검수자1.csv annotations/controlled/pilot_v0/sheet_local_검수자2.csv --out annotations/controlled/pilot_v0/agreement.json
+python -m koimplicit annotate pair-sheet --dataset datasets/pilot_v0 --out annotations/controlled/pilot_v0/pair_sheet.csv
+python -m koimplicit annotate adjudicate --dataset datasets/pilot_v0 --sheets annotations/controlled/pilot_v0/sheet_full_검수자1.csv annotations/controlled/pilot_v0/sheet_full_검수자2.csv annotations/controlled/pilot_v0/sheet_local_검수자1.csv annotations/controlled/pilot_v0/sheet_local_검수자2.csv --decisions annotations/controlled/pilot_v0/adjudication.csv --out annotations/controlled/pilot_v0/labels_adjudicated.jsonl
+
+# 6. 조정 라벨을 새 버전으로 동결한 뒤 공식 payload 생성 (accepted만 포함, 누수 검사 자동 실행)
+mkdir datasets\pilot_v1; copy datasets\pilot_v0\dialogues.jsonl datasets\pilot_v1\; copy annotations\controlled\pilot_v0\labels_adjudicated.jsonl datasets\pilot_v1\labels.jsonl
+python -m koimplicit validate --dataset datasets/pilot_v1 --strict
+python -m koimplicit payload --dataset datasets/pilot_v1 --out data/processed/pilot_v1
+
+#    검수 전 점검용 payload (결과는 공식 평가가 아니다)
+python -m koimplicit payload --dataset datasets/pilot_v0 --out data/processed/pilot_v0 --include-unreviewed
+
+# 7. 벤치마크 (mock / anthropic / openai). 조건: full_mcq, target_only_mcq, full_qa. 검수 전 표본은 --allow-unreviewed가 있어야 실행된다
+python -m koimplicit benchmark --items data/processed/pilot_v0/items.jsonl --gold data/processed/pilot_v0/gold.jsonl --model mock --conditions full_mcq,target_only_mcq --run-dir results/runs/20261010_mock_pilot_v0 --allow-unreviewed
+python -m koimplicit benchmark --items data/processed/pilot_v0/items.jsonl --gold data/processed/pilot_v0/gold.jsonl --model mock --conditions full_qa --prompt prompts/qa_v1.json --run-dir results/runs/20261010_mock_pilot_v0_qa --allow-unreviewed
+
+# 8. 휴리스틱 기준선과 지표 재계산(+ scenario 단위 cluster bootstrap)
+python -m koimplicit baselines --items data/processed/pilot_v0/items.jsonl --gold data/processed/pilot_v0/gold.jsonl --out results/analysis/pilot_v0_baselines
+python -m koimplicit metrics --normalized results/runs/20261010_mock_pilot_v0/normalized.jsonl --gold data/processed/pilot_v0/gold.jsonl --n-boot 2000 --out results/analysis/pilot_v0_mock_metrics.json
 ```
 
-`parse`는 같은 파일을 `data/interim/`의 `utterances.jsonl`, `targets.jsonl`, `gold_hints.jsonl`로 평탄화한다. 세부 규약은 [말뭉치 활용 구현 가이드](docs/말뭉치_활용_구현가이드.md) 2절을 따른다.
-
-```powershell
-.venv\Scripts\python -m koimplicit parse
-```
-
-평가 코드(`metrics`, `bootstrap`, `normalize`, `runner`, `baselines`)는 데이터와 gold 없이 더미 레이블 표로 검증한 상태다. `koimplicit run`은 현재 네트워크를 쓰지 않는 `dry` provider만 있고, prompt template이 비어 있어 승인 전에는 실행을 거부한다. 구현 순서는 [docs/말뭉치_활용_구현가이드.md](docs/말뭉치_활용_구현가이드.md)와 [docs/평가_설계가이드.md](docs/평가_설계가이드.md)를 따른다.
+실제 모델을 쓰려면 `configs/models.json`의 모델 라벨을 고르고 환경 변수를 설정한다. 코드는 `.env`를 읽지 않으므로 셸에서 직접 설정한다(`$env:ANTHROPIC_API_KEY="..."`). `openai_candidate`의 `model_id`는 팀이 정한 뒤 채운다. 같은 `--run-dir`는 같은 모델·프롬프트·입력일 때만 재사용되며 캐시로 재개된다.
 
 ## 폴더 구조
 
 ```text
 KoImplicit/
-├── 최종설계안.md                 # 현재 실행 설계 v2.0
-├── 독립검증_2026-10.md           # 문헌·공식 데이터 검증 근거
-├── configs/study.json           # MVP 수량·입력 조건·모델 선택 상태
-├── schemas/annotation.schema.json # 자연 자료 annotation 명세 초안
-├── src/koimplicit/              # 상태 확인 CLI, 평가 지표·bootstrap·정규화·실행기·기준선
-├── docs/                        # 설계 이력과 단계별 구현 가이드
-├── data/
-│   ├── raw/                     # 승인받은 ZA 2025 구어 원본
-│   ├── interim/                 # 구조 audit·정규화 중간 자료
-│   ├── processed/               # 후속 평가 입력
-│   └── manifests/               # source 연결·대화 split·버전 기록
-├── annotations/
-│   ├── development/             # 자연 개발 자료 독립 판정·조정
-│   ├── heldout/                 # 독립 자연 평가 자료 판정
-│   └── controlled/              # 후속 A/B 쌍의 검증·family 기록
-├── prompts/                     # prompt slot 뼈대(template 비어 있음), 승인 후 버전 고정
-├── results/
-│   ├── runs/                    # 모델 출력·실행 설정
-│   ├── analysis/                # entity/pair accuracy·cluster 분석
-│   └── figures/                 # 후속 결과 그림
-└── tests/                       # 기본 CLI 확인
+├── datasets/                      # 독립 창작 데이터(Git 추적)
+│   ├── scenarios/pilot_v0.jsonl   # 시나리오 명세(조건·의도·변형 선언)
+│   └── pilot_v0/                  # dialogues.jsonl(모델 노출 가능) + labels.jsonl(정답·메타, 비노출)
+│       ├── review.md / pairs.json / validation_report.json
+├── src/koimplicit/
+│   ├── schema.py                  # Pydantic 스키마, 파생 변수(역할·shift·거리·distractor)
+│   ├── scenarios.py / generate.py / variations.py
+│   ├── validate.py / annotation.py / payload.py
+│   ├── runner.py / normalize.py / metrics.py / bootstrap.py / baselines.py / benchmark.py
+│   └── providers/                 # dry, mock, anthropic, openai_chat
+├── prompts/                       # mcq_v1, qa_v1, generate_v1
+├── configs/                       # study.json(범위·변수·경로), models.json(모델별 설정·단가)
+├── docs/                          # 데이터셋_구축방법.md(현행), 설계 이력
+├── data/processed/                # payload 출력(Git 제외)
+├── annotations/controlled/        # 검수 시트·조정(Git 제외)
+└── results/                       # runs(실행 기록), analysis(Git 제외)
 ```
 
-`data/`, `annotations/`, `results/`의 실제 자료는 Git에서 제외한다. `.gitkeep`과 폴더 안내문만 추적한다. Git 제외는 공개 허가를 대신하지 않으며, 원문·파생 자료의 공개 범위는 실제 약정에 따라 확인한다.
+## 핵심 규칙
 
-## 설계와 구조의 연결
+- 역할(speaker / addressee / third_party)은 항상 **목표 발화의 화자 기준**으로 계산한다. 3인 대화의 청자는 호격·2인칭 표현 또는 인접쌍+내용으로 확정하고, 못 하면 비운다.
+- `speaker_changed`와 `referent_changed`는 별개 변수다. anchor(이전 참조 대상)는 경험자·대주어를 포함하는 사람 주어 규칙으로 찾고, 없으면 `None`이지 `False`가 아니다.
+- 정답이 불명확하면 `gold_referent_id`를 비운다(S03-novocative가 그 예다).
+- `dialogues.jsonl`과 `items.jsonl`에는 정답·anchor·distractor·작성 근거가 없다. 후보는 중립 ID(E1..)로 노출되고 `payload`가 실제 파일로 누수를 검사한다.
+- `annotation_status=accepted`가 아닌 표본은 공식 평가셋에 들어가지 않는다. `--allow-unreviewed` 실행은 결과에 `contains_unreviewed`로 표시된다.
+- 같은 시나리오의 변형은 독립 표본이 아니다. bootstrap과 pair 지표는 `scenario_id`를 cluster로 쓴다. `pairs`의 단일 변수 판정은 자동 구조 검사이며 사람의 pair 판정이 끝나야 minimal pair로 보고한다.
 
-| 단계 | 저장 위치 | 구현 착수 조건 |
-|---|---|---|
-| ZA 2025 구어 확보 | data/raw | 이용 승인·약정 |
-| speaker/context/target 구조 audit | data/interim | 실파일 구조 확인 |
-| 대화 단위 development/held-out split | data/manifests | 대상 적합성과 대화 ID 확인 |
-| Full/Local 독립 인간 판정 | annotations | 같은 입력 기준의 entity·충분성 판정 |
-| 자연 평가 N | data/processed, results/runs | gold·prompt·분석 기준 동결 |
-| 통제 실험 A/B | annotations/controlled | 후속 제작 및 독립 인간 검증 |
-| 결과 분석 | results/analysis | 대화/family 단위 cluster 보존 |
+## 설계 문서
 
-MVP 예산은 자연 개발 40개·held-out 80개, A/B 각 12쌍, 모델 2개다. 모델 ID는 아직 지정하지 않았다. 현재 수량은 설정된 **계획**이며 확보된 데이터 수가 아니다.
-
-다음 구현은 구어 실파일 parser와 후보 필터(말뭉치 활용 가이드 2·3절)다. 문항 생성과 실제 모델 provider는 해당 단계의 입력과 승인을 확인한 뒤 추가한다.
+- 현행: [docs/데이터셋_구축방법.md](docs/데이터셋_구축방법.md), [AGENTS.md](AGENTS.md)
+- 이력: [최종설계안.md](최종설계안.md) v2.0(연구 질문·지표 정의는 유지, 말뭉치 확보 절차는 폐기), [독립검증_2026-10.md](독립검증_2026-10.md), `docs/`의 이전 가이드

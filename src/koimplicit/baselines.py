@@ -33,21 +33,10 @@ def _participant_for_role(item: dict, role: str) -> str | None:
 
 
 def _mentions_in_text(text: str, roster: Iterable[dict]) -> list[tuple[int, str]]:
-    """(위치, entity_id) 목록. roster의 label과 aliases가 텍스트에 나타난 모든 자리."""
-    found = []
-    for entry in roster:
-        names = [entry.get("label")] + list(entry.get("aliases") or [])
-        for name in names:
-            if not name:
-                continue
-            start = 0
-            while True:
-                pos = text.find(name, start)
-                if pos == -1:
-                    break
-                found.append((pos, entry["entity_id"]))
-                start = pos + len(name)
-    return sorted(found)
+    """(위치, entity_id) 목록. 긴 표면형부터 겹침 없이 찾는다(schema.find_mentions와 같은 규칙)."""
+    from .schema import find_mentions, surface_forms_of
+
+    return find_mentions(text, surface_forms_of(list(roster)))
 
 
 def majority_role_prior(item: dict, fitted: dict) -> dict:
@@ -107,3 +96,57 @@ def mapping_failure_rate(rows: Iterable[dict]) -> dict:
     rows = list(rows)
     failed = sum(1 for r in rows if r.get("parse_status") != "ok")
     return {"failed": failed, "total": len(rows), "rate": failed / len(rows) if rows else None}
+
+
+# --------------------------------------------------------------------------- 독립 창작 데이터셋용 기준선
+
+def _strip_speaker_labels(full_text: str, candidates: Iterable[dict]) -> list[str]:
+    """'이름: 발화' 줄에서 발화자 라벨을 뗀다. 라벨은 언급이 아니다."""
+    labels = sorted({c.get("label") for c in candidates if c.get("label")}, key=len, reverse=True)
+    lines = []
+    for line in full_text.split("\n"):
+        for label in labels:
+            if line.startswith(label + ": "):
+                line = line[len(label) + 2:]
+                break
+        lines.append(line)
+    return lines
+
+
+def most_recent_entity(item: dict) -> dict:
+    """목표 서술어 앞까지의 텍스트(발화자 라벨 제외)에서 마지막으로 언급된 후보를 고른다."""
+    candidates = item.get("candidates") or []
+    lines = _strip_speaker_labels(item.get("full_text", ""), candidates)
+    marker = item.get("target_marker") or {}
+    label = item.get("target_speaker_label") or ""
+    if lines and isinstance(marker, dict) and marker.get("begin") is not None:
+        cut = marker["begin"] - (len(label) + 2)
+        lines[-1] = lines[-1][:max(cut, 0)]
+    text = "\n".join(lines)
+    mentions = _mentions_in_text(text, candidates)
+    if not mentions:
+        return {"predicted_entity_id": None, "parse_status": "unmapped", "rule": "no explicit mention"}
+    return {"predicted_entity_id": mentions[-1][1], "parse_status": "ok", "rule": "most_recent_entity"}
+
+
+def current_speaker(item: dict) -> dict:
+    speaker = item.get("target_speaker_id")
+    if speaker is None:
+        for c in item.get("candidates") or []:
+            if c.get("label") == item.get("target_speaker_label"):
+                speaker = c["entity_id"]
+    if speaker is None:
+        return {"predicted_entity_id": None, "parse_status": "unmapped", "rule": "current_speaker"}
+    return {"predicted_entity_id": speaker, "parse_status": "ok", "rule": "current_speaker"}
+
+
+def current_addressee(item: dict) -> dict:
+    """2인 대화면 상대 참여자, 3인 대화면 목표 발화 직전에 말한 다른 참여자(인접쌍 휴리스틱)."""
+    speaker = item.get("target_speaker_id")
+    participants = [p for p in item.get("dialogue_participants") or [] if p != speaker]
+    if len(participants) == 1:
+        return {"predicted_entity_id": participants[0], "parse_status": "ok", "rule": "other_participant"}
+    for prior in reversed((item.get("speaker_sequence") or [])[:-1]):
+        if prior != speaker:
+            return {"predicted_entity_id": prior, "parse_status": "ok", "rule": "previous_speaker"}
+    return {"predicted_entity_id": None, "parse_status": "unmapped", "rule": "current_addressee"}
