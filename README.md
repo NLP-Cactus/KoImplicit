@@ -23,7 +23,10 @@ python -m venv .venv
 ```powershell
 .venv\Scripts\python -m koimplicit status --json
 .venv\Scripts\python -m unittest discover -s tests
+.venv\Scripts\python -m koimplicit check-prompts
 ```
+
+평가 코드(`metrics`, `bootstrap`, `normalize`, `runner`, `baselines`)는 데이터와 gold 없이 더미 레이블 표로 검증한 상태다. `koimplicit run`은 현재 네트워크를 쓰지 않는 `dry` provider만 있고, prompt template이 비어 있어 승인 전에는 실행을 거부한다. 구현 순서는 [docs/말뭉치_활용_구현가이드.md](docs/말뭉치_활용_구현가이드.md)와 [docs/평가_설계가이드.md](docs/평가_설계가이드.md)를 따른다.
 
 ## 폴더 구조
 
@@ -33,7 +36,8 @@ KoImplicit/
 ├── 독립검증_2026-10.md           # 문헌·공식 데이터 검증 근거
 ├── configs/study.json           # MVP 수량·입력 조건·모델 선택 상태
 ├── schemas/annotation.schema.json # 자연 자료 annotation 명세 초안
-├── src/koimplicit/              # Python 패키지와 상태 확인 CLI
+├── src/koimplicit/              # 상태 확인 CLI, 평가 지표·bootstrap·정규화·실행기·기준선
+├── docs/                        # 설계 이력과 단계별 구현 가이드
 ├── data/
 │   ├── raw/                     # 승인받은 ZA 2025 구어 원본
 │   ├── interim/                 # 구조 audit·정규화 중간 자료
@@ -43,7 +47,7 @@ KoImplicit/
 │   ├── development/             # 자연 개발 자료 독립 판정·조정
 │   ├── heldout/                 # 독립 자연 평가 자료 판정
 │   └── controlled/              # 후속 A/B 쌍의 검증·family 기록
-├── prompts/                     # 후속 승인된 평가 prompt 버전
+├── prompts/                     # prompt slot 뼈대(template 비어 있음), 승인 후 버전 고정
 ├── results/
 │   ├── runs/                    # 모델 출력·실행 설정
 │   ├── analysis/                # entity/pair accuracy·cluster 분석
@@ -67,4 +71,4 @@ KoImplicit/
 
 MVP 예산은 자연 개발 40개·held-out 80개, A/B 각 12쌍, 모델 2개다. 모델 ID는 아직 지정하지 않았다. 현재 수량은 설정된 **계획**이며 확보된 데이터 수가 아니다.
 
-다음 구현은 구어 실파일 audit부터 시작한다. Corpus parser·문항 생성·모델 provider·통계 pipeline은 해당 단계의 입력을 확인한 뒤 추가한다.
+다음 구현은 구어 실파일 parser와 후보 필터(말뭉치 활용 가이드 2·3절)다. 문항 생성과 실제 모델 provider는 해당 단계의 입력과 승인을 확인한 뒤 추가한다.
