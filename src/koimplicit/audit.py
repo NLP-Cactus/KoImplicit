@@ -5,12 +5,13 @@ holds source IDs and must be written under the git-ignored data/ folder.
 """
 
 import json
+import random
 import re
 from collections import Counter
 from pathlib import Path
 
 from .corpus import find_spoken_release as find_corpus
-from .corpus import load_spoken_release, person
+from .corpus import load_spoken_release, parse_release, person
 
 PARTICIPANT_LABEL = re.compile(r"^(화자|청자)")
 NONREFERENTIAL = re.compile(r"^(누군가|무언가|무엇|어딘가)")
@@ -168,3 +169,136 @@ def run_audit(root: Path, corpus_path: Path = None, cases_path: Path = None) -> 
         cases_path.write_text(json.dumps(cases, ensure_ascii=False, indent=2), encoding="utf-8")
         report["cases_file"] = str(cases_path.relative_to(root))
     return report
+
+
+# --- Review sheet for the human structure audit (implementation guide §4) ---------------------
+
+# (stratum, items). perspective_conflict is drawn first so it is never crowded out.
+AUDIT_STRATA = (("perspective_conflict", 6), ("speaker", 8), ("addressee", 8),
+                ("third_party_relation", 7), ("name_placeholder", 5), ("manual_check", 6))
+CONTEXT_WINDOW = 15  # sentences before the target, the guideline's antecedent search range
+SHEET_COLUMNS = (
+    "item", "stratum", "target_id",
+    # Fill these BEFORE opening audit_key.md.
+    "대화연결_OK", "발화자_OK", "순서_OK", "발화경계_문제", "서술어위치_OK", "원문차이_영향",
+    "근거유형(텍스트/참여자지시/미래/비지시/불명)", "내판정_인물(A/B/제3자:누구/불명)", "5단ID_메모", "메모",
+    # Fill this AFTER opening audit_key.md.
+    "원주석_비교(일치/형태복사/오연결/기타)",
+)
+_STRATUM_OF = {"speaker_pronoun": "speaker", "speaker_deictic": "speaker",
+               "addressee_pronoun": "addressee", "addressee_deictic": "addressee",
+               "third_party_relation": "third_party_relation", "name_placeholder": "name_placeholder",
+               "other": "manual_check"}
+
+
+def audit_stratum(hint: dict):
+    if hint["perspective_conflict"]:
+        return "perspective_conflict"
+    return _STRATUM_OF.get(hint["hint_category"])  # generic_or_plural is not audited
+
+
+def sample_audit_items(utterances: list, targets: list, hints: list, seed: int,
+                       strata=AUDIT_STRATA) -> list:
+    """Stratified sample, one item per conversation where possible, two at most."""
+    dyads = {u["conversation_id"] for u in utterances if u["conversation_type"].startswith("2인")}
+    pools = {name: [] for name, _ in strata}
+    for target, hint in zip(targets, hints):
+        stratum = audit_stratum(hint)
+        if target["conversation_id"] in dyads and stratum in pools:
+            pools[stratum].append((target, hint))
+    rng = random.Random(seed)
+    used = Counter()
+    chosen = []
+    for name, wanted in strata:
+        pool = sorted(pools[name], key=lambda pair: pair[0]["target_id"])
+        rng.shuffle(pool)
+        picked = []
+        for cap in (1, 2):
+            for target, hint in pool:
+                if len(picked) == wanted:
+                    break
+                if used[target["conversation_id"]] < cap and all(t is not target for _, t, _ in picked):
+                    picked.append((name, target, hint))
+                    used[target["conversation_id"]] += 1
+        chosen += picked
+    return chosen
+
+
+def _mark_predicate(form: str, begin: int, end: int) -> str:
+    return f"{form[:begin]}[[{form[begin:end]}]]{form[end:]}"
+
+
+def render_audit_sheet(items: list, utterances_by_conversation: dict) -> tuple:
+    """Return (sheet_markdown, key_markdown, tsv_text). The sheet hides restored forms and antecedents."""
+    sheet = ["# 구조 audit 검토 시트", "",
+             "읽는 법과 판정 열 설명은 `docs/말뭉치_활용_구현가이드.md` 4절을 따른다.",
+             "판정은 `audit_sheet.tsv`에 적고, 모두 적은 뒤에만 `audit_key.md`를 연다.", ""]
+    key = ["# 구조 audit 정답 키 (판정을 마친 뒤에 연다)", ""]
+    rows = ["\t".join(SHEET_COLUMNS)]
+    for number, (stratum, target, hint) in enumerate(items, 1):
+        rows_of_doc = utterances_by_conversation[target["conversation_id"]]
+        order = target["order"]
+        start = max(0, order - CONTEXT_WINDOW)
+        run = [u for u in rows_of_doc if u["run_index"] == rows_of_doc[order]["run_index"]]
+        position = [u["order"] for u in run].index(order) + 1
+        sheet += [f"## {number:02d}. [{stratum}] {target['target_id']}", ""]
+        if start:
+            sheet.append(f"(대화 앞부분 {start}문장 생략)")
+            sheet.append("")
+        for u in rows_of_doc[start:order + 1]:
+            text = u["form"]
+            if u["order"] == order:
+                text = "**" + _mark_predicate(text, target["predicate_begin"], target["predicate_end"]) + "**"
+            depth = len(u["sentence_id"].split("."))
+            suffix = f"  `5단 ID {u['sentence_id']}`" if depth == 5 else ""
+            sheet.append(f"- {u['speaker_label']}: {text}{suffix}")
+        sheet.append("")
+        differs = [u for u in rows_of_doc[start:order + 1] if u["form_differs"]]
+        if differs:
+            sheet.append("원 전사문(form과 다른 문장만):")
+            sheet += [f"- {u['speaker_label']}: {u['original_form']}" for u in differs]
+            sheet.append("")
+        sheet += [f"목표: {rows_of_doc[order]['speaker_label']}의 서술어 `{target['predicate_form']}`의 생략 주어. "
+                  f"이 문장은 화자 run의 {position}/{len(run)}번째 문장이다.", ""]
+
+        label_of = {u["sentence_id"]: u["speaker_label"] for u in rows_of_doc}
+        order_of = {u["sentence_id"]: u["order"] for u in rows_of_doc}
+        key += [f"## {number:02d}. [{stratum}] {target['target_id']}", "",
+                f"- 원 복원형: `{hint['restored_form']}`",
+                f"- 자동 힌트: {hint['hint_category']} (근거 {hint['hint_basis']}, "
+                f"화자 전환 {hint['perspective_conflict']}, 대명사 선행어 충돌 {hint['pronoun_antecedent_conflict']})"]
+        for a in target["antecedents"] or [{"form": "(없음)", "relation": "missing"}]:
+            if a["relation"] in ("same", "earlier", "later"):
+                where = f"{label_of[a['sentence_id']]}의 문장, 목표 기준 {order_of[a['sentence_id']] - order:+d}문장"
+            else:
+                where = a["relation"]
+            key.append(f"- 원 선행어: `{a['form']}` ({where})")
+        key.append("")
+        rows.append("\t".join([f"{number:02d}", stratum, target["target_id"]] + [""] * (len(SHEET_COLUMNS) - 3)))
+    return "\n".join(sheet) + "\n", "\n".join(key) + "\n", "\n".join(rows) + "\n"
+
+
+def run_audit_sample(root: Path, corpus_path: Path = None, out_dir: Path = None,
+                     seed: int = 20261010) -> dict:
+    root = root.resolve()
+    corpus_path = (corpus_path or find_corpus(root)).resolve()
+    out_dir = (out_dir or root / "data" / "interim").resolve()
+    if not out_dir.is_relative_to(root / "data"):
+        raise ValueError("Audit sheets contain corpus text and must be written under data/")
+    utterances, targets, hints, _ = parse_release(load_spoken_release(corpus_path))
+    by_conversation = {}
+    for u in utterances:
+        by_conversation.setdefault(u["conversation_id"], []).append(u)
+    items = sample_audit_items(utterances, targets, hints, seed)
+    sheet, key, tsv = render_audit_sheet(items, by_conversation)
+    out_dir.mkdir(parents=True, exist_ok=True)
+    for name, text in (("audit_sheet.md", sheet), ("audit_key.md", key), ("audit_sheet.tsv", tsv)):
+        (out_dir / name).write_text(text, encoding="utf-8")
+    return {
+        "seed": seed,
+        "items": len(items),
+        "conversations": len({t["conversation_id"] for _, t, _ in items}),
+        "per_stratum": dict(Counter(stratum for stratum, _, _ in items)),
+        "files": [str((out_dir / name).relative_to(root))
+                  for name in ("audit_sheet.md", "audit_sheet.tsv", "audit_key.md")],
+    }

@@ -5,7 +5,8 @@ import tempfile
 import unittest
 from pathlib import Path
 
-from koimplicit.audit import audit, person, run_audit
+from koimplicit.audit import audit, person, render_audit_sheet, run_audit, sample_audit_items
+from koimplicit.corpus import flatten_targets, flatten_utterances
 
 
 def sentence(number, speaker, za=()):
@@ -15,7 +16,7 @@ def sentence(number, speaker, za=()):
 
 def subject(restored, antecedent_form, antecedent_number):
     antecedent_id = "D1.1.1.0" if antecedent_number is None else f"D1.1.1.{antecedent_number}"
-    return {"predicate": {"begin": 0},
+    return {"predicate": {"form": "s", "word_id": 1, "begin": 0, "end": 1},
             "ellipsis": [{"restored": {"form": restored, "type": "subject"},
                           "antecedent": [{"form": antecedent_form, "sentence_id": antecedent_id}]}]}
 
@@ -60,6 +61,27 @@ class AuditCheck(unittest.TestCase):
             report = run_audit(root, corpus, root / "data" / "interim" / "cases.json")
             self.assertEqual(report["cases_file"], str(Path("data/interim/cases.json")))
             self.assertNotIn("_cases", report)
+
+
+class AuditSheetCheck(unittest.TestCase):
+    def setUp(self):
+        self.utterances = flatten_utterances(CORPUS["document"][0])
+        self.targets, self.hints = flatten_targets(CORPUS["document"][0], self.utterances)
+
+    def test_sampling_is_stratified_and_repeatable(self):
+        strata = (("perspective_conflict", 1), ("speaker", 2))
+        first = sample_audit_items(self.utterances, self.targets, self.hints, 7, strata)
+        again = sample_audit_items(self.utterances, self.targets, self.hints, 7, strata)
+        self.assertEqual([t["target_id"] for _, t, _ in first], [t["target_id"] for _, t, _ in again])
+        self.assertEqual([s for s, _, _ in first], ["perspective_conflict", "speaker"])  # one dialogue: cap 2
+
+    def test_sheet_hides_answers(self):
+        items = sample_audit_items(self.utterances, self.targets, self.hints, 7, (("speaker", 1),))
+        sheet, key, tsv = render_audit_sheet(items, {"D1.1": self.utterances})
+        self.assertIn("[[", sheet)
+        self.assertNotIn("내가", sheet)  # restored form only in the key
+        self.assertIn("내가", key)
+        self.assertEqual(len(tsv.strip().splitlines()), 2)
 
 
 if __name__ == "__main__":

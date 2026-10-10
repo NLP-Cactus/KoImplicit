@@ -1,12 +1,12 @@
 """Workspace utilities. `status` never opens corpus files; `audit` prints counts only;
-`parse` writes corpus-derived files under data/ only; `check-prompts`, `run`, `metrics`
+`parse` and `audit-sample` write corpus-derived files under data/ only; `check-prompts`, `run`, `metrics`
 serve the evaluation pipeline and never read the raw corpus."""
 
 import argparse
 import json
 from pathlib import Path
 
-from .audit import run_audit
+from .audit import run_audit, run_audit_sample
 from .corpus import run_parse
 
 
@@ -96,6 +96,15 @@ def command_audit(args, parser) -> int:
     return 0
 
 
+def command_audit_sample(args, parser) -> int:
+    try:
+        report = run_audit_sample(args.root, args.corpus, args.out, args.seed)
+    except (OSError, ValueError, KeyError, TypeError) as error:
+        parser.exit(2, f"Audit sample error: {error}\n")
+    print(json.dumps(report, ensure_ascii=False, indent=2))
+    return 0
+
+
 def command_check_prompts(args, parser) -> int:
     from .runner import load_prompt, validate_prompt
 
@@ -169,6 +178,13 @@ def main(argv=None) -> int:
     parse.add_argument("--raw", type=Path, help="ZA 2025 spoken JSON (default: found under data/raw)")
     parse.add_argument("--out", type=Path, help="Output folder under data/ (default: data/interim)")
     parse.set_defaults(func=command_parse)
+
+    sample = commands.add_parser("audit-sample", help="Write a stratified review sheet for the human structure audit")
+    sample.add_argument("--root", type=Path, default=Path.cwd())
+    sample.add_argument("--corpus", type=Path, help="ZA 2025 spoken JSON (default: found under data/raw)")
+    sample.add_argument("--out", type=Path, help="Output folder under data/ (default: data/interim)")
+    sample.add_argument("--seed", type=int, default=20261010)
+    sample.set_defaults(func=command_audit_sample)
 
     check = commands.add_parser("check-prompts", help="Validate prompt slot files")
     check.add_argument("--prompts", default="prompts")
