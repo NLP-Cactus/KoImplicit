@@ -14,7 +14,7 @@
 
 ## 2. 현재 작업 기준
 
-- 데이터·평가 절차: [docs/데이터셋_구축방법.md](docs/데이터셋_구축방법.md) v2.1.
+- 데이터·평가 절차: [docs/데이터셋_구축방법.md](docs/데이터셋_구축방법.md) v2.2.
 - 연구 질문·지표 정의: [최종설계안.md](최종설계안.md) v2.0 (말뭉치 확보·audit·자연 자료 split 절차는 폐기).
 - 구조·실행 방법: [README.md](README.md).
 - 말뭉치 기반의 이전 가이드(`docs/말뭉치_활용_구현가이드.md`, `docs/annotation_가이드라인.md`, `docs/평가_설계가이드.md`, `docs/6주_역할분담.md`)는 설계 이력으로만 보존한다.
@@ -32,7 +32,9 @@
 
 - 역할(speaker / addressee / third_party)은 목표 발화의 화자 기준으로 판정한다.
 - 발화자 변경(`speaker_changed`)과 참조 대상 변경(`referent_changed`)을 분리한다. anchor를 확인할 수 없으면 `None`으로 두고 `False`로 만들지 않는다.
-- 다자 대화에서 청자를 식별할 수 없으면 `addressee_id`를 확정하지 않는다. 정답이 불명확하면 `gold_referent_id`를 비우고 `ambiguity_status`로 표시한다.
+- 다자 대화의 청자는 호격·2인칭 표현 또는 인접쌍+발화 내용으로만 확정한다. 식별할 수 없으면 `addressee_id`를 확정하지 않는다. 정답이 불명확하면 `gold_referent_id`를 비우고 `ambiguity_status`로 표시한다.
+- anchor는 목표 이전 발화의 마지막 절에서 사람을 가리키는 주어(경험자·대주어 포함)가 단수 인물로 확정되는 첫 발화다(docs/데이터셋_구축방법.md 2절). 확정할 수 없으면 `None`.
+- 검수 시트에는 sample_id·family·variant·작성자 라벨을 넣지 않는다(review_id와 id_map.json 사용). Local 시트를 Full보다 먼저 판정한다.
 - 변형이 바꾼 변수를 `manipulated_variables`/`pair_claims`로 선언하고 `koimplicit pairs`로 실제 차이를 대조한다. `unclaimed_differences`가 있으면 단일 변수 minimal pair라고 부르지 않는다.
 - 종결어미·경어·어휘 단서 사용을 자동으로 잘못된 추론이라고 해석하지 않는다. `linguistic_cues`로 기록해 분리 분석한다.
 - 같은 시나리오의 변형은 독립 표본이 아니다. 불확실성은 `scenario_id` 단위 cluster bootstrap으로 낸다.
@@ -50,4 +52,5 @@
 - 필요한 범위의 가장 단순한 구현을 선택하고 불필요한 framework·placeholder 모듈을 추가하지 않는다.
 - 변경에 맞는 검증(`python -m unittest discover -s tests`, `koimplicit validate --strict`)을 수행하고 실행한 검사와 남은 한계를 정확하게 보고한다.
 - 외부 API 호출 결과를 mock 실행 결과와 구별해서 보고한다. 실제 모델 평가를 하지 않았으면 그렇게 쓴다.
+- 검수 전 표본의 평가는 `--allow-unreviewed`로만 실행하고 결과를 공식 평가로 쓰지 않는다. `pairs`의 단일 변수 판정은 자동 구조 검사이며 사람의 pair 판정 전에는 minimal pair로 보고하지 않는다.
 - 관련 없는 사용자 변경을 되돌리거나 덮어쓰지 않는다.

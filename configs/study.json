@@ -1,6 +1,6 @@
 {
   "project": "KoImplicit",
-  "design_version": "2.1",
+  "design_version": "2.2",
   "stage": "pilot_candidates",
   "data_strategy": {
     "corpus_used": false,

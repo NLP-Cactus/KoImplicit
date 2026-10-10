@@ -1,5 +1,7 @@
 # Correct-Detect 논문 정리
 
+> **설계 이력 문서(2026-10-10 이후 실행 기준 아님).** 이 프로젝트는 국립국어원 말뭉치를 사용하지 않기로 했고 데이터 전략을 독립 창작 데이터셋으로 바꿨다. 이 문서의 말뭉치 사용 전제, 모델 결과에 따른 난도 조정, distractor 선택을 곧바로 이해 실패로 보는 해석은 현행 규칙과 다르다. 현행 절차는 [docs/데이터셋_구축방법.md](데이터셋_구축방법.md)와 [AGENTS.md](../AGENTS.md)를 따른다. 연구 기록으로 보존한다.
+
 - **제목:** Correct-Detect: Balancing Performance and Ambiguity Through the Lens of Coreference Resolution in LLMs
 - **저자:** Amber Shore, Russell Scheinberg, Ameeta Agrawal (Portland State Univ.), So Young Lee (Miami Univ.)
 - **게재:** EMNLP 2025 Main, pp. 30044–30058, DOI 10.18653/v1/2025.emnlp-main.1527 (arXiv:2509.14456)
