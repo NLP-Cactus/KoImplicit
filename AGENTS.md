@@ -33,7 +33,7 @@
 - 역할(speaker / addressee / third_party)은 목표 발화의 화자 기준으로 판정한다.
 - 발화자 변경(`speaker_changed`)과 참조 대상 변경(`referent_changed`)을 분리한다. anchor를 확인할 수 없으면 `None`으로 두고 `False`로 만들지 않는다.
 - 다자 대화의 청자는 호격·2인칭 표현 또는 인접쌍+발화 내용으로만 확정한다. 식별할 수 없으면 `addressee_id`를 확정하지 않는다. 정답이 불명확하면 `gold_referent_id`를 비우고 `ambiguity_status`로 표시한다.
-- anchor는 목표 이전 발화의 마지막 절에서 사람을 가리키는 주어(경험자·대주어 포함)가 단수 인물로 확정되는 첫 발화다(docs/데이터셋_구축방법.md 2절). 확정할 수 없으면 `None`.
+- anchor는 목표 이전 발화의 마지막 절에서 사람을 가리키는 주어(경험자·대주어 포함)가 단수 인물로 확정되는 첫 발화다(docs/데이터셋_구축방법.md 2절). 확정할 수 없으면 `None`. 작성자가 선언하는 설계 변수이며 검수자에게 판정시키지 않는다. 역할도 검수 항목이 아니라 계산값이다.
 - 검수 시트에는 sample_id·family·variant·작성자 라벨을 넣지 않는다(review_id와 id_map.json 사용). Local 시트를 Full보다 먼저 판정한다.
 - 변형이 바꾼 변수를 `manipulated_variables`/`pair_claims`로 선언하고 `koimplicit pairs`로 실제 차이를 대조한다. `unclaimed_differences`가 있으면 단일 변수 minimal pair라고 부르지 않는다.
 - 종결어미·경어·어휘 단서 사용을 자동으로 잘못된 추론이라고 해석하지 않는다. `linguistic_cues`로 기록해 분리 분석한다.

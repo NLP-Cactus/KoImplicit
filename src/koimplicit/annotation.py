@@ -7,9 +7,12 @@
 2. 검수자가 CSV를 채운다(독립 판정).
 3. load_sheet + agreement: 최초 독립 판정을 보존한 채 일치도(percent, Cohen's κ)를 계산한다. κ가 정의되지 않으면 None.
 4. make_pair_sheet: 독립 판정이 끝난 뒤 pair 두 버전을 나란히 보고 minimal pair 타당성을 판정한다.
-5. adjudicate: Full 판정으로 gold·anchor·청자를 확정한다. 전원 일치 → accepted, 전원 모호 → rejected,
+5. adjudicate: Full 판정으로 gold와 청자(3인 대화)를 확정한다. 전원 일치 → accepted, 전원 모호 → rejected,
    불일치 → decisions로 수정 또는 제외. Local 판정이 있으면 context_need를 분류한다.
    최초 판정은 validation_metadata.annotator_votes에 전부 보존한다.
+
+검수자는 역할(speaker/addressee/third_party)과 anchor를 적지 않는다. 역할은 인물·화자·청자에서 코드가 계산하고,
+anchor는 시나리오 설계 변수로 작성자가 선언한다(검수 대상이 아니며 pair 검수에서 조작 타당성으로만 확인한다).
 
 검수 파일은 annotations/ 아래(Git 제외)에 둔다.
 """
@@ -24,14 +27,12 @@ from collections import Counter
 from pathlib import Path
 from typing import Iterable, Optional
 
-from .schema import LabelRecord, Sample, infer_addressee, render_dialogue, role_of
+from .schema import LabelRecord, Sample, render_dialogue
 
 SHEET_FIELDS = ["order", "review_id", "dialogue", "target_turn", "target_predicate", "target_speaker", "candidates",
-                "naturalness_1to5", "referent_id", "referent_role", "addressee_id", "context_sufficient", "ambiguity",
-                "previous_referent_id", "previous_referent_turn", "notes"]
-JUDGEMENT_FIELDS = ["naturalness_1to5", "referent_id", "referent_role", "addressee_id", "context_sufficient", "ambiguity",
-                    "previous_referent_id", "previous_referent_turn", "notes"]
-AGREEMENT_FIELDS = ("referent_id", "referent_role", "addressee_id", "context_sufficient", "ambiguity", "previous_referent_id", "previous_referent_turn")
+                "naturalness_1to5", "referent_id", "addressee_id", "context_sufficient", "ambiguity", "notes"]
+JUDGEMENT_FIELDS = ["naturalness_1to5", "referent_id", "addressee_id", "context_sufficient", "ambiguity", "notes"]
+AGREEMENT_FIELDS = ("referent_id", "addressee_id", "context_sufficient", "ambiguity", "determinable")
 PAIR_FIELDS = ["pair_id", "sample_a", "sample_b", "claimed_manipulations", "dialogue_a", "dialogue_b",
                "pair_valid", "only_claimed_changed", "gold_change_as_intended", "notes"]
 VALID_AMBIGUITY = ("unambiguous", "ambiguous", "uncertain")
@@ -146,8 +147,13 @@ def agreement(rows: list[dict], fields: tuple = AGREEMENT_FIELDS) -> dict:
                 common = sorted(set(a) & set(b))
                 stats = {"n_common": len(common), "fields": {}}
                 for field in fields:
-                    both = [s for s in common if a[s].get(field) and b[s].get(field)]
-                    va, vb = [a[s][field] for s in both], [b[s][field] for s in both]
+                    if field == "determinable":  # 확정 가능 여부. ambiguous/uncertain 라벨 차이를 합친다
+                        both = [s for s in common if a[s].get("ambiguity") and b[s].get("ambiguity")]
+                        va = [str(a[s]["ambiguity"] == "unambiguous") for s in both]
+                        vb = [str(b[s]["ambiguity"] == "unambiguous") for s in both]
+                    else:
+                        both = [s for s in common if a[s].get(field) and b[s].get(field)]
+                        va, vb = [a[s][field] for s in both], [b[s][field] for s in both]
                     kappa = _kappa(va, vb)
                     stats["fields"][field] = {
                         "n": len(va), "n_missing": len(common) - len(va),
@@ -195,8 +201,7 @@ def make_pair_sheet(samples: Iterable[Sample], out_path: Path) -> Path:
 # --------------------------------------------------------------------------- 조정
 
 def load_decisions(path: Optional[Path]) -> dict[str, dict]:
-    """조정 파일 열: sample_id, adjudicator, decision(accept|reject), final_referent_id, final_ambiguity,
-    final_addressee_id, final_anchor_turn, final_anchor_referent_id, reason."""
+    """조정 파일 열: sample_id, adjudicator, decision(accept|reject), final_referent_id, final_ambiguity, final_addressee_id, reason."""
     if path is None or not Path(path).exists():
         return {}
     out = {}
@@ -225,7 +230,7 @@ def _check_votes(samples: list[Sample], rows: list[dict]) -> dict[str, list[dict
         r.setdefault("condition", "full")
         for field in JUDGEMENT_FIELDS:
             r.setdefault(field, "")
-        for field in ("referent_id", "previous_referent_id", "addressee_id"):
+        for field in ("referent_id", "addressee_id"):
             if r.get(field) and r[field] not in ids:
                 problems.append(f"{r['annotator']}/{r['sample_id']}: {field}={r[field]!r} not a candidate")
         if r.get("ambiguity") and r["ambiguity"] not in VALID_AMBIGUITY:
@@ -256,14 +261,15 @@ def classify_context_need(final_gold: Optional[str], local_votes: list[dict]) ->
 
 
 def adjudicate(samples: Iterable[Sample], rows: list[dict], decisions: dict[str, dict], min_annotators: int = 2) -> tuple[list[LabelRecord], dict]:
-    """최초 판정을 보존하고 최종 라벨을 만든다. Full 판정이 gold·anchor·청자를 정하고 Local 판정은 context_need에 쓴다.
+    """최초 판정을 보존하고 최종 라벨을 만든다. Full 판정이 gold와 청자를 정하고 Local 판정은 context_need에 쓴다.
 
     규칙:
     - 서로 다른 검수자 수 < min_annotators: in_review.
     - 전원 referent_id 일치 + 전원 unambiguous: accepted. 작성자 gold와 다르면 기록.
     - 전원 referent_id 비움 + 전원 같은 ambiguous/uncertain: rejected.
     - 그 외: decisions의 accept(final_referent_id 필수)/reject, 없으면 in_review.
-    - anchor·청자: 전원 일치하면 그 값(빈 값 일치면 None), 불일치면 decisions의 final_* 또는 작성자 값 유지 + disputed 기록.
+    - 청자(3인 대화): 전원 일치하면 그 값, 불일치면 decisions의 final_addressee_id 또는 작성자 값 유지 + disputed 기록.
+    - anchor는 작성자 선언값을 그대로 둔다(검수 항목이 아님).
     """
     samples = list(samples)
     votes = _check_votes(samples, rows)
@@ -279,7 +285,7 @@ def adjudicate(samples: Iterable[Sample], rows: list[dict], decisions: dict[str,
         meta = dict(lab.validation_metadata)
         meta["annotator_votes"] = [{k: r.get(k, "") for k in ("annotator", "condition", *JUDGEMENT_FIELDS)} for r in rows if r["sample_id"] == s.sample_id]
         meta["adjudicated_at"] = now
-        original = {"gold": lab.gold_referent_id, "anchor_turn": lab.anchor_turn, "anchor_referent_id": lab.anchor_referent_id, "addressee_id": lab.addressee_id}
+        original = {"gold": lab.gold_referent_id, "addressee_id": lab.addressee_id}
         decision = decisions.get(s.sample_id) or {}
         distinct = {r["annotator"] for r in v}
         if len(distinct) < min_annotators:
@@ -312,21 +318,6 @@ def adjudicate(samples: Iterable[Sample], rows: list[dict], decisions: dict[str,
                 lab.annotation_status = "in_review"
                 meta["agreement"] = "disagreement_pending"
                 summary["pending"] += 1
-            # anchor
-            anchor_id = _unanimous([r["previous_referent_id"] for r in v])
-            anchor_turn = _unanimous([r["previous_referent_turn"] for r in v])
-            if decision.get("final_anchor_referent_id") or decision.get("final_anchor_turn"):
-                lab.anchor_referent_id = decision.get("final_anchor_referent_id") or None
-                lab.anchor_turn = int(decision["final_anchor_turn"]) if decision.get("final_anchor_turn") else None
-            elif anchor_id is not None and anchor_turn is not None:
-                if anchor_id and anchor_turn:
-                    lab.anchor_referent_id, lab.anchor_turn = anchor_id, int(anchor_turn)
-                elif not anchor_id and not anchor_turn:
-                    lab.anchor_referent_id = lab.anchor_turn = None
-                else:
-                    meta["anchor_disputed"] = "inconsistent unanimous values"
-            else:
-                meta["anchor_disputed"] = [{"annotator": r["annotator"], "id": r["previous_referent_id"], "turn": r["previous_referent_turn"]} for r in v]
             # 청자(다자 대화)
             addressee = _unanimous([r["addressee_id"] for r in v])
             if decision.get("final_addressee_id"):
@@ -335,12 +326,7 @@ def adjudicate(samples: Iterable[Sample], rows: list[dict], decisions: dict[str,
                 lab.addressee_id = addressee
             elif addressee is None and any(r["addressee_id"] for r in v):
                 meta["addressee_disputed"] = [{"annotator": r["annotator"], "id": r["addressee_id"]} for r in v]
-            # 역할 대조
-            mismatches = [r["annotator"] for r in v if r["referent_id"] and r["referent_role"] and role_check(s, r["referent_id"]) != r["referent_role"]]
-            if mismatches:
-                meta["role_mismatch"] = mismatches
-        changed = {k: {"from": original[k], "to": new} for k, new in (("gold", lab.gold_referent_id), ("anchor_turn", lab.anchor_turn),
-                   ("anchor_referent_id", lab.anchor_referent_id), ("addressee_id", lab.addressee_id)) if original[k] != new}
+        changed = {k: {"from": original[k], "to": new} for k, new in (("gold", lab.gold_referent_id), ("addressee_id", lab.addressee_id)) if original[k] != new}
         if changed:
             meta["author_values_overridden"] = changed
         context_need = classify_context_need(lab.gold_referent_id if lab.annotation_status == "accepted" else None, local_votes.get(s.sample_id, []))
@@ -351,9 +337,3 @@ def adjudicate(samples: Iterable[Sample], rows: list[dict], decisions: dict[str,
         labels.append(LabelRecord.model_validate(lab.model_dump()))
     return labels, dict(summary)
 
-
-def role_check(sample: Sample, referent_id: str) -> Optional[str]:
-    """검수자가 적은 referent_id로 역할을 계산한다(검수자의 referent_role과 대조용)."""
-    rec = sample.record
-    addressee = infer_addressee(rec, rec.speaker_id, sample.label.addressee_id)
-    return role_of(referent_id, rec.speaker_id, addressee, rec)
