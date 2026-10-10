@@ -1,47 +1,41 @@
 {
   "project": "KoImplicit",
-  "design_version": "2.0",
-  "stage": "scaffold",
-  "source": {
-    "corpus": "NIKL Zero Anaphora Resolution Corpus 2025",
-    "subset": "spoken",
-    "acquired": false,
-    "structure_audited": false
+  "design_version": "2.1",
+  "stage": "pilot_candidates",
+  "data_strategy": {
+    "corpus_used": false,
+    "note": "국립국어원 무형 대용어 복원 말뭉치는 사용하지 않는다. 모든 대화는 독립 설계한 시나리오로 새로 작성한다(docs/데이터셋_구축방법.md)."
   },
   "scope": {
     "language": "ko",
-    "participants": 2,
+    "participants": [2, 3],
+    "turns": [2, 6],
     "argument_type": "subject",
     "referent_scope": "singular_human",
-    "context_end": "target_utterance_end",
-    "turn_unit": "unverified"
+    "roles": ["speaker", "addressee", "third_party"],
+    "variables": ["referent_shift", "distractor", "context_distance", "speaker_role", "linguistic_cue"]
+  },
+  "datasets": {
+    "pilot_v0": {"path": "datasets/pilot_v0", "scenarios": "datasets/scenarios/pilot_v0.jsonl", "target_n": 20, "status": "candidate"},
+    "controlled": {"path": "datasets/controlled", "target_n": null, "status": "planned"},
+    "naturalistic": {"path": "datasets/naturalistic", "target_n": null, "status": "planned"}
   },
   "budget": {
-    "natural_development": 40,
-    "natural_heldout": 80,
-    "controlled_A_pairs": 12,
-    "controlled_B_pairs": 12,
-    "qa_subset": 24
+    "pilot_candidates": 20,
+    "annotators": 2,
+    "full_dataset_target": 600,
+    "note": "600은 향후 목표이며 pilot 검수 전에는 생성하지 않는다"
   },
-  "conditions": {
-    "N": ["full_mcq", "local_mcq", "full_qa_subset"],
-    "A": "referent_changing_context",
-    "B": "gold_preserving_recency"
-  },
-  "models": [
-    {"label": "model_a", "model_id": null},
-    {"label": "model_b", "model_id": null}
-  ],
-  "primary_metrics": ["natural_full_entity_accuracy", "A_pair_accuracy", "B_paired_harm"],
-  "cluster_units": {"natural": "conversation", "controlled": "family"},
+  "conditions": ["full_mcq", "target_only_mcq", "full_qa"],
+  "baselines": ["most_recent_entity", "current_speaker", "current_addressee", "target_only_llm", "full_context_llm"],
+  "primary_metrics": ["overall_accuracy", "accuracy_by_referent_type", "accuracy_by_shift", "distractor_error_rate", "context_benefit", "pair_consistency"],
+  "cluster_unit": "scenario_id",
+  "seed": 20261010,
   "paths": {
-    "raw": "data/raw",
-    "interim": "data/interim",
+    "datasets": "datasets",
+    "scenarios": "datasets/scenarios",
     "processed": "data/processed",
-    "manifests": "data/manifests",
-    "development_annotations": "annotations/development",
-    "heldout_annotations": "annotations/heldout",
-    "controlled_annotations": "annotations/controlled",
+    "annotations": "annotations/controlled",
     "prompts": "prompts",
     "runs": "results/runs",
     "analysis": "results/analysis",

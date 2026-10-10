@@ -1,5 +1,9 @@
-# 평가 prompt 작업 공간
+# 프롬프트 (버전 고정)
 
-실제 prompt는 아직 작성하지 않았다. `mcq_v1.json`, `qa_v1.json`은 slot 선언만 있는 뼈대이며 `template`이 비어 있다. 비어 있는 동안 `koimplicit run`은 `PromptNotApproved`로 실행을 거부한다. `koimplicit check-prompts`로 slot 선언과 template의 일치를 검사한다. 후속 단계에서 Full/Local MCQ와 Full QA의 입력 정보를 맞추고 개발 자료로 검토한 뒤 버전을 고정한다.
+| 파일 | 용도 | slot |
+|---|---|---|
+| `mcq_v1.json` | Multiple-choice 주평가. `full_mcq`, `target_only_mcq` 공통 | dialogue, target_utterance, target_marker, target_speaker_label, candidates, output_schema |
+| `qa_v1.json` | Direct Answer 확장 조건 `full_qa` | 위에서 candidates 제외 |
+| `generate_v1.json` | 시나리오 → 대화 초안 생성 | scenario, variant, constraints, output_schema |
 
-원문, 문항, 정답 예시는 이 폴더의 공개 prompt 파일에 넣지 않는다. 모델 실행은 각 항목을 독립 요청으로 처리하고 pair의 다른 버전이나 정답을 history에 남기지 않는다.
+`koimplicit check-prompts`가 slot 선언과 template의 일치를 검사한다. 평가 프롬프트에는 정답·역할·anchor 정보가 들어가지 않는다(`koimplicit validate`의 누수 검사 대상). 문구를 바꾸면 새 버전 파일을 만들고 실행 기록의 prompt sha256으로 구분한다. 생성 프롬프트는 의도한 지시 대상을 포함하지만 그 결과의 gold는 검수 전까지 후보값이다.

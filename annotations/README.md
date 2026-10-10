@@ -1,7 +1,13 @@
-# 주석 작업 공간
+# 주석 작업 공간 (Git 제외)
 
-development와 heldout은 대화 단위로 분리한다. 원 gold를 숨긴 두 명의 독립 판정, 조정 결과와 최초 판정을 함께 보존한다.
+`controlled/<dataset>/`에 `koimplicit annotate`의 파일을 둔다.
 
-controlled는 후속 A/B 제작 후 독립 검증과 pair/family 연결을 저장한다. 현재 문항은 없다.
+| 파일 | 만드는 단계 | 내용 |
+|---|---|---|
+| `sheet_<검수자>.csv` | `annotate sheets` | 검수자별 독립 판정 시트. 정답·anchor·작성 근거는 없다. 열: naturalness_1to5, referent_id, referent_role, context_sufficient(yes/no), ambiguity(unambiguous/ambiguous/uncertain), previous_referent_id, previous_referent_turn, notes |
+| `agreement.json` | `annotate agreement` | 필드별 percent agreement, Cohen's κ, 자연스러움 차이, 불일치 목록 |
+| `pair_sheet.csv` | `annotate pair-sheet` | 독립 판정 뒤 두 버전을 나란히 보고 pair_valid, only_claimed_changed, gold_change_as_intended 판정 |
+| `adjudication.csv` | 조정자가 작성 | sample_id, adjudicator, decision(accept/reject), final_referent_id, final_ambiguity, reason |
+| `labels_adjudicated.jsonl` | `annotate adjudicate` | 최종 라벨. 최초 판정은 `validation_metadata.annotator_votes`에 보존 |
 
-자연 annotation 필드 초안은 [annotation.schema.json](../schemas/annotation.schema.json)에 있다. 실제 원자료 형태를 확인한 뒤 확정하며, 구조 검증만으로 정답의 의미적 타당성을 보장하지 않는다. 실제 주석 자료는 Git에서 제외된다.
+채택된 라벨은 새 버전 폴더(`datasets/pilot_v1/labels.jsonl` 등)로 복사해 동결한다. 검수자는 판정 전에 `labels.jsonl`과 `review.md`의 작성자 라벨을 보지 않는다.

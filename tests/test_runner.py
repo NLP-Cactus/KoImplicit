@@ -68,10 +68,21 @@ class RequestBuilding(unittest.TestCase):
         self.assertEqual(runner.validate_prompt(PROMPT), [])
 
     def test_repository_prompt_files_load(self):
+        from koimplicit.generate import GENERATE_SLOTS
         root = Path(__file__).resolve().parents[1] / "prompts"
         for path in root.glob("*.json"):
-            prompt = runner.load_prompt(path)
-            self.assertEqual(prompt["template"], "", f"{path.name} template must stay empty until approved")
+            slots = GENERATE_SLOTS if path.name.startswith("generate") else runner.PROMPT_SLOTS
+            prompt = runner.load_prompt(path, allowed_slots=slots)
+            self.assertTrue(prompt["template"].strip(), f"{path.name} template is empty")
+            self.assertEqual(runner.validate_prompt(prompt), [], path.name)
+            self.assertNotIn("role", prompt["template"].lower())
+
+    def test_target_only_condition_uses_local_text(self):
+        clean = runner.strip_gold(item())
+        req = runner.build_request(clean, "target_only_mcq", PROMPT, CONFIG)
+        self.assertNotIn("A: 문장1", req["user"])
+        self.assertEqual(req["candidate_ids"], ["A", "B", "T1"])
+        self.assertEqual(runner.build_request(clean, "full_qa", PROMPT, CONFIG)["candidate_ids"], [])
 
 
 class Retry(unittest.TestCase):

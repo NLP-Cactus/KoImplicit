@@ -1,6 +1,8 @@
-"""provider adapter 레지스트리. 실제 API provider는 모델 선정 뒤 한 파일씩 추가한다.
+"""provider adapter 레지스트리.
 
-현재는 네트워크를 쓰지 않는 dry adapter만 있다. 요청 생성·기록·캐시를 비용 없이 점검하는 용도다.
+- dry: 네트워크 없음, 응답 없음(요청 기록만).
+- mock: 네트워크 없음, 결정적 응답. API 키 없이 전체 파이프라인을 검증할 때 쓴다.
+- anthropic / openai: 표준 라이브러리 urllib로 호출. 키는 환경 변수에서만 읽는다.
 """
 
 from __future__ import annotations
@@ -9,6 +11,9 @@ from importlib import import_module
 
 PROVIDERS = {
     "dry": "koimplicit.providers.dry",
+    "mock": "koimplicit.providers.mock",
+    "anthropic": "koimplicit.providers.anthropic",
+    "openai": "koimplicit.providers.openai_chat",
 }
 
 

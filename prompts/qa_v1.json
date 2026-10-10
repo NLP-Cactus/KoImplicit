@@ -1,8 +1,8 @@
 {
   "version": "qa_v1",
   "created": "2026-10-10",
-  "status": "not_approved",
-  "note": "QA 조건은 candidates slot을 쓰지 않는다. template은 사용자 승인 뒤 작성한다.",
+  "status": "pilot",
+  "note": "Direct Answer 확장 조건. 후보 목록이 없고 응답은 normalize.map_qa_answer로 entity ID에 매핑한다.",
   "slots": ["dialogue", "target_utterance", "target_marker", "target_speaker_label", "output_schema"],
-  "template": ""
+  "template": "다음은 한국어 대화입니다. 각 줄은 \"이름: 발화\" 형식이며, 마지막 줄이 질문 대상 발화입니다.\n\n[대화]\n{dialogue}\n\n[질문]\n{target_speaker_label}의 발화 \"{target_utterance}\"에서 서술어 \"{target_marker}\"의 생략된 주어는 누구입니까?\n\n{output_schema}"
 }

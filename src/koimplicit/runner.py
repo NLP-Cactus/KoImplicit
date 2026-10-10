@@ -17,8 +17,10 @@ import time
 from pathlib import Path
 from typing import Iterable, Protocol
 
-GOLD_KEYS = ("gold_entity_id", "gold_role", "designated_distractor_id", "restored_form", "gold")
+GOLD_KEYS = ("gold_entity_id", "gold_role", "gold_referent_id", "gold_referent_role", "designated_distractor_id",
+             "distractor_id", "anchor_referent_id", "author_rationale", "restored_form", "gold")
 PROMPT_SLOTS = ("dialogue", "target_utterance", "target_marker", "target_speaker_label", "candidates", "output_schema")
+LOCAL_CONDITION_MARKERS = ("local", "target_only")
 MAX_RETRIES = 2
 
 
@@ -41,12 +43,12 @@ class ProviderAdapter(Protocol):
         네트워크 오류는 TransientError, 그 외는 PermanentError를 던진다."""
 
 
-def load_prompt(path: Path) -> dict:
+def load_prompt(path: Path, allowed_slots: tuple = PROMPT_SLOTS) -> dict:
     prompt = json.loads(Path(path).read_text(encoding="utf-8"))
     for key in ("version", "slots", "template"):
         if key not in prompt:
             raise ValueError(f"prompt file missing {key!r}: {path}")
-    unknown = set(prompt["slots"]) - set(PROMPT_SLOTS)
+    unknown = set(prompt["slots"]) - set(allowed_slots)
     if unknown:
         raise ValueError(f"unknown prompt slots {sorted(unknown)} in {path}")
     return prompt
@@ -109,7 +111,7 @@ def build_request(item: dict, condition: str, prompt: dict, run_config: dict) ->
     present = [k for k in GOLD_KEYS if k in item]
     if present:
         raise ValueError(f"item {item.get('item_id')} carries gold keys {present}; call strip_gold first")
-    if condition.startswith("local"):
+    if any(marker in condition for marker in LOCAL_CONDITION_MARKERS):
         dialogue = item["local_text"]
     else:
         dialogue = item["full_text"]
@@ -120,12 +122,14 @@ def build_request(item: dict, condition: str, prompt: dict, run_config: dict) ->
         "target_marker": item["target_marker"]["form"] if isinstance(item.get("target_marker"), dict) else item.get("target_marker", ""),
         "target_speaker_label": item["target_speaker_label"],
         "candidates": format_candidates(item["candidates"]) if include_candidates else "",
-        "output_schema": run_config.get("output_schema", ""),
+        "output_schema": run_config.get("output_schema", "") if include_candidates else run_config.get("qa_output_schema", run_config.get("output_schema", "")),
     }
     user = render_prompt(prompt, values)
     return {
+        "task": "resolve",
         "item_id": item["item_id"],
         "condition": condition,
+        "candidate_ids": [c["entity_id"] for c in item["candidates"]] if include_candidates else [],
         "model_id": run_config["model_id"],
         "system": run_config.get("system", ""),
         "user": user,
@@ -218,6 +222,8 @@ def run_items(
                 "output_tokens": response.get("output_tokens") if response else None,
                 "latency_ms": response.get("latency_ms") if response else None,
                 "finish_reason": response.get("finish_reason") if response else None,
+                "response_model": response.get("model") if response else None,
+                "request_id": response.get("request_id") if response else None,
                 "status": "ok" if response and response.get("raw_text") is not None else "missing",
             }
             if response is not None:
