@@ -1,0 +1,8 @@
+{
+  "version": "mcq_v1",
+  "created": "2026-10-10",
+  "status": "not_approved",
+  "note": "template은 사용자 승인 뒤 작성한다. 승인 전에는 render가 PromptNotApproved를 던진다.",
+  "slots": ["dialogue", "target_utterance", "target_marker", "target_speaker_label", "candidates", "output_schema"],
+  "template": ""
+}

@@ -1,5 +1,6 @@
 """Workspace utilities. `status` never opens corpus files; `audit` prints counts only;
-`parse` writes corpus-derived files under data/ only."""
+`parse` and `audit-sample` write corpus-derived files under data/ only; `check-prompts`, `run`, `metrics`
+serve the evaluation pipeline and never read the raw corpus."""
 
 import argparse
 import json
@@ -31,47 +32,34 @@ def workspace_status(root: Path) -> dict:
     }
 
 
-def main(argv=None) -> int:
-    parser = argparse.ArgumentParser(description="KoImplicit workspace utilities")
-    commands = parser.add_subparsers(dest="command", required=True)
-    status = commands.add_parser("status", help="Show configuration and folder availability")
-    status.add_argument("--root", type=Path, default=Path.cwd())
-    status.add_argument("--json", action="store_true", help="Print machine-readable status")
-    audit = commands.add_parser("audit", help="Count corpus structure and annotation patterns")
-    audit.add_argument("--root", type=Path, default=Path.cwd())
-    audit.add_argument("--corpus", type=Path, help="ZA 2025 spoken JSON (default: found under data/raw)")
-    audit.add_argument("--cases", type=Path, help="Write cross-speaker pronoun links under data/")
-    parse = commands.add_parser("parse", help="Flatten the ZA 2025 spoken release into data/interim JSONL")
-    parse.add_argument("--root", type=Path, default=Path.cwd())
-    parse.add_argument("--raw", type=Path, help="ZA 2025 spoken JSON (default: found under data/raw)")
-    parse.add_argument("--out", type=Path, help="Output folder under data/ (default: data/interim)")
-    sample = commands.add_parser("audit-sample", help="Write a stratified review sheet for the human structure audit")
-    sample.add_argument("--root", type=Path, default=Path.cwd())
-    sample.add_argument("--corpus", type=Path, help="ZA 2025 spoken JSON (default: found under data/raw)")
-    sample.add_argument("--out", type=Path, help="Output folder under data/ (default: data/interim)")
-    sample.add_argument("--seed", type=int, default=20261010)
-    args = parser.parse_args(argv)
-    if args.command == "audit-sample":
-        try:
-            report = run_audit_sample(args.root, args.corpus, args.out, args.seed)
-        except (OSError, ValueError, KeyError, TypeError) as error:
-            parser.exit(2, f"Audit sample error: {error}\n")
-        print(json.dumps(report, ensure_ascii=False, indent=2))
-        return 0
-    if args.command == "parse":
-        try:
-            report = run_parse(args.root, args.raw, args.out)
-        except (OSError, ValueError, KeyError, TypeError) as error:
-            parser.exit(2, f"Parse error: {error}\n")
-        print(json.dumps(report, ensure_ascii=False, indent=2))
-        return 0
-    if args.command == "audit":
-        try:
-            report = run_audit(args.root, args.corpus, args.cases)
-        except (OSError, ValueError, KeyError, TypeError) as error:
-            parser.exit(2, f"Audit error: {error}\n")
-        print(json.dumps(report, ensure_ascii=False, indent=2))
-        return 0
+def read_jsonl(path: Path) -> list[dict]:
+    with Path(path).open(encoding="utf-8") as f:
+        return [json.loads(line) for line in f if line.strip()]
+
+
+def join_rows(normalized: list[dict], items: list[dict]) -> list[dict]:
+    """normalized 행에 items의 gold·후보·대화 정보를 item_id로 붙인다."""
+    by_item = {i["item_id"]: i for i in items}
+    rows = []
+    for r in normalized:
+        item = by_item.get(r["item_id"])
+        if item is None:
+            continue
+        rows.append({
+            **r,
+            "gold_entity_id": item.get("gold_entity_id"),
+            "conversation_id": item.get("conversation_id"),
+            "family_id": item.get("family_id"),
+            "pair_id": item.get("pair_id"),
+            "version": item.get("version"),
+            "designated_distractor_id": item.get("designated_distractor_id"),
+            "candidates": item.get("candidates"),
+            "entity_roles": {c["entity_id"]: c.get("role") for c in item.get("candidates") or []},
+        })
+    return rows
+
+
+def command_status(args, parser) -> int:
     try:
         report = workspace_status(args.root)
     except (OSError, ValueError, KeyError, TypeError) as error:
@@ -88,3 +76,141 @@ def main(argv=None) -> int:
             state = "OK" if info["exists"] else "MISSING"
             print(f"[{state}] {label}: {info['path']}")
     return 0 if all(info["exists"] for info in report["paths"].values()) else 1
+
+
+def command_parse(args, parser) -> int:
+    try:
+        report = run_parse(args.root, args.raw, args.out)
+    except (OSError, ValueError, KeyError, TypeError) as error:
+        parser.exit(2, f"Parse error: {error}\n")
+    print(json.dumps(report, ensure_ascii=False, indent=2))
+    return 0
+
+
+def command_audit(args, parser) -> int:
+    try:
+        report = run_audit(args.root, args.corpus, args.cases)
+    except (OSError, ValueError, KeyError, TypeError) as error:
+        parser.exit(2, f"Audit error: {error}\n")
+    print(json.dumps(report, ensure_ascii=False, indent=2))
+    return 0
+
+
+def command_audit_sample(args, parser) -> int:
+    try:
+        report = run_audit_sample(args.root, args.corpus, args.out, args.seed)
+    except (OSError, ValueError, KeyError, TypeError) as error:
+        parser.exit(2, f"Audit sample error: {error}\n")
+    print(json.dumps(report, ensure_ascii=False, indent=2))
+    return 0
+
+
+def command_check_prompts(args, parser) -> int:
+    from .runner import load_prompt, validate_prompt
+
+    failed = 0
+    for path in sorted(Path(args.prompts).glob("*.json")):
+        prompt = load_prompt(path)
+        problems = validate_prompt(prompt)
+        approved = bool(prompt["template"].strip())
+        state = "approved" if approved else "template empty"
+        print(f"{path.name}: {state}; slots={prompt['slots']}" + (f"; problems={problems}" if problems else ""))
+        failed += bool(problems)
+    return 1 if failed else 0
+
+
+def command_metrics(args, parser) -> int:
+    from .bootstrap import cluster_bootstrap
+    from .metrics import controlled_summary, entity_accuracy, natural_summary
+
+    rows = join_rows(read_jsonl(args.normalized), read_jsonl(args.items))
+    report = {}
+    if args.experiment == "N":
+        for condition in sorted({r["condition"] for r in rows}):
+            subset = [r for r in rows if r["condition"] == condition]
+            report[condition] = natural_summary(subset)
+            report[condition]["entity_accuracy_ci"] = cluster_bootstrap(subset, "conversation_id", entity_accuracy, n_boot=args.n_boot, seed=args.seed)
+    else:
+        first, second = ("v1", "v2") if args.experiment == "A" else ("early", "late")
+        report[args.experiment] = controlled_summary(rows, first, second)
+    text = json.dumps(report, ensure_ascii=False, indent=2)
+    if args.out:
+        Path(args.out).write_text(text, encoding="utf-8")
+    print(text)
+    return 0
+
+
+def command_run(args, parser) -> int:
+    from .providers import get_adapter
+    from .runner import load_prompt, run_items
+
+    config = json.loads(Path(args.config).read_text(encoding="utf-8")) if args.config else {}
+    config.setdefault("model_id", args.model_id or "unset")
+    config.setdefault("model_label", args.model_label)
+    config.setdefault("provider", args.provider)
+    items = read_jsonl(args.items)
+    if args.split:
+        items = [i for i in items if i.get("split") == args.split]
+    prompt = load_prompt(Path(args.prompt))
+    adapter = get_adapter(args.provider)
+    summary = run_items(items, args.conditions.split(","), adapter, prompt, config, Path(args.run_dir), seed=args.seed)
+    print(json.dumps(summary, ensure_ascii=False))
+    return 0
+
+
+def main(argv=None) -> int:
+    parser = argparse.ArgumentParser(description="KoImplicit workspace utilities")
+    commands = parser.add_subparsers(dest="command", required=True)
+
+    status = commands.add_parser("status", help="Show configuration and folder availability")
+    status.add_argument("--root", type=Path, default=Path.cwd())
+    status.add_argument("--json", action="store_true", help="Print machine-readable status")
+    status.set_defaults(func=command_status)
+
+    audit = commands.add_parser("audit", help="Count corpus structure and annotation patterns")
+    audit.add_argument("--root", type=Path, default=Path.cwd())
+    audit.add_argument("--corpus", type=Path, help="ZA 2025 spoken JSON (default: found under data/raw)")
+    audit.add_argument("--cases", type=Path, help="Write cross-speaker pronoun links under data/")
+    audit.set_defaults(func=command_audit)
+
+    parse = commands.add_parser("parse", help="Flatten the ZA 2025 spoken release into data/interim JSONL")
+    parse.add_argument("--root", type=Path, default=Path.cwd())
+    parse.add_argument("--raw", type=Path, help="ZA 2025 spoken JSON (default: found under data/raw)")
+    parse.add_argument("--out", type=Path, help="Output folder under data/ (default: data/interim)")
+    parse.set_defaults(func=command_parse)
+
+    sample = commands.add_parser("audit-sample", help="Write a stratified review sheet for the human structure audit")
+    sample.add_argument("--root", type=Path, default=Path.cwd())
+    sample.add_argument("--corpus", type=Path, help="ZA 2025 spoken JSON (default: found under data/raw)")
+    sample.add_argument("--out", type=Path, help="Output folder under data/ (default: data/interim)")
+    sample.add_argument("--seed", type=int, default=20261010)
+    sample.set_defaults(func=command_audit_sample)
+
+    check = commands.add_parser("check-prompts", help="Validate prompt slot files")
+    check.add_argument("--prompts", default="prompts")
+    check.set_defaults(func=command_check_prompts)
+
+    metrics = commands.add_parser("metrics", help="Compute metrics from normalized outputs and items")
+    metrics.add_argument("--normalized", required=True)
+    metrics.add_argument("--items", required=True)
+    metrics.add_argument("--experiment", choices=["N", "A", "B"], default="N")
+    metrics.add_argument("--n-boot", type=int, default=2000)
+    metrics.add_argument("--seed", type=int, default=0)
+    metrics.add_argument("--out")
+    metrics.set_defaults(func=command_metrics)
+
+    run = commands.add_parser("run", help="Run items through a provider adapter and record responses")
+    run.add_argument("--items", required=True)
+    run.add_argument("--split")
+    run.add_argument("--conditions", required=True, help="comma-separated, e.g. full_mcq,local_mcq")
+    run.add_argument("--prompt", required=True)
+    run.add_argument("--provider", default="dry")
+    run.add_argument("--model-id")
+    run.add_argument("--model-label", default="model_a")
+    run.add_argument("--config", help="JSON with model_id, decoding, output_schema, system, seed")
+    run.add_argument("--run-dir", required=True)
+    run.add_argument("--seed", type=int, default=0)
+    run.set_defaults(func=command_run)
+
+    args = parser.parse_args(argv)
+    return args.func(args, parser)
