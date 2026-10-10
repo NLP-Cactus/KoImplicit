@@ -26,6 +26,18 @@ python -m venv .venv
 .venv\Scripts\python -m koimplicit check-prompts
 ```
 
+ZA 2025 구어 JSON을 `data/raw/` 아래에 풀어 두면 구조 audit을 실행할 수 있다. 출력은 개수만 담고 문장 원문은 출력하지 않는다. `--cases`는 화자가 바뀐 대명사 연결의 source ID 목록을 쓰며 `data/` 아래 경로만 허용한다.
+
+```powershell
+.venv\Scripts\python -m koimplicit audit --cases data\interim\cross_speaker_pronoun_links.json
+```
+
+`parse`는 같은 파일을 `data/interim/`의 `utterances.jsonl`, `targets.jsonl`, `gold_hints.jsonl`로 평탄화한다. 세부 규약은 [말뭉치 활용 구현 가이드](docs/말뭉치_활용_구현가이드.md) 2절을 따른다.
+
+```powershell
+.venv\Scripts\python -m koimplicit parse
+```
+
 평가 코드(`metrics`, `bootstrap`, `normalize`, `runner`, `baselines`)는 데이터와 gold 없이 더미 레이블 표로 검증한 상태다. `koimplicit run`은 현재 네트워크를 쓰지 않는 `dry` provider만 있고, prompt template이 비어 있어 승인 전에는 실행을 거부한다. 구현 순서는 [docs/말뭉치_활용_구현가이드.md](docs/말뭉치_활용_구현가이드.md)와 [docs/평가_설계가이드.md](docs/평가_설계가이드.md)를 따른다.
 
 ## 폴더 구조

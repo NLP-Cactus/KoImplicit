@@ -1,8 +1,13 @@
-"""Workspace status and evaluation utilities; corpus contents are never opened by `status`."""
+"""Workspace utilities. `status` never opens corpus files; `audit` prints counts only;
+`parse` writes corpus-derived files under data/ only; `check-prompts`, `run`, `metrics`
+serve the evaluation pipeline and never read the raw corpus."""
 
 import argparse
 import json
 from pathlib import Path
+
+from .audit import run_audit
+from .corpus import run_parse
 
 
 def workspace_status(root: Path) -> dict:
@@ -54,7 +59,44 @@ def join_rows(normalized: list[dict], items: list[dict]) -> list[dict]:
     return rows
 
 
-def command_check_prompts(args) -> int:
+def command_status(args, parser) -> int:
+    try:
+        report = workspace_status(args.root)
+    except (OSError, ValueError, KeyError, TypeError) as error:
+        parser.exit(2, f"Workspace configuration error: {error}\n")
+    if args.json:
+        print(json.dumps(report, ensure_ascii=False, indent=2))
+    else:
+        print(f"{report['project']} | design {report['design_version']} | {report['stage']}")
+        print(f"Root: {report['root']}")
+        print(f"Source acquired: {report['source_acquired']}")
+        print(f"Structure audited: {report['structure_audited']}")
+        print(f"Configured models: {report['configured_models']}")
+        for label, info in report["paths"].items():
+            state = "OK" if info["exists"] else "MISSING"
+            print(f"[{state}] {label}: {info['path']}")
+    return 0 if all(info["exists"] for info in report["paths"].values()) else 1
+
+
+def command_parse(args, parser) -> int:
+    try:
+        report = run_parse(args.root, args.raw, args.out)
+    except (OSError, ValueError, KeyError, TypeError) as error:
+        parser.exit(2, f"Parse error: {error}\n")
+    print(json.dumps(report, ensure_ascii=False, indent=2))
+    return 0
+
+
+def command_audit(args, parser) -> int:
+    try:
+        report = run_audit(args.root, args.corpus, args.cases)
+    except (OSError, ValueError, KeyError, TypeError) as error:
+        parser.exit(2, f"Audit error: {error}\n")
+    print(json.dumps(report, ensure_ascii=False, indent=2))
+    return 0
+
+
+def command_check_prompts(args, parser) -> int:
     from .runner import load_prompt, validate_prompt
 
     failed = 0
@@ -68,7 +110,7 @@ def command_check_prompts(args) -> int:
     return 1 if failed else 0
 
 
-def command_metrics(args) -> int:
+def command_metrics(args, parser) -> int:
     from .bootstrap import cluster_bootstrap
     from .metrics import controlled_summary, entity_accuracy, natural_summary
 
@@ -89,7 +131,7 @@ def command_metrics(args) -> int:
     return 0
 
 
-def command_run(args) -> int:
+def command_run(args, parser) -> int:
     from .providers import get_adapter
     from .runner import load_prompt, run_items
 
@@ -114,6 +156,19 @@ def main(argv=None) -> int:
     status = commands.add_parser("status", help="Show configuration and folder availability")
     status.add_argument("--root", type=Path, default=Path.cwd())
     status.add_argument("--json", action="store_true", help="Print machine-readable status")
+    status.set_defaults(func=command_status)
+
+    audit = commands.add_parser("audit", help="Count corpus structure and annotation patterns")
+    audit.add_argument("--root", type=Path, default=Path.cwd())
+    audit.add_argument("--corpus", type=Path, help="ZA 2025 spoken JSON (default: found under data/raw)")
+    audit.add_argument("--cases", type=Path, help="Write cross-speaker pronoun links under data/")
+    audit.set_defaults(func=command_audit)
+
+    parse = commands.add_parser("parse", help="Flatten the ZA 2025 spoken release into data/interim JSONL")
+    parse.add_argument("--root", type=Path, default=Path.cwd())
+    parse.add_argument("--raw", type=Path, help="ZA 2025 spoken JSON (default: found under data/raw)")
+    parse.add_argument("--out", type=Path, help="Output folder under data/ (default: data/interim)")
+    parse.set_defaults(func=command_parse)
 
     check = commands.add_parser("check-prompts", help="Validate prompt slot files")
     check.add_argument("--prompts", default="prompts")
@@ -142,21 +197,4 @@ def main(argv=None) -> int:
     run.set_defaults(func=command_run)
 
     args = parser.parse_args(argv)
-    if args.command != "status":
-        return args.func(args)
-    try:
-        report = workspace_status(args.root)
-    except (OSError, ValueError, KeyError, TypeError) as error:
-        parser.exit(2, f"Workspace configuration error: {error}\n")
-    if args.json:
-        print(json.dumps(report, ensure_ascii=False, indent=2))
-    else:
-        print(f"{report['project']} | design {report['design_version']} | {report['stage']}")
-        print(f"Root: {report['root']}")
-        print(f"Source acquired: {report['source_acquired']}")
-        print(f"Structure audited: {report['structure_audited']}")
-        print(f"Configured models: {report['configured_models']}")
-        for label, info in report["paths"].items():
-            state = "OK" if info["exists"] else "MISSING"
-            print(f"[{state}] {label}: {info['path']}")
-    return 0 if all(info["exists"] for info in report["paths"].values()) else 1
+    return args.func(args, parser)
