@@ -5,7 +5,7 @@ import argparse
 import json
 from pathlib import Path
 
-from .audit import run_audit
+from .audit import run_audit, run_audit_sample
 from .corpus import run_parse
 
 
@@ -45,7 +45,19 @@ def main(argv=None) -> int:
     parse.add_argument("--root", type=Path, default=Path.cwd())
     parse.add_argument("--raw", type=Path, help="ZA 2025 spoken JSON (default: found under data/raw)")
     parse.add_argument("--out", type=Path, help="Output folder under data/ (default: data/interim)")
+    sample = commands.add_parser("audit-sample", help="Write a stratified review sheet for the human structure audit")
+    sample.add_argument("--root", type=Path, default=Path.cwd())
+    sample.add_argument("--corpus", type=Path, help="ZA 2025 spoken JSON (default: found under data/raw)")
+    sample.add_argument("--out", type=Path, help="Output folder under data/ (default: data/interim)")
+    sample.add_argument("--seed", type=int, default=20261010)
     args = parser.parse_args(argv)
+    if args.command == "audit-sample":
+        try:
+            report = run_audit_sample(args.root, args.corpus, args.out, args.seed)
+        except (OSError, ValueError, KeyError, TypeError) as error:
+            parser.exit(2, f"Audit sample error: {error}\n")
+        print(json.dumps(report, ensure_ascii=False, indent=2))
+        return 0
     if args.command == "parse":
         try:
             report = run_parse(args.root, args.raw, args.out)
