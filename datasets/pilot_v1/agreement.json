@@ -3,11 +3,11 @@
   "by_condition": {
     "full": {
       "annotators": [
-        "rev1",
+        "임동건",
         "정택준"
       ],
       "pairs": {
-        "rev1~정택준": {
+        "임동건~정택준": {
           "n_common": 20,
           "fields": {
             "referent_id": {
@@ -61,11 +61,11 @@
     },
     "local": {
       "annotators": [
-        "rev1",
+        "임동건",
         "정택준"
       ],
       "pairs": {
-        "rev1~정택준": {
+        "임동건~정택준": {
           "n_common": 20,
           "fields": {
             "referent_id": {

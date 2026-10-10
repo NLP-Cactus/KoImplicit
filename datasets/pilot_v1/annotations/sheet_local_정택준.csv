@@ -1,0 +1,21 @@
+﻿order,review_id,dialogue,target_turn,target_predicate,target_speaker,candidates,naturalness_1to5,referent_id,referent_role,addressee_id,context_sufficient,ambiguity,previous_referent_id,previous_referent_turn,notes
+1,R001,"수아: 응, 어제 밤새 혼자 다 했어. 진짜 [[고생 많았다]].",,고생 많았다,수아,P1=수아; P2=준호; T1=민수,,,,,no,uncertain,,,앞 문장이 없어 애매함
+2,R015,"시우: 응, 어제 메시지 보냈는데 아직 안 [[읽었나 봐]].",,읽었나 봐,시우,P1=다은; P2=시우; T1=지훈 선배,,,third_party,,no,uncertain,,,앞 문장이 없어 애매함
+3,R009,시우: 근데 아직 안 [[읽었나 봐]].,,읽었나 봐,시우,P1=다은; P2=시우; T1=지훈 선배,,,third_party,,no,uncertain,,,앞 문장이 없어 애매함
+4,R014,"수아: 응, 민수가 어제 밤새 혼자 다 했대. 진짜 [[고생 많았다]].",,고생 많았다,수아,P1=수아; P2=준호; T1=민수,,T1,third_party,,yes,unambiguous,,,
+5,R007,"도현: 아니, 아직 [[결정 못 했어]].",,결정 못 했어,도현,P1=세진; P2=도현; T1=윤아,,P2,speaker,,yes,unambiguous,,,
+6,R011,하준: 아직 몸이 다 안 회복돼서 그날은 친정에 [[가 있기로 했대]].,,가 있기로 했대,하준,P1=하준; P2=예린; T1=형; T2=형수,,,third_party,,no,uncertain,,,누굴 말하는지 모르겠음
+7,R010,"현우: 응, 그렇다고 하더라. 요즘 많이 [[바쁘대]].",,바쁘대,현우,P1=지은; P2=현우; T1=민수; T2=서연,,,third_party,,no,uncertain,,,누굴 말하는지 모르겠음
+8,R003,"도현: 아니, 아직 [[결정 못 했어]].",,결정 못 했어,도현,P1=세진; P2=도현; T1=윤아,,P2,speaker,,yes,unambiguous,,,
+9,R013,민재: 내일은 좀 일찍 [[와야 돼]]. 아침에 리허설 있어.,,와야 돼,민재,P1=민재; P2=소희,,P2,addressee,,yes,unambiguous,,,
+10,R005,"현우: 응, 그렇다고 하더라. 요즘 많이 [[바쁘대]].",,바쁘대,현우,P1=지은; P2=현우; T1=민수; T2=서연,,,third_party,,no,uncertain,,,누굴 말하는지 모르겠음
+11,R020,유진: 다음 주에 [[올라오신대]].,,올라오신대,유진,P1=엄마; P2=유진; T1=아빠; T2=이모,,,third_party,,no,uncertain,,,누굴 말하는지 모르겠음
+12,R004,"하늘: 그럼 일요일에 보자. 보라야, 장소 좀 [[정해 줘]].",,정해 줘,하늘,P1=하늘; P2=태양; P3=보라,,P3,addressee,,yes,unambiguous,,,
+13,R008,"민재: 아홉 시. 근데 음향 세팅을 맡아서, 내일은 좀 일찍 [[와야 돼]].",,와야 돼,민재,P1=민재; P2=소희,,P1,speaker,,yes,unambiguous,,,
+14,R016,하늘: 그럼 일요일에 보자. 장소 좀 [[정해 줘]].,,정해 줘,하늘,P1=하늘; P2=태양; P3=보라,,,addressee,,no,uncertain,,,누굴 말하는지 모르겠음
+15,R018,"현우: 응, 그렇다고 하더라. 요즘 많이 [[바쁘대]].",,바쁘대,현우,P1=지은; P2=현우; T1=민수; T2=서연,,,third_party,,no,uncertain,,,누굴 말하는지 모르겠음
+16,R019,유진: 다음 주에 [[올라오신대]].,,올라오신대,유진,P1=엄마; P2=유진; T1=아빠; T2=이모,,,third_party,,no,uncertain,,,누굴 말하는지 모르겠음
+17,R002,건우: 링크 좀 [[보내 줄 수 있어]]?,,보내 줄 수 있어,건우,P1=유나; P2=건우; P3=서준,,,addressee,,no,uncertain,,,앞 문장이 없어 애매함
+18,R012,나래: 아직 [[말 안 했어]]. 이번 주에 얘기하려고.,,말 안 했어,나래,P1=나래; P2=재훈; T1=사장님,,P1,speaker,,yes,unambiguous,,,
+19,R017,"도현: 아니, 아직 [[결정 못 했대]].",,결정 못 했대,도현,P1=세진; P2=도현; T1=윤아,,,third_party,,no,uncertain,,,앞 문장이 없어 애매함
+20,R006,수아: 진짜 [[고생 많았다]].,,고생 많았다,수아,P1=수아; P2=준호; T1=민수,,,addressee,,no,uncertain,,,누굴 말하는지 모르겠음

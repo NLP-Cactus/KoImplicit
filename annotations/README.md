@@ -13,3 +13,5 @@
 | `labels_adjudicated.jsonl` | `annotate adjudicate` | 최종 라벨. 최초 판정은 `validation_metadata.annotator_votes`에, 작성자 값 변경은 `author_values_overridden`에, Local 기반 분류는 `context_need`에 기록 |
 
 채택된 라벨은 새 버전 폴더(`datasets/pilot_v1/labels.jsonl`)로 복사해 `dialogues.jsonl`과 함께 동결한다. 검수자는 판정 전에 `labels.jsonl`, `review.md`, `pairs.json`을 보지 않는다. 청자 판정 규칙은 `docs/데이터셋_구축방법.md` 2절을 따른다. anchor는 작성자 선언 변수라 검수하지 않는다.
+
+독립 창작 데이터셋의 검수 원본(시트·id_map·adjudication)은 동결할 때 `datasets/<version>/annotations/`로 복사해 추적한다(Pilot v1: 임동건·정택준). 이 폴더는 작업 중인 사본이다.

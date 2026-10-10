@@ -1,0 +1,22 @@
+{
+  "R001": "S02-speaker",
+  "R002": "N02-01",
+  "R003": "S07-speaker",
+  "R004": "S03-vocative",
+  "R005": "S01-distractor",
+  "R006": "S02-addressee",
+  "R007": "S07-plain",
+  "R008": "S05-speaker",
+  "R009": "S06-d5",
+  "R010": "S01-base",
+  "R011": "N03-01",
+  "R012": "N01-01",
+  "R013": "S05-addressee",
+  "R014": "S02-third",
+  "R015": "S06-d1",
+  "R016": "S03-novocative",
+  "R017": "S07-hearsay",
+  "R018": "S01-shift",
+  "R019": "S04-distractor",
+  "R020": "S04-base"
+}
