@@ -2,7 +2,7 @@
   "n_samples": 20,
   "n_errors": 0,
   "n_warnings": 2,
-  "n_review_flags": 10,
+  "n_review_flags": 9,
   "balance": {
     "n": 20,
     "by_dataset": {
@@ -54,14 +54,12 @@
       "6": 3
     },
     "by_annotation_status": {
-      "accepted": 16,
-      "in_review": 1,
+      "accepted": 17,
       "rejected": 3
     },
     "by_ambiguity_status": {
       "ambiguous": 3,
-      "unambiguous": 16,
-      "unreviewed": 1
+      "unambiguous": 17
     },
     "by_creation_method": {
       "llm_authored": 20
@@ -87,12 +85,6 @@
       "sample_id": "S02-third",
       "code": "ANCHOR_MISSING",
       "message": "controlled sample without anchor: shift variables are None"
-    },
-    {
-      "level": "review",
-      "sample_id": "S02-third",
-      "code": "HUMAN_REVIEW",
-      "message": "gold_unverified"
     },
     {
       "level": "review",

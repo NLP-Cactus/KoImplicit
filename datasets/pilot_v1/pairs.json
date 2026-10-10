@@ -190,6 +190,7 @@
         "third"
       ],
       "claimed_manipulations": [
+        "linguistic_cue",
         "referent_shift"
       ],
       "differing_variables": {
@@ -221,6 +222,10 @@
           null,
           false
         ],
+        "target_predicate": [
+          "고생 많았다",
+          "고생 많이 했더라"
+        ],
         "anchor_turn": [
           1,
           null
@@ -237,7 +242,8 @@
           [
             "evaluative_exclamation",
             "same_turn_prior_clause",
-            "hearsay_in_prior_clause"
+            "hearsay_in_prior_clause",
+            "retrospective_ending(-더라)"
           ]
         ]
       },
@@ -247,12 +253,11 @@
       ],
       "same_target_utterance": false,
       "same_candidate_set": true,
-      "structural_conditions_met": false,
+      "structural_conditions_met": true,
       "expected_gold_change": true,
       "observed_gold_change": null,
       "gold_change_matches_expectation": true,
       "unclaimed_differences": [
-        "linguistic_cues",
         "speaker_changed"
       ],
       "evaluable": false,

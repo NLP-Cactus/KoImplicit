@@ -4,7 +4,7 @@
 
 ## 자동 검증 요약
 
-- 표본 20개, 오류 0, 경고 2, 사람 검수 표시 10
+- 표본 20개, 오류 0, 경고 2, 사람 검수 표시 9
 
 | 축 | 분포 |
 |---|---|
@@ -139,11 +139,11 @@
 ### S02-third (controlled, variant=third, pairs=S02:speaker~third)
 
 - 인물: P1=수아, P2=준호, T1=민수(비참여)
-- 목표: 2번 발화, 서술어 `고생 많았다`, 화자 수아
+- 목표: 2번 발화, 서술어 `고생 많이 했더라`, 화자 수아
 
 ```text
 준호: 발표 자료는 다 끝났어?
-수아: 응, 민수가 어제 밤새 혼자 다 했대. 진짜 [[고생 많았다]].
+수아: 응, 민수가 어제 밤새 혼자 다 했대. 진짜 [[고생 많이 했더라]].
 ```
 
 <details><summary>작성자 라벨 (검수 전)</summary>
@@ -151,13 +151,13 @@
 - gold: T1 민수 / role=third_party
 - anchor: turn None → None; speaker_changed=None, referent_changed=None, role_changed=None
 - distractor: None present=False; turn_distance=0; most_recent=T1
-- cues: evaluative_exclamation, same_turn_prior_clause, hearsay_in_prior_clause; manipulated: referent_shift; expected_gold_change=True
-- 상태: ambiguity=unreviewed, annotation=in_review, creation=llm_authored
+- cues: evaluative_exclamation, same_turn_prior_clause, hearsay_in_prior_clause, retrospective_ending(-더라); manipulated: referent_shift; expected_gold_change=True
+- 상태: ambiguity=unambiguous, annotation=accepted, creation=llm_authored
 - 근거: 앞 절에서 민수가 밤샘했다고 전했으므로 '고생 많았다'는 민수에 대한 평가다. 1번 발화 '끝났어?'의 주어는 자료(비인간)라 anchor를 두지 않는다.
 
 </details>
 
-검증 표시: warning:ANCHOR_MISSING(controlled sample without anchor: shift variables are None); review:HUMAN_REVIEW(gold_unverified)
+검증 표시: warning:ANCHOR_MISSING(controlled sample without anchor: shift variables are None)
 
 ## S03
 
