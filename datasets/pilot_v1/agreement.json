@@ -1,0 +1,135 @@
+{
+  "n_rows": 80,
+  "by_condition": {
+    "full": {
+      "annotators": [
+        "rev1",
+        "정택준"
+      ],
+      "pairs": {
+        "rev1~정택준": {
+          "n_common": 20,
+          "fields": {
+            "referent_id": {
+              "n": 16,
+              "n_missing": 4,
+              "percent_agreement": 0.9375,
+              "cohen_kappa": 0.9157894736842105,
+              "kappa_note": null
+            },
+            "addressee_id": {
+              "n": 2,
+              "n_missing": 18,
+              "percent_agreement": 1.0,
+              "cohen_kappa": null,
+              "kappa_note": "undefined: single category"
+            },
+            "context_sufficient": {
+              "n": 20,
+              "n_missing": 0,
+              "percent_agreement": 0.9,
+              "cohen_kappa": 0.6153846153846155,
+              "kappa_note": null
+            },
+            "ambiguity": {
+              "n": 20,
+              "n_missing": 0,
+              "percent_agreement": 0.9,
+              "cohen_kappa": 0.6153846153846155,
+              "kappa_note": null
+            },
+            "determinable": {
+              "n": 20,
+              "n_missing": 0,
+              "percent_agreement": 0.9,
+              "cohen_kappa": 0.6153846153846155,
+              "kappa_note": null
+            }
+          },
+          "naturalness": {
+            "n": 20,
+            "mean_abs_diff": 1.15,
+            "within_1": 0.85
+          },
+          "disagreements": [
+            "N01-01",
+            "S01-shift",
+            "S02-third"
+          ]
+        }
+      }
+    },
+    "local": {
+      "annotators": [
+        "rev1",
+        "정택준"
+      ],
+      "pairs": {
+        "rev1~정택준": {
+          "n_common": 20,
+          "fields": {
+            "referent_id": {
+              "n": 3,
+              "n_missing": 17,
+              "percent_agreement": 1.0,
+              "cohen_kappa": 1.0,
+              "kappa_note": null
+            },
+            "addressee_id": {
+              "n": 0,
+              "n_missing": 20,
+              "percent_agreement": null,
+              "cohen_kappa": null,
+              "kappa_note": null
+            },
+            "context_sufficient": {
+              "n": 20,
+              "n_missing": 0,
+              "percent_agreement": 0.8,
+              "cohen_kappa": 0.4936708860759495,
+              "kappa_note": null
+            },
+            "ambiguity": {
+              "n": 20,
+              "n_missing": 0,
+              "percent_agreement": 0.15,
+              "cohen_kappa": 0.1029023746701847,
+              "kappa_note": null
+            },
+            "determinable": {
+              "n": 20,
+              "n_missing": 0,
+              "percent_agreement": 0.8,
+              "cohen_kappa": 0.4936708860759495,
+              "kappa_note": null
+            }
+          },
+          "naturalness": {
+            "n": 0,
+            "mean_abs_diff": null,
+            "within_1": null
+          },
+          "disagreements": [
+            "N01-01",
+            "N02-01",
+            "N03-01",
+            "S01-base",
+            "S01-distractor",
+            "S01-shift",
+            "S02-addressee",
+            "S02-speaker",
+            "S03-novocative",
+            "S04-base",
+            "S04-distractor",
+            "S05-addressee",
+            "S06-d1",
+            "S06-d5",
+            "S07-hearsay",
+            "S07-plain",
+            "S07-speaker"
+          ]
+        }
+      }
+    }
+  }
+}

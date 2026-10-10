@@ -1,0 +1,146 @@
+{
+  "n_samples": 20,
+  "n_errors": 0,
+  "n_warnings": 2,
+  "n_review_flags": 10,
+  "balance": {
+    "n": 20,
+    "by_dataset": {
+      "controlled": 17,
+      "naturalistic": 3
+    },
+    "by_role": {
+      "None": 3,
+      "addressee": 4,
+      "speaker": 2,
+      "third_party": 11
+    },
+    "by_referent_changed": {
+      "False": 12,
+      "None": 5,
+      "True": 3
+    },
+    "by_speaker_changed": {
+      "False": 1,
+      "None": 2,
+      "True": 17
+    },
+    "by_role_changed": {
+      "False": 8,
+      "None": 5,
+      "True": 7
+    },
+    "by_distractor_present": {
+      "False": 15,
+      "None": 3,
+      "True": 2
+    },
+    "by_turn_distance": {
+      "0": 2,
+      "1": 6,
+      "3": 3,
+      "5": 1,
+      "None": 8
+    },
+    "by_n_participants": {
+      "2": 17,
+      "3": 3
+    },
+    "by_n_turns": {
+      "2": 7,
+      "3": 2,
+      "4": 6,
+      "5": 2,
+      "6": 3
+    },
+    "by_annotation_status": {
+      "accepted": 16,
+      "in_review": 1,
+      "rejected": 3
+    },
+    "by_ambiguity_status": {
+      "ambiguous": 3,
+      "unambiguous": 16,
+      "unreviewed": 1
+    },
+    "by_creation_method": {
+      "llm_authored": 20
+    },
+    "n_pairs": 10,
+    "n_scenarios": 10
+  },
+  "issues": [
+    {
+      "level": "review",
+      "sample_id": "S01-distractor",
+      "code": "HUMAN_REVIEW",
+      "message": "distractor_check_gold_still_unique"
+    },
+    {
+      "level": "review",
+      "sample_id": "S02-addressee",
+      "code": "HUMAN_REVIEW",
+      "message": "deictic_no_text_mention"
+    },
+    {
+      "level": "warning",
+      "sample_id": "S02-third",
+      "code": "ANCHOR_MISSING",
+      "message": "controlled sample without anchor: shift variables are None"
+    },
+    {
+      "level": "review",
+      "sample_id": "S02-third",
+      "code": "HUMAN_REVIEW",
+      "message": "gold_unverified"
+    },
+    {
+      "level": "review",
+      "sample_id": "S03-vocative",
+      "code": "HUMAN_REVIEW",
+      "message": "multi_party_addressee"
+    },
+    {
+      "level": "review",
+      "sample_id": "S03-novocative",
+      "code": "HUMAN_REVIEW",
+      "message": "multi_party_addressee"
+    },
+    {
+      "level": "review",
+      "sample_id": "S04-distractor",
+      "code": "HUMAN_REVIEW",
+      "message": "distractor_check_gold_still_unique"
+    },
+    {
+      "level": "review",
+      "sample_id": "S05-addressee",
+      "code": "HUMAN_REVIEW",
+      "message": "deictic_no_text_mention"
+    },
+    {
+      "level": "warning",
+      "sample_id": "S05-speaker",
+      "code": "ANCHOR_MISSING",
+      "message": "controlled sample without anchor: shift variables are None"
+    },
+    {
+      "level": "review",
+      "sample_id": "S05-speaker",
+      "code": "HUMAN_REVIEW",
+      "message": "deictic_no_text_mention"
+    },
+    {
+      "level": "review",
+      "sample_id": "S07-speaker",
+      "code": "HUMAN_REVIEW",
+      "message": "deictic_no_text_mention"
+    },
+    {
+      "level": "review",
+      "sample_id": "N02-01",
+      "code": "HUMAN_REVIEW",
+      "message": "deictic_no_text_mention,multi_party_addressee"
+    }
+  ]
+}
