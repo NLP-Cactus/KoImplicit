@@ -1,0 +1,8 @@
+{
+  "version": "qa_v1",
+  "created": "2026-10-10",
+  "status": "not_approved",
+  "note": "QA 조건은 candidates slot을 쓰지 않는다. template은 사용자 승인 뒤 작성한다.",
+  "slots": ["dialogue", "target_utterance", "target_marker", "target_speaker_label", "output_schema"],
+  "template": ""
+}
