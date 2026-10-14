@@ -31,7 +31,7 @@ def load_model_config(models_file: Path, model_label: str) -> dict:
     model["output_schema"] = cfg.get("output_schema", "")
     model["qa_output_schema"] = cfg.get("qa_output_schema", "")
     model["structured"] = cfg.get("structured", True)
-    model["system"] = cfg.get("system", "")
+    model["system"] = model.get("system", cfg.get("system", ""))  # 모델별 system이 전역값을 덮는다
     return model
 
 

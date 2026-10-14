@@ -1,0 +1,35 @@
+{
+  "provider": "claude_cli",
+  "model_id": "claude-haiku-5-5",
+  "decoding": {
+    "effort": "low",
+    "timeout": 300
+  },
+  "adapter_options": {},
+  "system": "사용자의 질문에 요구된 형식으로만 답한다. 설명을 덧붙이지 않는다.",
+  "price_per_million": {
+    "input": null,
+    "output": null
+  },
+  "seed_supported": false,
+  "note": "Claude Code 구독 CLI(claude -p). 개발·pilot 점검용. system이 있으면 Claude Code 기본 시스템 프롬프트를 대체한다. 비용은 CLI가 보고한 cli_cost_usd를 responses.jsonl에서 본다",
+  "model_label": "claude_code_cli",
+  "output_schema": "후보 중 하나의 ID만 골라 다음 JSON 형식으로만 답하세요: {\"entity_id\": \"<ID>\"}",
+  "qa_output_schema": "대화에 나온 인물의 이름이나 표현으로 한 사람만 답하세요. 설명은 쓰지 마세요.",
+  "structured": true,
+  "seed": 20261010,
+  "items_sha256": "3a8cbadea4b4ead492c75cd3c631212f9b7121189b6f26e5d17277c9da87de94",
+  "prompt_sha256": "467e1894670f1f1d25da76e3e4bdebdac6ba7d4d48215b2309637403392a54b1",
+  "conditions": [
+    "full_mcq",
+    "target_only_mcq"
+  ],
+  "allow_unreviewed": false,
+  "contains_unreviewed": false,
+  "run_date": "2026-10-14T05:23:38+00:00",
+  "prompt_version": "mcq_v1",
+  "n_items": 17,
+  "order_seed": 20261010,
+  "max_retries": 2,
+  "started": "2026-10-14T05:23:38+00:00"
+}

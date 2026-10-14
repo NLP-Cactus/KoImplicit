@@ -57,6 +57,8 @@ python -m koimplicit baselines --items data/processed/pilot_v0/items.jsonl --gol
 python -m koimplicit metrics --normalized results/runs/20261010_mock_pilot_v0/normalized.jsonl --gold data/processed/pilot_v0/gold.jsonl --n-boot 2000 --out results/analysis/pilot_v0_mock_metrics.json
 ```
 
+구독 CLI로도 돌릴 수 있다(`--model claude_code_cli`, `--model codex_cli`). 각각 `claude -p`와 `codex exec`를 subprocess로 부르며 로그인만 되어 있으면 된다. 에이전트용 시스템 프롬프트가 붙고 디코딩 설정 통제가 약하며 CLI가 자동 갱신되므로 **개발·pilot 점검용**이다. 정식 수치는 API provider로 낸다.
+
 실제 모델을 쓰려면 `configs/models.json`의 모델 라벨을 고르고 환경 변수를 설정한다. 코드는 `.env`를 읽지 않으므로 셸에서 직접 설정한다(`$env:ANTHROPIC_API_KEY="..."`). `openai_candidate`의 `model_id`는 팀이 정한 뒤 채운다. 같은 `--run-dir`는 같은 모델·프롬프트·입력일 때만 재사용되며 캐시로 재개된다.
 
 ## 폴더 구조

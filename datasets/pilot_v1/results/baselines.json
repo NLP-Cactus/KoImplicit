@@ -1,0 +1,945 @@
+{
+  "most_recent_entity": {
+    "metrics": {
+      "by_model_condition": {
+        "most_recent_entity|baseline": {
+          "overall_accuracy": {
+            "value": 0.5882352941176471,
+            "numerator": 10,
+            "denominator": 17
+          },
+          "role_accuracy": {
+            "value": 0.7058823529411765,
+            "numerator": 12,
+            "denominator": 17
+          },
+          "chance_level": {
+            "value": 0.32352941176470584,
+            "numerator": 17,
+            "denominator": 17
+          },
+          "status_counts": {
+            "ok": 12,
+            "invalid": 0,
+            "abstain": 0,
+            "missing": 0,
+            "unmapped": 5
+          },
+          "by_referent_type": {
+            "addressee": {
+              "value": 0.25,
+              "numerator": 1,
+              "denominator": 4
+            },
+            "speaker": {
+              "value": 0.0,
+              "numerator": 0,
+              "denominator": 2
+            },
+            "third_party": {
+              "value": 0.8181818181818182,
+              "numerator": 9,
+              "denominator": 11
+            }
+          },
+          "by_referent_changed": {
+            "False": {
+              "value": 0.5,
+              "numerator": 6,
+              "denominator": 12
+            },
+            "None": {
+              "value": 0.5,
+              "numerator": 1,
+              "denominator": 2
+            },
+            "True": {
+              "value": 1.0,
+              "numerator": 3,
+              "denominator": 3
+            }
+          },
+          "by_speaker_changed": {
+            "False": {
+              "value": 1.0,
+              "numerator": 1,
+              "denominator": 1
+            },
+            "None": {
+              "value": 0.5,
+              "numerator": 1,
+              "denominator": 2
+            },
+            "True": {
+              "value": 0.5714285714285714,
+              "numerator": 8,
+              "denominator": 14
+            }
+          },
+          "by_role_changed": {
+            "False": {
+              "value": 0.75,
+              "numerator": 6,
+              "denominator": 8
+            },
+            "None": {
+              "value": 0.5,
+              "numerator": 1,
+              "denominator": 2
+            },
+            "True": {
+              "value": 0.42857142857142855,
+              "numerator": 3,
+              "denominator": 7
+            }
+          },
+          "by_distractor_present": {
+            "False": {
+              "value": 0.6666666666666666,
+              "numerator": 10,
+              "denominator": 15
+            },
+            "True": {
+              "value": 0.0,
+              "numerator": 0,
+              "denominator": 2
+            }
+          },
+          "by_turn_distance": {
+            "0": {
+              "value": 1.0,
+              "numerator": 2,
+              "denominator": 2
+            },
+            "1": {
+              "value": 1.0,
+              "numerator": 6,
+              "denominator": 6
+            },
+            "3": {
+              "value": 0.3333333333333333,
+              "numerator": 1,
+              "denominator": 3
+            },
+            "5": {
+              "value": 1.0,
+              "numerator": 1,
+              "denominator": 1
+            },
+            "None": {
+              "value": 0.0,
+              "numerator": 0,
+              "denominator": 5
+            }
+          },
+          "by_dataset": {
+            "controlled": {
+              "value": 0.6,
+              "numerator": 9,
+              "denominator": 15
+            },
+            "naturalistic": {
+              "value": 0.5,
+              "numerator": 1,
+              "denominator": 2
+            }
+          },
+          "by_creation_method": {
+            "llm_authored": {
+              "value": 0.5882352941176471,
+              "numerator": 10,
+              "denominator": 17
+            }
+          },
+          "by_context_need": {
+            "None": {
+              "value": 1.0,
+              "numerator": 1,
+              "denominator": 1
+            },
+            "conflict": {
+              "value": 0.3333333333333333,
+              "numerator": 1,
+              "denominator": 3
+            },
+            "discourse_dependent": {
+              "value": 0.6363636363636364,
+              "numerator": 7,
+              "denominator": 11
+            },
+            "locally_recoverable": {
+              "value": 0.5,
+              "numerator": 1,
+              "denominator": 2
+            }
+          },
+          "by_linguistic_cue": {
+            "adjacency": {
+              "value": 0.0,
+              "numerator": 0,
+              "denominator": 1
+            },
+            "conjecture(-나 봐)": {
+              "value": 1.0,
+              "numerator": 2,
+              "denominator": 2
+            },
+            "evaluative_exclamation": {
+              "value": 0.5,
+              "numerator": 1,
+              "denominator": 2
+            },
+            "hearsay_ending(-대)": {
+              "value": 0.7142857142857143,
+              "numerator": 5,
+              "denominator": 7
+            },
+            "hearsay_in_prior_clause": {
+              "value": 1.0,
+              "numerator": 1,
+              "denominator": 1
+            },
+            "honorific(-시-)": {
+              "value": 0.5,
+              "numerator": 1,
+              "denominator": 2
+            },
+            "imperative(-해 줘)": {
+              "value": 1.0,
+              "numerator": 1,
+              "denominator": 1
+            },
+            "lexical(친정)": {
+              "value": 1.0,
+              "numerator": 1,
+              "denominator": 1
+            },
+            "obligation(-아야 돼)": {
+              "value": 0.0,
+              "numerator": 0,
+              "denominator": 2
+            },
+            "plain_ending(-어)": {
+              "value": 0.5,
+              "numerator": 1,
+              "denominator": 2
+            },
+            "request(-줄 수 있어)": {
+              "value": 0.0,
+              "numerator": 0,
+              "denominator": 1
+            },
+            "retrospective_ending(-더라)": {
+              "value": 1.0,
+              "numerator": 1,
+              "denominator": 1
+            },
+            "same_turn_prior_clause": {
+              "value": 0.5,
+              "numerator": 1,
+              "denominator": 2
+            },
+            "vocative": {
+              "value": 1.0,
+              "numerator": 1,
+              "denominator": 1
+            }
+          },
+          "distractor_error_rate": {
+            "value": 1.0,
+            "numerator": 2,
+            "denominator": 2
+          },
+          "role_confusion": {
+            "addressee": {
+              "addressee": 1,
+              "unmapped": 3
+            },
+            "speaker": {
+              "unmapped": 2
+            },
+            "third_party": {
+              "third_party": 11
+            }
+          },
+          "candidate_slot_confusion": {
+            "E1": {
+              "E1": 6,
+              "E3": 1,
+              "unmapped": 2
+            },
+            "E2": {
+              "unmapped": 3
+            },
+            "E3": {
+              "E1": 1,
+              "E3": 4
+            }
+          },
+          "pair_consistency": {
+            "pair_accuracy": {
+              "value": null,
+              "numerator": 0,
+              "denominator": 0
+            },
+            "paired_harm": {
+              "value": null,
+              "numerator": 0,
+              "denominator": 0
+            },
+            "paired_recovery": {
+              "value": null,
+              "numerator": 0,
+              "denominator": 0
+            },
+            "n_pairs": 0,
+            "dropped_pairs": [],
+            "transitions": {
+              "both_correct": 0,
+              "base_correct_only": 0,
+              "variant_correct_only": 0,
+              "both_wrong": 0
+            }
+          },
+          "n_rows": 17,
+          "n_clusters": 9
+        }
+      },
+      "context_benefit": {}
+    },
+    "mapping_failure": {
+      "failed": 5,
+      "total": 17,
+      "rate": 0.29411764705882354
+    }
+  },
+  "current_speaker": {
+    "metrics": {
+      "by_model_condition": {
+        "current_speaker|baseline": {
+          "overall_accuracy": {
+            "value": 0.11764705882352941,
+            "numerator": 2,
+            "denominator": 17
+          },
+          "role_accuracy": {
+            "value": 0.11764705882352941,
+            "numerator": 2,
+            "denominator": 17
+          },
+          "chance_level": {
+            "value": 0.32352941176470584,
+            "numerator": 17,
+            "denominator": 17
+          },
+          "status_counts": {
+            "ok": 17,
+            "invalid": 0,
+            "abstain": 0,
+            "missing": 0,
+            "unmapped": 0
+          },
+          "by_referent_type": {
+            "addressee": {
+              "value": 0.0,
+              "numerator": 0,
+              "denominator": 4
+            },
+            "speaker": {
+              "value": 1.0,
+              "numerator": 2,
+              "denominator": 2
+            },
+            "third_party": {
+              "value": 0.0,
+              "numerator": 0,
+              "denominator": 11
+            }
+          },
+          "by_referent_changed": {
+            "False": {
+              "value": 0.08333333333333333,
+              "numerator": 1,
+              "denominator": 12
+            },
+            "None": {
+              "value": 0.5,
+              "numerator": 1,
+              "denominator": 2
+            },
+            "True": {
+              "value": 0.0,
+              "numerator": 0,
+              "denominator": 3
+            }
+          },
+          "by_speaker_changed": {
+            "False": {
+              "value": 0.0,
+              "numerator": 0,
+              "denominator": 1
+            },
+            "None": {
+              "value": 0.5,
+              "numerator": 1,
+              "denominator": 2
+            },
+            "True": {
+              "value": 0.07142857142857142,
+              "numerator": 1,
+              "denominator": 14
+            }
+          },
+          "by_role_changed": {
+            "False": {
+              "value": 0.0,
+              "numerator": 0,
+              "denominator": 8
+            },
+            "None": {
+              "value": 0.5,
+              "numerator": 1,
+              "denominator": 2
+            },
+            "True": {
+              "value": 0.14285714285714285,
+              "numerator": 1,
+              "denominator": 7
+            }
+          },
+          "by_distractor_present": {
+            "False": {
+              "value": 0.13333333333333333,
+              "numerator": 2,
+              "denominator": 15
+            },
+            "True": {
+              "value": 0.0,
+              "numerator": 0,
+              "denominator": 2
+            }
+          },
+          "by_turn_distance": {
+            "0": {
+              "value": 0.0,
+              "numerator": 0,
+              "denominator": 2
+            },
+            "1": {
+              "value": 0.0,
+              "numerator": 0,
+              "denominator": 6
+            },
+            "3": {
+              "value": 0.0,
+              "numerator": 0,
+              "denominator": 3
+            },
+            "5": {
+              "value": 0.0,
+              "numerator": 0,
+              "denominator": 1
+            },
+            "None": {
+              "value": 0.4,
+              "numerator": 2,
+              "denominator": 5
+            }
+          },
+          "by_dataset": {
+            "controlled": {
+              "value": 0.13333333333333333,
+              "numerator": 2,
+              "denominator": 15
+            },
+            "naturalistic": {
+              "value": 0.0,
+              "numerator": 0,
+              "denominator": 2
+            }
+          },
+          "by_creation_method": {
+            "llm_authored": {
+              "value": 0.11764705882352941,
+              "numerator": 2,
+              "denominator": 17
+            }
+          },
+          "by_context_need": {
+            "None": {
+              "value": 0.0,
+              "numerator": 0,
+              "denominator": 1
+            },
+            "conflict": {
+              "value": 0.3333333333333333,
+              "numerator": 1,
+              "denominator": 3
+            },
+            "discourse_dependent": {
+              "value": 0.0,
+              "numerator": 0,
+              "denominator": 11
+            },
+            "locally_recoverable": {
+              "value": 0.5,
+              "numerator": 1,
+              "denominator": 2
+            }
+          },
+          "by_linguistic_cue": {
+            "adjacency": {
+              "value": 0.0,
+              "numerator": 0,
+              "denominator": 1
+            },
+            "conjecture(-나 봐)": {
+              "value": 0.0,
+              "numerator": 0,
+              "denominator": 2
+            },
+            "evaluative_exclamation": {
+              "value": 0.0,
+              "numerator": 0,
+              "denominator": 2
+            },
+            "hearsay_ending(-대)": {
+              "value": 0.0,
+              "numerator": 0,
+              "denominator": 7
+            },
+            "hearsay_in_prior_clause": {
+              "value": 0.0,
+              "numerator": 0,
+              "denominator": 1
+            },
+            "honorific(-시-)": {
+              "value": 0.0,
+              "numerator": 0,
+              "denominator": 2
+            },
+            "imperative(-해 줘)": {
+              "value": 0.0,
+              "numerator": 0,
+              "denominator": 1
+            },
+            "lexical(친정)": {
+              "value": 0.0,
+              "numerator": 0,
+              "denominator": 1
+            },
+            "obligation(-아야 돼)": {
+              "value": 0.5,
+              "numerator": 1,
+              "denominator": 2
+            },
+            "plain_ending(-어)": {
+              "value": 0.5,
+              "numerator": 1,
+              "denominator": 2
+            },
+            "request(-줄 수 있어)": {
+              "value": 0.0,
+              "numerator": 0,
+              "denominator": 1
+            },
+            "retrospective_ending(-더라)": {
+              "value": 0.0,
+              "numerator": 0,
+              "denominator": 1
+            },
+            "same_turn_prior_clause": {
+              "value": 0.5,
+              "numerator": 1,
+              "denominator": 2
+            },
+            "vocative": {
+              "value": 0.0,
+              "numerator": 0,
+              "denominator": 1
+            }
+          },
+          "distractor_error_rate": {
+            "value": 0.0,
+            "numerator": 0,
+            "denominator": 2
+          },
+          "role_confusion": {
+            "addressee": {
+              "speaker": 4
+            },
+            "speaker": {
+              "speaker": 2
+            },
+            "third_party": {
+              "speaker": 11
+            }
+          },
+          "candidate_slot_confusion": {
+            "E1": {
+              "E1": 1,
+              "E2": 7,
+              "E3": 1
+            },
+            "E2": {
+              "E1": 2,
+              "E2": 1
+            },
+            "E3": {
+              "E2": 5
+            }
+          },
+          "pair_consistency": {
+            "pair_accuracy": {
+              "value": null,
+              "numerator": 0,
+              "denominator": 0
+            },
+            "paired_harm": {
+              "value": null,
+              "numerator": 0,
+              "denominator": 0
+            },
+            "paired_recovery": {
+              "value": null,
+              "numerator": 0,
+              "denominator": 0
+            },
+            "n_pairs": 0,
+            "dropped_pairs": [],
+            "transitions": {
+              "both_correct": 0,
+              "base_correct_only": 0,
+              "variant_correct_only": 0,
+              "both_wrong": 0
+            }
+          },
+          "n_rows": 17,
+          "n_clusters": 9
+        }
+      },
+      "context_benefit": {}
+    },
+    "mapping_failure": {
+      "failed": 0,
+      "total": 17,
+      "rate": 0.0
+    }
+  },
+  "current_addressee": {
+    "metrics": {
+      "by_model_condition": {
+        "current_addressee|baseline": {
+          "overall_accuracy": {
+            "value": 0.17647058823529413,
+            "numerator": 3,
+            "denominator": 17
+          },
+          "role_accuracy": {
+            "value": 0.17647058823529413,
+            "numerator": 3,
+            "denominator": 17
+          },
+          "chance_level": {
+            "value": 0.32352941176470584,
+            "numerator": 17,
+            "denominator": 17
+          },
+          "status_counts": {
+            "ok": 17,
+            "invalid": 0,
+            "abstain": 0,
+            "missing": 0,
+            "unmapped": 0
+          },
+          "by_referent_type": {
+            "addressee": {
+              "value": 0.75,
+              "numerator": 3,
+              "denominator": 4
+            },
+            "speaker": {
+              "value": 0.0,
+              "numerator": 0,
+              "denominator": 2
+            },
+            "third_party": {
+              "value": 0.0,
+              "numerator": 0,
+              "denominator": 11
+            }
+          },
+          "by_referent_changed": {
+            "False": {
+              "value": 0.25,
+              "numerator": 3,
+              "denominator": 12
+            },
+            "None": {
+              "value": 0.0,
+              "numerator": 0,
+              "denominator": 2
+            },
+            "True": {
+              "value": 0.0,
+              "numerator": 0,
+              "denominator": 3
+            }
+          },
+          "by_speaker_changed": {
+            "False": {
+              "value": 0.0,
+              "numerator": 0,
+              "denominator": 1
+            },
+            "None": {
+              "value": 0.0,
+              "numerator": 0,
+              "denominator": 2
+            },
+            "True": {
+              "value": 0.21428571428571427,
+              "numerator": 3,
+              "denominator": 14
+            }
+          },
+          "by_role_changed": {
+            "False": {
+              "value": 0.0,
+              "numerator": 0,
+              "denominator": 8
+            },
+            "None": {
+              "value": 0.0,
+              "numerator": 0,
+              "denominator": 2
+            },
+            "True": {
+              "value": 0.42857142857142855,
+              "numerator": 3,
+              "denominator": 7
+            }
+          },
+          "by_distractor_present": {
+            "False": {
+              "value": 0.2,
+              "numerator": 3,
+              "denominator": 15
+            },
+            "True": {
+              "value": 0.0,
+              "numerator": 0,
+              "denominator": 2
+            }
+          },
+          "by_turn_distance": {
+            "0": {
+              "value": 0.0,
+              "numerator": 0,
+              "denominator": 2
+            },
+            "1": {
+              "value": 0.0,
+              "numerator": 0,
+              "denominator": 6
+            },
+            "3": {
+              "value": 0.0,
+              "numerator": 0,
+              "denominator": 3
+            },
+            "5": {
+              "value": 0.0,
+              "numerator": 0,
+              "denominator": 1
+            },
+            "None": {
+              "value": 0.6,
+              "numerator": 3,
+              "denominator": 5
+            }
+          },
+          "by_dataset": {
+            "controlled": {
+              "value": 0.13333333333333333,
+              "numerator": 2,
+              "denominator": 15
+            },
+            "naturalistic": {
+              "value": 0.5,
+              "numerator": 1,
+              "denominator": 2
+            }
+          },
+          "by_creation_method": {
+            "llm_authored": {
+              "value": 0.17647058823529413,
+              "numerator": 3,
+              "denominator": 17
+            }
+          },
+          "by_context_need": {
+            "None": {
+              "value": 0.0,
+              "numerator": 0,
+              "denominator": 1
+            },
+            "conflict": {
+              "value": 0.3333333333333333,
+              "numerator": 1,
+              "denominator": 3
+            },
+            "discourse_dependent": {
+              "value": 0.18181818181818182,
+              "numerator": 2,
+              "denominator": 11
+            },
+            "locally_recoverable": {
+              "value": 0.0,
+              "numerator": 0,
+              "denominator": 2
+            }
+          },
+          "by_linguistic_cue": {
+            "adjacency": {
+              "value": 1.0,
+              "numerator": 1,
+              "denominator": 1
+            },
+            "conjecture(-나 봐)": {
+              "value": 0.0,
+              "numerator": 0,
+              "denominator": 2
+            },
+            "evaluative_exclamation": {
+              "value": 0.5,
+              "numerator": 1,
+              "denominator": 2
+            },
+            "hearsay_ending(-대)": {
+              "value": 0.0,
+              "numerator": 0,
+              "denominator": 7
+            },
+            "hearsay_in_prior_clause": {
+              "value": 0.0,
+              "numerator": 0,
+              "denominator": 1
+            },
+            "honorific(-시-)": {
+              "value": 0.0,
+              "numerator": 0,
+              "denominator": 2
+            },
+            "imperative(-해 줘)": {
+              "value": 0.0,
+              "numerator": 0,
+              "denominator": 1
+            },
+            "lexical(친정)": {
+              "value": 0.0,
+              "numerator": 0,
+              "denominator": 1
+            },
+            "obligation(-아야 돼)": {
+              "value": 0.5,
+              "numerator": 1,
+              "denominator": 2
+            },
+            "plain_ending(-어)": {
+              "value": 0.0,
+              "numerator": 0,
+              "denominator": 2
+            },
+            "request(-줄 수 있어)": {
+              "value": 1.0,
+              "numerator": 1,
+              "denominator": 1
+            },
+            "retrospective_ending(-더라)": {
+              "value": 0.0,
+              "numerator": 0,
+              "denominator": 1
+            },
+            "same_turn_prior_clause": {
+              "value": 0.0,
+              "numerator": 0,
+              "denominator": 2
+            },
+            "vocative": {
+              "value": 0.0,
+              "numerator": 0,
+              "denominator": 1
+            }
+          },
+          "distractor_error_rate": {
+            "value": 0.0,
+            "numerator": 0,
+            "denominator": 2
+          },
+          "role_confusion": {
+            "addressee": {
+              "addressee": 3,
+              "third_party": 1
+            },
+            "speaker": {
+              "addressee": 2
+            },
+            "third_party": {
+              "addressee": 11
+            }
+          },
+          "candidate_slot_confusion": {
+            "E1": {
+              "E1": 1,
+              "E2": 2,
+              "E3": 4,
+              "E4": 2
+            },
+            "E2": {
+              "E2": 2,
+              "E3": 1
+            },
+            "E3": {
+              "E1": 1,
+              "E4": 4
+            }
+          },
+          "pair_consistency": {
+            "pair_accuracy": {
+              "value": null,
+              "numerator": 0,
+              "denominator": 0
+            },
+            "paired_harm": {
+              "value": null,
+              "numerator": 0,
+              "denominator": 0
+            },
+            "paired_recovery": {
+              "value": null,
+              "numerator": 0,
+              "denominator": 0
+            },
+            "n_pairs": 0,
+            "dropped_pairs": [],
+            "transitions": {
+              "both_correct": 0,
+              "base_correct_only": 0,
+              "variant_correct_only": 0,
+              "both_wrong": 0
+            }
+          },
+          "n_rows": 17,
+          "n_clusters": 9
+        }
+      },
+      "context_benefit": {}
+    },
+    "mapping_failure": {
+      "failed": 0,
+      "total": 17,
+      "rate": 0.0
+    }
+  }
+}
