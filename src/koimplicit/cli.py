@@ -154,6 +154,15 @@ def command_annotate(args, parser) -> int:
         if args.out:
             Path(args.out).write_text(json.dumps(report, ensure_ascii=False, indent=2), encoding="utf-8")
         _print(report)
+    elif args.step == "model-fill":
+        from .benchmark import load_model_config
+        from .model_review import fill_sheet
+        from .providers import get_adapter
+
+        model = load_model_config(Path(args.models), args.model)
+        adapter = get_adapter(model["provider"], **model.get("adapter_options", {}))
+        summary = fill_sheet(Path(args.sheets[0]), Path(args.out), adapter, model, args.condition)
+        _print({**summary, "written": args.out})
     elif args.step == "adjudicate":
         samples = load_dataset(Path(args.dataset))
         rows = [r for p in args.sheets for r in A.load_sheet(Path(p))]
@@ -308,7 +317,9 @@ def main(argv=None) -> int:
     p.set_defaults(func=command_pairs)
 
     p = commands.add_parser("annotate", help="사람 검수 시트·일치도·조정")
-    p.add_argument("step", choices=["sheets", "pair-sheet", "agreement", "adjudicate"])
+    p.add_argument("step", choices=["sheets", "pair-sheet", "agreement", "adjudicate", "model-fill"])
+    p.add_argument("--model", default="mock", help="model-fill: configs/models.json의 검수 모델 라벨")
+    p.add_argument("--models", default="configs/models.json")
     p.add_argument("--condition", choices=["full", "local"], default="full", help="sheets: full(전체 문맥) 또는 local(목표 발화만)")
     p.add_argument("--dataset")
     p.add_argument("--annotators", default="annotator1,annotator2")

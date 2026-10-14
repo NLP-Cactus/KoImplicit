@@ -33,7 +33,13 @@ MANIPULATION_SCOPE = {
     "speaker_role": {"speaker_id", "addressee_id", "gold_referent_role", "speaker_changed", "referent_role_changed",
                      "anchor_turn", "anchor_referent_id", "gold_referent_id", "referent_changed", "turn_distance",
                      "gold_last_mention_turn", "most_recent_mentioned_id", "distractor_present"},
-    "linguistic_cue": {"linguistic_cues", "target_predicate"},
+    "linguistic_cue": {"linguistic_cues", "target_predicate", "gold_last_mention_turn", "most_recent_mentioned_id", "turn_distance", "distractor_present"},
+    # C 템플릿: 정답은 유지하고 anchor(이전 참조 대상)의 화자 또는 인물만 바꾼다
+    "anchor_speaker": {"speaker_changed", "anchor_turn", "gold_last_mention_turn", "turn_distance",
+                       "most_recent_mentioned_id", "distractor_present", "distractor_last_mention_turn"},
+    "anchor_entity": {"anchor_referent_id", "anchor_turn", "referent_changed", "referent_role_changed",
+                      "most_recent_mentioned_id", "distractor_present", "distractor_last_mention_turn",
+                      "turn_distance", "gold_last_mention_turn", "speaker_changed"},
 }
 
 

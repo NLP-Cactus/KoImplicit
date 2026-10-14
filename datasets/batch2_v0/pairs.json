@@ -1,0 +1,2976 @@
+{
+  "check_level": "automatic_structural_only",
+  "n_pairs": 60,
+  "n_single_variable": 52,
+  "n_compound": 8,
+  "problems": [],
+  "pairs": [
+    {
+      "pair_id": "A1:base~distractor",
+      "scenario_id": "A1",
+      "a": "A1-base",
+      "b": "A1-distractor",
+      "variants": [
+        "base",
+        "distractor"
+      ],
+      "claimed_manipulations": [
+        "distractor"
+      ],
+      "differing_variables": {
+        "most_recent_mentioned_id": [
+          "T1",
+          "T2"
+        ],
+        "distractor_present": [
+          false,
+          true
+        ],
+        "distractor_id": [
+          null,
+          "T2"
+        ],
+        "distractor_last_mention_turn": [
+          null,
+          2
+        ]
+      },
+      "differing_turns": [
+        1,
+        2
+      ],
+      "same_target_utterance": true,
+      "same_candidate_set": true,
+      "structural_conditions_met": true,
+      "expected_gold_change": false,
+      "observed_gold_change": false,
+      "gold_change_matches_expectation": true,
+      "unclaimed_differences": [],
+      "evaluable": true,
+      "is_single_variable_pair": true,
+      "check_level": "automatic_structural_only"
+    },
+    {
+      "pair_id": "A1:base~shift",
+      "scenario_id": "A1",
+      "a": "A1-base",
+      "b": "A1-shift",
+      "variants": [
+        "base",
+        "shift"
+      ],
+      "claimed_manipulations": [
+        "referent_shift"
+      ],
+      "differing_variables": {
+        "gold_referent_id": [
+          "T1",
+          "T2"
+        ],
+        "turn_distance": [
+          3,
+          1
+        ],
+        "gold_last_mention_turn": [
+          1,
+          3
+        ],
+        "most_recent_mentioned_id": [
+          "T1",
+          "T2"
+        ],
+        "anchor_referent_id": [
+          "T1",
+          "T2"
+        ]
+      },
+      "differing_turns": [
+        1,
+        2,
+        3
+      ],
+      "same_target_utterance": true,
+      "same_candidate_set": true,
+      "structural_conditions_met": true,
+      "expected_gold_change": true,
+      "observed_gold_change": true,
+      "gold_change_matches_expectation": true,
+      "unclaimed_differences": [],
+      "evaluable": true,
+      "is_single_variable_pair": true,
+      "check_level": "automatic_structural_only"
+    },
+    {
+      "pair_id": "A1:shift~shift_distractor",
+      "scenario_id": "A1",
+      "a": "A1-shift",
+      "b": "A1-shift_distractor",
+      "variants": [
+        "shift",
+        "shift_distractor"
+      ],
+      "claimed_manipulations": [
+        "distractor"
+      ],
+      "differing_variables": {
+        "most_recent_mentioned_id": [
+          "T2",
+          "T1"
+        ],
+        "distractor_present": [
+          false,
+          true
+        ],
+        "distractor_id": [
+          null,
+          "T1"
+        ],
+        "distractor_last_mention_turn": [
+          null,
+          3
+        ]
+      },
+      "differing_turns": [
+        1,
+        2,
+        3
+      ],
+      "same_target_utterance": true,
+      "same_candidate_set": true,
+      "structural_conditions_met": true,
+      "expected_gold_change": false,
+      "observed_gold_change": false,
+      "gold_change_matches_expectation": true,
+      "unclaimed_differences": [],
+      "evaluable": true,
+      "is_single_variable_pair": true,
+      "check_level": "automatic_structural_only"
+    },
+    {
+      "pair_id": "A2:base~distractor",
+      "scenario_id": "A2",
+      "a": "A2-base",
+      "b": "A2-distractor",
+      "variants": [
+        "base",
+        "distractor"
+      ],
+      "claimed_manipulations": [
+        "distractor"
+      ],
+      "differing_variables": {
+        "most_recent_mentioned_id": [
+          "T1",
+          "T2"
+        ],
+        "distractor_present": [
+          false,
+          true
+        ],
+        "distractor_id": [
+          null,
+          "T2"
+        ],
+        "distractor_last_mention_turn": [
+          null,
+          2
+        ]
+      },
+      "differing_turns": [
+        1,
+        2
+      ],
+      "same_target_utterance": true,
+      "same_candidate_set": true,
+      "structural_conditions_met": true,
+      "expected_gold_change": false,
+      "observed_gold_change": false,
+      "gold_change_matches_expectation": true,
+      "unclaimed_differences": [],
+      "evaluable": true,
+      "is_single_variable_pair": true,
+      "check_level": "automatic_structural_only"
+    },
+    {
+      "pair_id": "A2:base~shift",
+      "scenario_id": "A2",
+      "a": "A2-base",
+      "b": "A2-shift",
+      "variants": [
+        "base",
+        "shift"
+      ],
+      "claimed_manipulations": [
+        "referent_shift"
+      ],
+      "differing_variables": {
+        "gold_referent_id": [
+          "T1",
+          "T2"
+        ],
+        "turn_distance": [
+          3,
+          1
+        ],
+        "gold_last_mention_turn": [
+          1,
+          3
+        ],
+        "most_recent_mentioned_id": [
+          "T1",
+          "T2"
+        ],
+        "anchor_referent_id": [
+          "T1",
+          "T2"
+        ]
+      },
+      "differing_turns": [
+        1,
+        2,
+        3
+      ],
+      "same_target_utterance": true,
+      "same_candidate_set": true,
+      "structural_conditions_met": true,
+      "expected_gold_change": true,
+      "observed_gold_change": true,
+      "gold_change_matches_expectation": true,
+      "unclaimed_differences": [],
+      "evaluable": true,
+      "is_single_variable_pair": true,
+      "check_level": "automatic_structural_only"
+    },
+    {
+      "pair_id": "A2:shift~shift_distractor",
+      "scenario_id": "A2",
+      "a": "A2-shift",
+      "b": "A2-shift_distractor",
+      "variants": [
+        "shift",
+        "shift_distractor"
+      ],
+      "claimed_manipulations": [
+        "distractor"
+      ],
+      "differing_variables": {
+        "most_recent_mentioned_id": [
+          "T2",
+          "T1"
+        ],
+        "distractor_present": [
+          false,
+          true
+        ],
+        "distractor_id": [
+          null,
+          "T1"
+        ],
+        "distractor_last_mention_turn": [
+          null,
+          3
+        ]
+      },
+      "differing_turns": [
+        1,
+        2,
+        3
+      ],
+      "same_target_utterance": true,
+      "same_candidate_set": true,
+      "structural_conditions_met": true,
+      "expected_gold_change": false,
+      "observed_gold_change": false,
+      "gold_change_matches_expectation": true,
+      "unclaimed_differences": [],
+      "evaluable": true,
+      "is_single_variable_pair": true,
+      "check_level": "automatic_structural_only"
+    },
+    {
+      "pair_id": "A3:base~distractor",
+      "scenario_id": "A3",
+      "a": "A3-base",
+      "b": "A3-distractor",
+      "variants": [
+        "base",
+        "distractor"
+      ],
+      "claimed_manipulations": [
+        "distractor"
+      ],
+      "differing_variables": {
+        "most_recent_mentioned_id": [
+          "T1",
+          "T2"
+        ],
+        "distractor_present": [
+          false,
+          true
+        ],
+        "distractor_id": [
+          null,
+          "T2"
+        ],
+        "distractor_last_mention_turn": [
+          null,
+          2
+        ]
+      },
+      "differing_turns": [
+        1,
+        2
+      ],
+      "same_target_utterance": true,
+      "same_candidate_set": true,
+      "structural_conditions_met": true,
+      "expected_gold_change": false,
+      "observed_gold_change": false,
+      "gold_change_matches_expectation": true,
+      "unclaimed_differences": [],
+      "evaluable": true,
+      "is_single_variable_pair": true,
+      "check_level": "automatic_structural_only"
+    },
+    {
+      "pair_id": "A3:base~shift",
+      "scenario_id": "A3",
+      "a": "A3-base",
+      "b": "A3-shift",
+      "variants": [
+        "base",
+        "shift"
+      ],
+      "claimed_manipulations": [
+        "referent_shift"
+      ],
+      "differing_variables": {
+        "gold_referent_id": [
+          "T1",
+          "T2"
+        ],
+        "turn_distance": [
+          3,
+          1
+        ],
+        "gold_last_mention_turn": [
+          1,
+          3
+        ],
+        "most_recent_mentioned_id": [
+          "T1",
+          "T2"
+        ],
+        "anchor_referent_id": [
+          "T1",
+          "T2"
+        ]
+      },
+      "differing_turns": [
+        1,
+        2,
+        3
+      ],
+      "same_target_utterance": true,
+      "same_candidate_set": true,
+      "structural_conditions_met": true,
+      "expected_gold_change": true,
+      "observed_gold_change": true,
+      "gold_change_matches_expectation": true,
+      "unclaimed_differences": [],
+      "evaluable": true,
+      "is_single_variable_pair": true,
+      "check_level": "automatic_structural_only"
+    },
+    {
+      "pair_id": "A3:shift~shift_distractor",
+      "scenario_id": "A3",
+      "a": "A3-shift",
+      "b": "A3-shift_distractor",
+      "variants": [
+        "shift",
+        "shift_distractor"
+      ],
+      "claimed_manipulations": [
+        "distractor"
+      ],
+      "differing_variables": {
+        "most_recent_mentioned_id": [
+          "T2",
+          "T1"
+        ],
+        "distractor_present": [
+          false,
+          true
+        ],
+        "distractor_id": [
+          null,
+          "T1"
+        ],
+        "distractor_last_mention_turn": [
+          null,
+          3
+        ]
+      },
+      "differing_turns": [
+        1,
+        2,
+        3
+      ],
+      "same_target_utterance": true,
+      "same_candidate_set": true,
+      "structural_conditions_met": true,
+      "expected_gold_change": false,
+      "observed_gold_change": false,
+      "gold_change_matches_expectation": true,
+      "unclaimed_differences": [],
+      "evaluable": true,
+      "is_single_variable_pair": true,
+      "check_level": "automatic_structural_only"
+    },
+    {
+      "pair_id": "A4:base~distractor",
+      "scenario_id": "A4",
+      "a": "A4-base",
+      "b": "A4-distractor",
+      "variants": [
+        "base",
+        "distractor"
+      ],
+      "claimed_manipulations": [
+        "distractor"
+      ],
+      "differing_variables": {
+        "most_recent_mentioned_id": [
+          "T1",
+          "T2"
+        ],
+        "distractor_present": [
+          false,
+          true
+        ],
+        "distractor_id": [
+          null,
+          "T2"
+        ],
+        "distractor_last_mention_turn": [
+          null,
+          2
+        ]
+      },
+      "differing_turns": [
+        1,
+        2
+      ],
+      "same_target_utterance": true,
+      "same_candidate_set": true,
+      "structural_conditions_met": true,
+      "expected_gold_change": false,
+      "observed_gold_change": false,
+      "gold_change_matches_expectation": true,
+      "unclaimed_differences": [],
+      "evaluable": true,
+      "is_single_variable_pair": true,
+      "check_level": "automatic_structural_only"
+    },
+    {
+      "pair_id": "A4:base~shift",
+      "scenario_id": "A4",
+      "a": "A4-base",
+      "b": "A4-shift",
+      "variants": [
+        "base",
+        "shift"
+      ],
+      "claimed_manipulations": [
+        "referent_shift"
+      ],
+      "differing_variables": {
+        "gold_referent_id": [
+          "T1",
+          "T2"
+        ],
+        "turn_distance": [
+          3,
+          1
+        ],
+        "gold_last_mention_turn": [
+          1,
+          3
+        ],
+        "most_recent_mentioned_id": [
+          "T1",
+          "T2"
+        ],
+        "anchor_referent_id": [
+          "T1",
+          "T2"
+        ]
+      },
+      "differing_turns": [
+        1,
+        2,
+        3
+      ],
+      "same_target_utterance": true,
+      "same_candidate_set": true,
+      "structural_conditions_met": true,
+      "expected_gold_change": true,
+      "observed_gold_change": true,
+      "gold_change_matches_expectation": true,
+      "unclaimed_differences": [],
+      "evaluable": true,
+      "is_single_variable_pair": true,
+      "check_level": "automatic_structural_only"
+    },
+    {
+      "pair_id": "A4:shift~shift_distractor",
+      "scenario_id": "A4",
+      "a": "A4-shift",
+      "b": "A4-shift_distractor",
+      "variants": [
+        "shift",
+        "shift_distractor"
+      ],
+      "claimed_manipulations": [
+        "distractor"
+      ],
+      "differing_variables": {
+        "most_recent_mentioned_id": [
+          "T2",
+          "T1"
+        ],
+        "distractor_present": [
+          false,
+          true
+        ],
+        "distractor_id": [
+          null,
+          "T1"
+        ],
+        "distractor_last_mention_turn": [
+          null,
+          3
+        ]
+      },
+      "differing_turns": [
+        1,
+        2,
+        3
+      ],
+      "same_target_utterance": true,
+      "same_candidate_set": true,
+      "structural_conditions_met": true,
+      "expected_gold_change": false,
+      "observed_gold_change": false,
+      "gold_change_matches_expectation": true,
+      "unclaimed_differences": [],
+      "evaluable": true,
+      "is_single_variable_pair": true,
+      "check_level": "automatic_structural_only"
+    },
+    {
+      "pair_id": "A5:base~distractor",
+      "scenario_id": "A5",
+      "a": "A5-base",
+      "b": "A5-distractor",
+      "variants": [
+        "base",
+        "distractor"
+      ],
+      "claimed_manipulations": [
+        "distractor"
+      ],
+      "differing_variables": {
+        "most_recent_mentioned_id": [
+          "T1",
+          "T2"
+        ],
+        "distractor_present": [
+          false,
+          true
+        ],
+        "distractor_id": [
+          null,
+          "T2"
+        ],
+        "distractor_last_mention_turn": [
+          null,
+          2
+        ]
+      },
+      "differing_turns": [
+        1,
+        2
+      ],
+      "same_target_utterance": true,
+      "same_candidate_set": true,
+      "structural_conditions_met": true,
+      "expected_gold_change": false,
+      "observed_gold_change": false,
+      "gold_change_matches_expectation": true,
+      "unclaimed_differences": [],
+      "evaluable": true,
+      "is_single_variable_pair": true,
+      "check_level": "automatic_structural_only"
+    },
+    {
+      "pair_id": "A5:base~shift",
+      "scenario_id": "A5",
+      "a": "A5-base",
+      "b": "A5-shift",
+      "variants": [
+        "base",
+        "shift"
+      ],
+      "claimed_manipulations": [
+        "referent_shift"
+      ],
+      "differing_variables": {
+        "gold_referent_id": [
+          "T1",
+          "T2"
+        ],
+        "turn_distance": [
+          3,
+          1
+        ],
+        "gold_last_mention_turn": [
+          1,
+          3
+        ],
+        "most_recent_mentioned_id": [
+          "T1",
+          "T2"
+        ],
+        "anchor_referent_id": [
+          "T1",
+          "T2"
+        ]
+      },
+      "differing_turns": [
+        1,
+        2,
+        3
+      ],
+      "same_target_utterance": true,
+      "same_candidate_set": true,
+      "structural_conditions_met": true,
+      "expected_gold_change": true,
+      "observed_gold_change": true,
+      "gold_change_matches_expectation": true,
+      "unclaimed_differences": [],
+      "evaluable": true,
+      "is_single_variable_pair": true,
+      "check_level": "automatic_structural_only"
+    },
+    {
+      "pair_id": "A5:shift~shift_distractor",
+      "scenario_id": "A5",
+      "a": "A5-shift",
+      "b": "A5-shift_distractor",
+      "variants": [
+        "shift",
+        "shift_distractor"
+      ],
+      "claimed_manipulations": [
+        "distractor"
+      ],
+      "differing_variables": {
+        "turn_distance": [
+          1,
+          3
+        ],
+        "gold_last_mention_turn": [
+          3,
+          1
+        ],
+        "most_recent_mentioned_id": [
+          "T2",
+          "T1"
+        ],
+        "distractor_present": [
+          false,
+          true
+        ],
+        "distractor_id": [
+          null,
+          "T1"
+        ],
+        "distractor_last_mention_turn": [
+          null,
+          3
+        ]
+      },
+      "differing_turns": [
+        1,
+        2,
+        3
+      ],
+      "same_target_utterance": true,
+      "same_candidate_set": true,
+      "structural_conditions_met": true,
+      "expected_gold_change": false,
+      "observed_gold_change": false,
+      "gold_change_matches_expectation": true,
+      "unclaimed_differences": [
+        "gold_last_mention_turn",
+        "turn_distance"
+      ],
+      "evaluable": true,
+      "is_single_variable_pair": false,
+      "check_level": "automatic_structural_only"
+    },
+    {
+      "pair_id": "B1:addressee~third",
+      "scenario_id": "B1",
+      "a": "B1-addressee",
+      "b": "B1-third",
+      "variants": [
+        "addressee",
+        "third"
+      ],
+      "claimed_manipulations": [
+        "referent_shift"
+      ],
+      "differing_variables": {
+        "gold_referent_id": [
+          "P1",
+          "T1"
+        ],
+        "gold_referent_role": [
+          "addressee",
+          "third_party"
+        ],
+        "referent_role_changed": [
+          true,
+          false
+        ],
+        "turn_distance": [
+          null,
+          1
+        ],
+        "gold_last_mention_turn": [
+          null,
+          1
+        ],
+        "most_recent_mentioned_id": [
+          null,
+          "T1"
+        ],
+        "anchor_referent_id": [
+          "P1",
+          "T1"
+        ]
+      },
+      "differing_turns": [
+        1,
+        2
+      ],
+      "same_target_utterance": false,
+      "same_candidate_set": true,
+      "structural_conditions_met": false,
+      "expected_gold_change": true,
+      "observed_gold_change": true,
+      "gold_change_matches_expectation": true,
+      "unclaimed_differences": [],
+      "evaluable": true,
+      "is_single_variable_pair": false,
+      "check_level": "automatic_structural_only"
+    },
+    {
+      "pair_id": "B1:speaker~addressee",
+      "scenario_id": "B1",
+      "a": "B1-addressee",
+      "b": "B1-speaker",
+      "variants": [
+        "addressee",
+        "speaker"
+      ],
+      "claimed_manipulations": [
+        "speaker_role"
+      ],
+      "differing_variables": {
+        "gold_referent_role": [
+          "addressee",
+          "speaker"
+        ],
+        "speaker_id": [
+          "P2",
+          "P1"
+        ],
+        "speaker_changed": [
+          true,
+          null
+        ],
+        "referent_changed": [
+          false,
+          null
+        ],
+        "referent_role_changed": [
+          true,
+          null
+        ],
+        "anchor_turn": [
+          1,
+          null
+        ],
+        "anchor_referent_id": [
+          "P1",
+          null
+        ],
+        "linguistic_cues": [
+          [
+            "evaluative_exclamation"
+          ],
+          [
+            "evaluative_exclamation",
+            "same_turn_prior_clause"
+          ]
+        ]
+      },
+      "differing_turns": [
+        1,
+        2
+      ],
+      "same_target_utterance": false,
+      "same_candidate_set": true,
+      "structural_conditions_met": false,
+      "expected_gold_change": false,
+      "observed_gold_change": false,
+      "gold_change_matches_expectation": true,
+      "unclaimed_differences": [
+        "linguistic_cues"
+      ],
+      "evaluable": true,
+      "is_single_variable_pair": false,
+      "check_level": "automatic_structural_only"
+    },
+    {
+      "pair_id": "B1:third~third_distractor",
+      "scenario_id": "B1",
+      "a": "B1-third",
+      "b": "B1-third_distractor",
+      "variants": [
+        "third",
+        "third_distractor"
+      ],
+      "claimed_manipulations": [
+        "distractor"
+      ],
+      "differing_variables": {
+        "most_recent_mentioned_id": [
+          "T1",
+          "T2"
+        ],
+        "distractor_present": [
+          false,
+          true
+        ],
+        "distractor_id": [
+          null,
+          "T2"
+        ],
+        "distractor_last_mention_turn": [
+          null,
+          1
+        ]
+      },
+      "differing_turns": [
+        1
+      ],
+      "same_target_utterance": true,
+      "same_candidate_set": true,
+      "structural_conditions_met": true,
+      "expected_gold_change": false,
+      "observed_gold_change": false,
+      "gold_change_matches_expectation": true,
+      "unclaimed_differences": [],
+      "evaluable": true,
+      "is_single_variable_pair": true,
+      "check_level": "automatic_structural_only"
+    },
+    {
+      "pair_id": "B2:addressee~third",
+      "scenario_id": "B2",
+      "a": "B2-addressee",
+      "b": "B2-third",
+      "variants": [
+        "addressee",
+        "third"
+      ],
+      "claimed_manipulations": [
+        "referent_shift"
+      ],
+      "differing_variables": {
+        "gold_referent_id": [
+          "P1",
+          "T1"
+        ],
+        "gold_referent_role": [
+          "addressee",
+          "third_party"
+        ],
+        "referent_role_changed": [
+          true,
+          false
+        ],
+        "turn_distance": [
+          null,
+          1
+        ],
+        "gold_last_mention_turn": [
+          null,
+          1
+        ],
+        "most_recent_mentioned_id": [
+          null,
+          "T1"
+        ],
+        "anchor_referent_id": [
+          "P1",
+          "T1"
+        ]
+      },
+      "differing_turns": [
+        1
+      ],
+      "same_target_utterance": true,
+      "same_candidate_set": true,
+      "structural_conditions_met": true,
+      "expected_gold_change": true,
+      "observed_gold_change": true,
+      "gold_change_matches_expectation": true,
+      "unclaimed_differences": [],
+      "evaluable": true,
+      "is_single_variable_pair": true,
+      "check_level": "automatic_structural_only"
+    },
+    {
+      "pair_id": "B2:speaker~addressee",
+      "scenario_id": "B2",
+      "a": "B2-addressee",
+      "b": "B2-speaker",
+      "variants": [
+        "addressee",
+        "speaker"
+      ],
+      "claimed_manipulations": [
+        "speaker_role"
+      ],
+      "differing_variables": {
+        "gold_referent_role": [
+          "addressee",
+          "speaker"
+        ],
+        "speaker_id": [
+          "P2",
+          "P1"
+        ],
+        "speaker_changed": [
+          true,
+          null
+        ],
+        "referent_changed": [
+          false,
+          null
+        ],
+        "referent_role_changed": [
+          true,
+          null
+        ],
+        "anchor_turn": [
+          1,
+          null
+        ],
+        "anchor_referent_id": [
+          "P1",
+          null
+        ],
+        "linguistic_cues": [
+          [
+            "evaluative_exclamation"
+          ],
+          [
+            "evaluative_exclamation",
+            "same_turn_prior_clause"
+          ]
+        ]
+      },
+      "differing_turns": [
+        1,
+        2
+      ],
+      "same_target_utterance": false,
+      "same_candidate_set": true,
+      "structural_conditions_met": false,
+      "expected_gold_change": false,
+      "observed_gold_change": false,
+      "gold_change_matches_expectation": true,
+      "unclaimed_differences": [
+        "linguistic_cues"
+      ],
+      "evaluable": true,
+      "is_single_variable_pair": false,
+      "check_level": "automatic_structural_only"
+    },
+    {
+      "pair_id": "B2:third~third_distractor",
+      "scenario_id": "B2",
+      "a": "B2-third",
+      "b": "B2-third_distractor",
+      "variants": [
+        "third",
+        "third_distractor"
+      ],
+      "claimed_manipulations": [
+        "distractor"
+      ],
+      "differing_variables": {
+        "most_recent_mentioned_id": [
+          "T1",
+          "T2"
+        ],
+        "distractor_present": [
+          false,
+          true
+        ],
+        "distractor_id": [
+          null,
+          "T2"
+        ],
+        "distractor_last_mention_turn": [
+          null,
+          1
+        ]
+      },
+      "differing_turns": [
+        1
+      ],
+      "same_target_utterance": true,
+      "same_candidate_set": true,
+      "structural_conditions_met": true,
+      "expected_gold_change": false,
+      "observed_gold_change": false,
+      "gold_change_matches_expectation": true,
+      "unclaimed_differences": [],
+      "evaluable": true,
+      "is_single_variable_pair": true,
+      "check_level": "automatic_structural_only"
+    },
+    {
+      "pair_id": "B3:addressee~third",
+      "scenario_id": "B3",
+      "a": "B3-addressee",
+      "b": "B3-third",
+      "variants": [
+        "addressee",
+        "third"
+      ],
+      "claimed_manipulations": [
+        "referent_shift"
+      ],
+      "differing_variables": {
+        "gold_referent_id": [
+          "P1",
+          "T1"
+        ],
+        "gold_referent_role": [
+          "addressee",
+          "third_party"
+        ],
+        "speaker_changed": [
+          null,
+          true
+        ],
+        "referent_changed": [
+          null,
+          false
+        ],
+        "referent_role_changed": [
+          null,
+          false
+        ],
+        "turn_distance": [
+          null,
+          1
+        ],
+        "gold_last_mention_turn": [
+          null,
+          1
+        ],
+        "most_recent_mentioned_id": [
+          null,
+          "T1"
+        ],
+        "anchor_turn": [
+          null,
+          1
+        ],
+        "anchor_referent_id": [
+          null,
+          "T1"
+        ]
+      },
+      "differing_turns": [
+        1
+      ],
+      "same_target_utterance": true,
+      "same_candidate_set": true,
+      "structural_conditions_met": true,
+      "expected_gold_change": true,
+      "observed_gold_change": true,
+      "gold_change_matches_expectation": true,
+      "unclaimed_differences": [
+        "speaker_changed"
+      ],
+      "evaluable": true,
+      "is_single_variable_pair": false,
+      "check_level": "automatic_structural_only"
+    },
+    {
+      "pair_id": "B3:speaker~addressee",
+      "scenario_id": "B3",
+      "a": "B3-addressee",
+      "b": "B3-speaker",
+      "variants": [
+        "addressee",
+        "speaker"
+      ],
+      "claimed_manipulations": [
+        "speaker_role"
+      ],
+      "differing_variables": {
+        "gold_referent_role": [
+          "addressee",
+          "speaker"
+        ],
+        "speaker_id": [
+          "P2",
+          "P1"
+        ],
+        "linguistic_cues": [
+          [
+            "evaluative_exclamation"
+          ],
+          [
+            "evaluative_exclamation",
+            "same_turn_prior_clause"
+          ]
+        ]
+      },
+      "differing_turns": [
+        1,
+        2
+      ],
+      "same_target_utterance": false,
+      "same_candidate_set": true,
+      "structural_conditions_met": false,
+      "expected_gold_change": false,
+      "observed_gold_change": false,
+      "gold_change_matches_expectation": true,
+      "unclaimed_differences": [
+        "linguistic_cues"
+      ],
+      "evaluable": true,
+      "is_single_variable_pair": false,
+      "check_level": "automatic_structural_only"
+    },
+    {
+      "pair_id": "B3:third~third_distractor",
+      "scenario_id": "B3",
+      "a": "B3-third",
+      "b": "B3-third_distractor",
+      "variants": [
+        "third",
+        "third_distractor"
+      ],
+      "claimed_manipulations": [
+        "distractor"
+      ],
+      "differing_variables": {
+        "most_recent_mentioned_id": [
+          "T1",
+          "T2"
+        ],
+        "distractor_present": [
+          false,
+          true
+        ],
+        "distractor_id": [
+          null,
+          "T2"
+        ],
+        "distractor_last_mention_turn": [
+          null,
+          1
+        ]
+      },
+      "differing_turns": [
+        1
+      ],
+      "same_target_utterance": true,
+      "same_candidate_set": true,
+      "structural_conditions_met": true,
+      "expected_gold_change": false,
+      "observed_gold_change": false,
+      "gold_change_matches_expectation": true,
+      "unclaimed_differences": [],
+      "evaluable": true,
+      "is_single_variable_pair": true,
+      "check_level": "automatic_structural_only"
+    },
+    {
+      "pair_id": "B4:addressee~third",
+      "scenario_id": "B4",
+      "a": "B4-addressee",
+      "b": "B4-third",
+      "variants": [
+        "addressee",
+        "third"
+      ],
+      "claimed_manipulations": [
+        "referent_shift"
+      ],
+      "differing_variables": {
+        "gold_referent_id": [
+          "P1",
+          "T1"
+        ],
+        "gold_referent_role": [
+          "addressee",
+          "third_party"
+        ],
+        "referent_role_changed": [
+          true,
+          false
+        ],
+        "turn_distance": [
+          null,
+          1
+        ],
+        "gold_last_mention_turn": [
+          null,
+          1
+        ],
+        "most_recent_mentioned_id": [
+          null,
+          "T1"
+        ],
+        "anchor_referent_id": [
+          "P1",
+          "T1"
+        ]
+      },
+      "differing_turns": [
+        1
+      ],
+      "same_target_utterance": true,
+      "same_candidate_set": true,
+      "structural_conditions_met": true,
+      "expected_gold_change": true,
+      "observed_gold_change": true,
+      "gold_change_matches_expectation": true,
+      "unclaimed_differences": [],
+      "evaluable": true,
+      "is_single_variable_pair": true,
+      "check_level": "automatic_structural_only"
+    },
+    {
+      "pair_id": "B4:speaker~addressee",
+      "scenario_id": "B4",
+      "a": "B4-addressee",
+      "b": "B4-speaker",
+      "variants": [
+        "addressee",
+        "speaker"
+      ],
+      "claimed_manipulations": [
+        "speaker_role"
+      ],
+      "differing_variables": {
+        "gold_referent_role": [
+          "addressee",
+          "speaker"
+        ],
+        "speaker_id": [
+          "P2",
+          "P1"
+        ],
+        "speaker_changed": [
+          true,
+          null
+        ],
+        "referent_changed": [
+          false,
+          null
+        ],
+        "referent_role_changed": [
+          true,
+          null
+        ],
+        "anchor_turn": [
+          1,
+          null
+        ],
+        "anchor_referent_id": [
+          "P1",
+          null
+        ],
+        "linguistic_cues": [
+          [
+            "evaluative_exclamation"
+          ],
+          [
+            "evaluative_exclamation",
+            "same_turn_prior_clause"
+          ]
+        ]
+      },
+      "differing_turns": [
+        1,
+        2
+      ],
+      "same_target_utterance": false,
+      "same_candidate_set": true,
+      "structural_conditions_met": false,
+      "expected_gold_change": false,
+      "observed_gold_change": false,
+      "gold_change_matches_expectation": true,
+      "unclaimed_differences": [
+        "linguistic_cues"
+      ],
+      "evaluable": true,
+      "is_single_variable_pair": false,
+      "check_level": "automatic_structural_only"
+    },
+    {
+      "pair_id": "B4:third~third_distractor",
+      "scenario_id": "B4",
+      "a": "B4-third",
+      "b": "B4-third_distractor",
+      "variants": [
+        "third",
+        "third_distractor"
+      ],
+      "claimed_manipulations": [
+        "distractor"
+      ],
+      "differing_variables": {
+        "most_recent_mentioned_id": [
+          "T1",
+          "T2"
+        ],
+        "distractor_present": [
+          false,
+          true
+        ],
+        "distractor_id": [
+          null,
+          "T2"
+        ],
+        "distractor_last_mention_turn": [
+          null,
+          1
+        ]
+      },
+      "differing_turns": [
+        1
+      ],
+      "same_target_utterance": true,
+      "same_candidate_set": true,
+      "structural_conditions_met": true,
+      "expected_gold_change": false,
+      "observed_gold_change": false,
+      "gold_change_matches_expectation": true,
+      "unclaimed_differences": [],
+      "evaluable": true,
+      "is_single_variable_pair": true,
+      "check_level": "automatic_structural_only"
+    },
+    {
+      "pair_id": "B5:addressee~third",
+      "scenario_id": "B5",
+      "a": "B5-addressee",
+      "b": "B5-third",
+      "variants": [
+        "addressee",
+        "third"
+      ],
+      "claimed_manipulations": [
+        "referent_shift"
+      ],
+      "differing_variables": {
+        "gold_referent_id": [
+          "P1",
+          "T1"
+        ],
+        "gold_referent_role": [
+          "addressee",
+          "third_party"
+        ],
+        "referent_role_changed": [
+          true,
+          false
+        ],
+        "turn_distance": [
+          null,
+          1
+        ],
+        "gold_last_mention_turn": [
+          null,
+          1
+        ],
+        "most_recent_mentioned_id": [
+          null,
+          "T1"
+        ],
+        "anchor_referent_id": [
+          "P1",
+          "T1"
+        ]
+      },
+      "differing_turns": [
+        1
+      ],
+      "same_target_utterance": true,
+      "same_candidate_set": true,
+      "structural_conditions_met": true,
+      "expected_gold_change": true,
+      "observed_gold_change": true,
+      "gold_change_matches_expectation": true,
+      "unclaimed_differences": [],
+      "evaluable": true,
+      "is_single_variable_pair": true,
+      "check_level": "automatic_structural_only"
+    },
+    {
+      "pair_id": "B5:speaker~addressee",
+      "scenario_id": "B5",
+      "a": "B5-addressee",
+      "b": "B5-speaker",
+      "variants": [
+        "addressee",
+        "speaker"
+      ],
+      "claimed_manipulations": [
+        "speaker_role"
+      ],
+      "differing_variables": {
+        "gold_referent_role": [
+          "addressee",
+          "speaker"
+        ],
+        "speaker_id": [
+          "P2",
+          "P1"
+        ],
+        "linguistic_cues": [
+          [
+            "evaluative_exclamation"
+          ],
+          [
+            "evaluative_exclamation",
+            "same_turn_prior_clause"
+          ]
+        ]
+      },
+      "differing_turns": [
+        1,
+        2
+      ],
+      "same_target_utterance": false,
+      "same_candidate_set": true,
+      "structural_conditions_met": false,
+      "expected_gold_change": false,
+      "observed_gold_change": false,
+      "gold_change_matches_expectation": true,
+      "unclaimed_differences": [
+        "linguistic_cues"
+      ],
+      "evaluable": true,
+      "is_single_variable_pair": false,
+      "check_level": "automatic_structural_only"
+    },
+    {
+      "pair_id": "B5:third~third_distractor",
+      "scenario_id": "B5",
+      "a": "B5-third",
+      "b": "B5-third_distractor",
+      "variants": [
+        "third",
+        "third_distractor"
+      ],
+      "claimed_manipulations": [
+        "distractor"
+      ],
+      "differing_variables": {
+        "most_recent_mentioned_id": [
+          "T1",
+          "T2"
+        ],
+        "distractor_present": [
+          false,
+          true
+        ],
+        "distractor_id": [
+          null,
+          "T2"
+        ],
+        "distractor_last_mention_turn": [
+          null,
+          1
+        ]
+      },
+      "differing_turns": [
+        1
+      ],
+      "same_target_utterance": true,
+      "same_candidate_set": true,
+      "structural_conditions_met": true,
+      "expected_gold_change": false,
+      "observed_gold_change": false,
+      "gold_change_matches_expectation": true,
+      "unclaimed_differences": [],
+      "evaluable": true,
+      "is_single_variable_pair": true,
+      "check_level": "automatic_structural_only"
+    },
+    {
+      "pair_id": "C1:keep_other~keep_same",
+      "scenario_id": "C1",
+      "a": "C1-keep_other",
+      "b": "C1-keep_same",
+      "variants": [
+        "keep_other",
+        "keep_same"
+      ],
+      "claimed_manipulations": [
+        "anchor_speaker"
+      ],
+      "differing_variables": {
+        "speaker_changed": [
+          true,
+          false
+        ],
+        "anchor_turn": [
+          3,
+          2
+        ]
+      },
+      "differing_turns": [
+        2,
+        3
+      ],
+      "same_target_utterance": true,
+      "same_candidate_set": true,
+      "structural_conditions_met": true,
+      "expected_gold_change": false,
+      "observed_gold_change": false,
+      "gold_change_matches_expectation": true,
+      "unclaimed_differences": [],
+      "evaluable": true,
+      "is_single_variable_pair": true,
+      "check_level": "automatic_structural_only"
+    },
+    {
+      "pair_id": "C1:keep_other~shift_other",
+      "scenario_id": "C1",
+      "a": "C1-keep_other",
+      "b": "C1-shift_other",
+      "variants": [
+        "keep_other",
+        "shift_other"
+      ],
+      "claimed_manipulations": [
+        "anchor_entity"
+      ],
+      "differing_variables": {
+        "referent_changed": [
+          false,
+          true
+        ],
+        "most_recent_mentioned_id": [
+          "T1",
+          "T2"
+        ],
+        "distractor_present": [
+          false,
+          true
+        ],
+        "anchor_referent_id": [
+          "T1",
+          "T2"
+        ]
+      },
+      "differing_turns": [
+        3
+      ],
+      "same_target_utterance": true,
+      "same_candidate_set": true,
+      "structural_conditions_met": true,
+      "expected_gold_change": false,
+      "observed_gold_change": false,
+      "gold_change_matches_expectation": true,
+      "unclaimed_differences": [],
+      "evaluable": true,
+      "is_single_variable_pair": true,
+      "check_level": "automatic_structural_only"
+    },
+    {
+      "pair_id": "C1:keep_same~shift_same",
+      "scenario_id": "C1",
+      "a": "C1-keep_same",
+      "b": "C1-shift_same",
+      "variants": [
+        "keep_same",
+        "shift_same"
+      ],
+      "claimed_manipulations": [
+        "anchor_entity"
+      ],
+      "differing_variables": {
+        "referent_changed": [
+          false,
+          true
+        ],
+        "most_recent_mentioned_id": [
+          "T1",
+          "T2"
+        ],
+        "distractor_present": [
+          false,
+          true
+        ],
+        "anchor_referent_id": [
+          "T1",
+          "T2"
+        ]
+      },
+      "differing_turns": [
+        2,
+        3
+      ],
+      "same_target_utterance": true,
+      "same_candidate_set": true,
+      "structural_conditions_met": true,
+      "expected_gold_change": false,
+      "observed_gold_change": false,
+      "gold_change_matches_expectation": true,
+      "unclaimed_differences": [],
+      "evaluable": true,
+      "is_single_variable_pair": true,
+      "check_level": "automatic_structural_only"
+    },
+    {
+      "pair_id": "C1:shift_other~shift_same",
+      "scenario_id": "C1",
+      "a": "C1-shift_other",
+      "b": "C1-shift_same",
+      "variants": [
+        "shift_other",
+        "shift_same"
+      ],
+      "claimed_manipulations": [
+        "anchor_speaker"
+      ],
+      "differing_variables": {
+        "speaker_changed": [
+          true,
+          false
+        ],
+        "anchor_turn": [
+          3,
+          2
+        ]
+      },
+      "differing_turns": [
+        2,
+        3
+      ],
+      "same_target_utterance": true,
+      "same_candidate_set": true,
+      "structural_conditions_met": true,
+      "expected_gold_change": false,
+      "observed_gold_change": false,
+      "gold_change_matches_expectation": true,
+      "unclaimed_differences": [],
+      "evaluable": true,
+      "is_single_variable_pair": true,
+      "check_level": "automatic_structural_only"
+    },
+    {
+      "pair_id": "C2:keep_other~keep_same",
+      "scenario_id": "C2",
+      "a": "C2-keep_other",
+      "b": "C2-keep_same",
+      "variants": [
+        "keep_other",
+        "keep_same"
+      ],
+      "claimed_manipulations": [
+        "anchor_speaker"
+      ],
+      "differing_variables": {
+        "speaker_changed": [
+          true,
+          false
+        ],
+        "anchor_turn": [
+          3,
+          2
+        ]
+      },
+      "differing_turns": [
+        2,
+        3
+      ],
+      "same_target_utterance": true,
+      "same_candidate_set": true,
+      "structural_conditions_met": true,
+      "expected_gold_change": false,
+      "observed_gold_change": false,
+      "gold_change_matches_expectation": true,
+      "unclaimed_differences": [],
+      "evaluable": true,
+      "is_single_variable_pair": true,
+      "check_level": "automatic_structural_only"
+    },
+    {
+      "pair_id": "C2:keep_other~shift_other",
+      "scenario_id": "C2",
+      "a": "C2-keep_other",
+      "b": "C2-shift_other",
+      "variants": [
+        "keep_other",
+        "shift_other"
+      ],
+      "claimed_manipulations": [
+        "anchor_entity"
+      ],
+      "differing_variables": {
+        "referent_changed": [
+          false,
+          true
+        ],
+        "most_recent_mentioned_id": [
+          "T1",
+          "T2"
+        ],
+        "distractor_present": [
+          false,
+          true
+        ],
+        "anchor_referent_id": [
+          "T1",
+          "T2"
+        ]
+      },
+      "differing_turns": [
+        3
+      ],
+      "same_target_utterance": true,
+      "same_candidate_set": true,
+      "structural_conditions_met": true,
+      "expected_gold_change": false,
+      "observed_gold_change": false,
+      "gold_change_matches_expectation": true,
+      "unclaimed_differences": [],
+      "evaluable": true,
+      "is_single_variable_pair": true,
+      "check_level": "automatic_structural_only"
+    },
+    {
+      "pair_id": "C2:keep_same~shift_same",
+      "scenario_id": "C2",
+      "a": "C2-keep_same",
+      "b": "C2-shift_same",
+      "variants": [
+        "keep_same",
+        "shift_same"
+      ],
+      "claimed_manipulations": [
+        "anchor_entity"
+      ],
+      "differing_variables": {
+        "referent_changed": [
+          false,
+          true
+        ],
+        "most_recent_mentioned_id": [
+          "T1",
+          "T2"
+        ],
+        "distractor_present": [
+          false,
+          true
+        ],
+        "anchor_referent_id": [
+          "T1",
+          "T2"
+        ]
+      },
+      "differing_turns": [
+        2
+      ],
+      "same_target_utterance": true,
+      "same_candidate_set": true,
+      "structural_conditions_met": true,
+      "expected_gold_change": false,
+      "observed_gold_change": false,
+      "gold_change_matches_expectation": true,
+      "unclaimed_differences": [],
+      "evaluable": true,
+      "is_single_variable_pair": true,
+      "check_level": "automatic_structural_only"
+    },
+    {
+      "pair_id": "C2:shift_other~shift_same",
+      "scenario_id": "C2",
+      "a": "C2-shift_other",
+      "b": "C2-shift_same",
+      "variants": [
+        "shift_other",
+        "shift_same"
+      ],
+      "claimed_manipulations": [
+        "anchor_speaker"
+      ],
+      "differing_variables": {
+        "speaker_changed": [
+          true,
+          false
+        ],
+        "anchor_turn": [
+          3,
+          2
+        ]
+      },
+      "differing_turns": [
+        2,
+        3
+      ],
+      "same_target_utterance": true,
+      "same_candidate_set": true,
+      "structural_conditions_met": true,
+      "expected_gold_change": false,
+      "observed_gold_change": false,
+      "gold_change_matches_expectation": true,
+      "unclaimed_differences": [],
+      "evaluable": true,
+      "is_single_variable_pair": true,
+      "check_level": "automatic_structural_only"
+    },
+    {
+      "pair_id": "C3:keep_other~keep_same",
+      "scenario_id": "C3",
+      "a": "C3-keep_other",
+      "b": "C3-keep_same",
+      "variants": [
+        "keep_other",
+        "keep_same"
+      ],
+      "claimed_manipulations": [
+        "anchor_speaker"
+      ],
+      "differing_variables": {
+        "speaker_changed": [
+          true,
+          false
+        ],
+        "anchor_turn": [
+          3,
+          2
+        ]
+      },
+      "differing_turns": [
+        2,
+        3
+      ],
+      "same_target_utterance": true,
+      "same_candidate_set": true,
+      "structural_conditions_met": true,
+      "expected_gold_change": false,
+      "observed_gold_change": false,
+      "gold_change_matches_expectation": true,
+      "unclaimed_differences": [],
+      "evaluable": true,
+      "is_single_variable_pair": true,
+      "check_level": "automatic_structural_only"
+    },
+    {
+      "pair_id": "C3:keep_other~shift_other",
+      "scenario_id": "C3",
+      "a": "C3-keep_other",
+      "b": "C3-shift_other",
+      "variants": [
+        "keep_other",
+        "shift_other"
+      ],
+      "claimed_manipulations": [
+        "anchor_entity"
+      ],
+      "differing_variables": {
+        "referent_changed": [
+          false,
+          true
+        ],
+        "most_recent_mentioned_id": [
+          "T1",
+          "T2"
+        ],
+        "distractor_present": [
+          false,
+          true
+        ],
+        "anchor_referent_id": [
+          "T1",
+          "T2"
+        ]
+      },
+      "differing_turns": [
+        3
+      ],
+      "same_target_utterance": true,
+      "same_candidate_set": true,
+      "structural_conditions_met": true,
+      "expected_gold_change": false,
+      "observed_gold_change": false,
+      "gold_change_matches_expectation": true,
+      "unclaimed_differences": [],
+      "evaluable": true,
+      "is_single_variable_pair": true,
+      "check_level": "automatic_structural_only"
+    },
+    {
+      "pair_id": "C3:keep_same~shift_same",
+      "scenario_id": "C3",
+      "a": "C3-keep_same",
+      "b": "C3-shift_same",
+      "variants": [
+        "keep_same",
+        "shift_same"
+      ],
+      "claimed_manipulations": [
+        "anchor_entity"
+      ],
+      "differing_variables": {
+        "referent_changed": [
+          false,
+          true
+        ],
+        "most_recent_mentioned_id": [
+          "T1",
+          "T2"
+        ],
+        "distractor_present": [
+          false,
+          true
+        ],
+        "anchor_referent_id": [
+          "T1",
+          "T2"
+        ]
+      },
+      "differing_turns": [
+        2
+      ],
+      "same_target_utterance": true,
+      "same_candidate_set": true,
+      "structural_conditions_met": true,
+      "expected_gold_change": false,
+      "observed_gold_change": false,
+      "gold_change_matches_expectation": true,
+      "unclaimed_differences": [],
+      "evaluable": true,
+      "is_single_variable_pair": true,
+      "check_level": "automatic_structural_only"
+    },
+    {
+      "pair_id": "C3:shift_other~shift_same",
+      "scenario_id": "C3",
+      "a": "C3-shift_other",
+      "b": "C3-shift_same",
+      "variants": [
+        "shift_other",
+        "shift_same"
+      ],
+      "claimed_manipulations": [
+        "anchor_speaker"
+      ],
+      "differing_variables": {
+        "speaker_changed": [
+          true,
+          false
+        ],
+        "anchor_turn": [
+          3,
+          2
+        ]
+      },
+      "differing_turns": [
+        2,
+        3
+      ],
+      "same_target_utterance": true,
+      "same_candidate_set": true,
+      "structural_conditions_met": true,
+      "expected_gold_change": false,
+      "observed_gold_change": false,
+      "gold_change_matches_expectation": true,
+      "unclaimed_differences": [],
+      "evaluable": true,
+      "is_single_variable_pair": true,
+      "check_level": "automatic_structural_only"
+    },
+    {
+      "pair_id": "C4:keep_other~keep_same",
+      "scenario_id": "C4",
+      "a": "C4-keep_other",
+      "b": "C4-keep_same",
+      "variants": [
+        "keep_other",
+        "keep_same"
+      ],
+      "claimed_manipulations": [
+        "anchor_speaker"
+      ],
+      "differing_variables": {
+        "speaker_changed": [
+          true,
+          false
+        ],
+        "anchor_turn": [
+          3,
+          2
+        ]
+      },
+      "differing_turns": [
+        2,
+        3
+      ],
+      "same_target_utterance": true,
+      "same_candidate_set": true,
+      "structural_conditions_met": true,
+      "expected_gold_change": false,
+      "observed_gold_change": false,
+      "gold_change_matches_expectation": true,
+      "unclaimed_differences": [],
+      "evaluable": true,
+      "is_single_variable_pair": true,
+      "check_level": "automatic_structural_only"
+    },
+    {
+      "pair_id": "C4:keep_other~shift_other",
+      "scenario_id": "C4",
+      "a": "C4-keep_other",
+      "b": "C4-shift_other",
+      "variants": [
+        "keep_other",
+        "shift_other"
+      ],
+      "claimed_manipulations": [
+        "anchor_entity"
+      ],
+      "differing_variables": {
+        "referent_changed": [
+          false,
+          true
+        ],
+        "most_recent_mentioned_id": [
+          "T1",
+          "T2"
+        ],
+        "distractor_present": [
+          false,
+          true
+        ],
+        "anchor_referent_id": [
+          "T1",
+          "T2"
+        ]
+      },
+      "differing_turns": [
+        3
+      ],
+      "same_target_utterance": true,
+      "same_candidate_set": true,
+      "structural_conditions_met": true,
+      "expected_gold_change": false,
+      "observed_gold_change": false,
+      "gold_change_matches_expectation": true,
+      "unclaimed_differences": [],
+      "evaluable": true,
+      "is_single_variable_pair": true,
+      "check_level": "automatic_structural_only"
+    },
+    {
+      "pair_id": "C4:keep_same~shift_same",
+      "scenario_id": "C4",
+      "a": "C4-keep_same",
+      "b": "C4-shift_same",
+      "variants": [
+        "keep_same",
+        "shift_same"
+      ],
+      "claimed_manipulations": [
+        "anchor_entity"
+      ],
+      "differing_variables": {
+        "referent_changed": [
+          false,
+          true
+        ],
+        "most_recent_mentioned_id": [
+          "T1",
+          "T2"
+        ],
+        "distractor_present": [
+          false,
+          true
+        ],
+        "anchor_referent_id": [
+          "T1",
+          "T2"
+        ]
+      },
+      "differing_turns": [
+        2
+      ],
+      "same_target_utterance": true,
+      "same_candidate_set": true,
+      "structural_conditions_met": true,
+      "expected_gold_change": false,
+      "observed_gold_change": false,
+      "gold_change_matches_expectation": true,
+      "unclaimed_differences": [],
+      "evaluable": true,
+      "is_single_variable_pair": true,
+      "check_level": "automatic_structural_only"
+    },
+    {
+      "pair_id": "C4:shift_other~shift_same",
+      "scenario_id": "C4",
+      "a": "C4-shift_other",
+      "b": "C4-shift_same",
+      "variants": [
+        "shift_other",
+        "shift_same"
+      ],
+      "claimed_manipulations": [
+        "anchor_speaker"
+      ],
+      "differing_variables": {
+        "speaker_changed": [
+          true,
+          false
+        ],
+        "anchor_turn": [
+          3,
+          2
+        ]
+      },
+      "differing_turns": [
+        2,
+        3
+      ],
+      "same_target_utterance": true,
+      "same_candidate_set": true,
+      "structural_conditions_met": true,
+      "expected_gold_change": false,
+      "observed_gold_change": false,
+      "gold_change_matches_expectation": true,
+      "unclaimed_differences": [],
+      "evaluable": true,
+      "is_single_variable_pair": true,
+      "check_level": "automatic_structural_only"
+    },
+    {
+      "pair_id": "C5:keep_other~keep_same",
+      "scenario_id": "C5",
+      "a": "C5-keep_other",
+      "b": "C5-keep_same",
+      "variants": [
+        "keep_other",
+        "keep_same"
+      ],
+      "claimed_manipulations": [
+        "anchor_speaker"
+      ],
+      "differing_variables": {
+        "speaker_changed": [
+          true,
+          false
+        ],
+        "anchor_turn": [
+          3,
+          2
+        ]
+      },
+      "differing_turns": [
+        2,
+        3
+      ],
+      "same_target_utterance": true,
+      "same_candidate_set": true,
+      "structural_conditions_met": true,
+      "expected_gold_change": false,
+      "observed_gold_change": false,
+      "gold_change_matches_expectation": true,
+      "unclaimed_differences": [],
+      "evaluable": true,
+      "is_single_variable_pair": true,
+      "check_level": "automatic_structural_only"
+    },
+    {
+      "pair_id": "C5:keep_other~shift_other",
+      "scenario_id": "C5",
+      "a": "C5-keep_other",
+      "b": "C5-shift_other",
+      "variants": [
+        "keep_other",
+        "shift_other"
+      ],
+      "claimed_manipulations": [
+        "anchor_entity"
+      ],
+      "differing_variables": {
+        "referent_changed": [
+          false,
+          true
+        ],
+        "most_recent_mentioned_id": [
+          "T1",
+          "T2"
+        ],
+        "distractor_present": [
+          false,
+          true
+        ],
+        "anchor_referent_id": [
+          "T1",
+          "T2"
+        ]
+      },
+      "differing_turns": [
+        3
+      ],
+      "same_target_utterance": true,
+      "same_candidate_set": true,
+      "structural_conditions_met": true,
+      "expected_gold_change": false,
+      "observed_gold_change": false,
+      "gold_change_matches_expectation": true,
+      "unclaimed_differences": [],
+      "evaluable": true,
+      "is_single_variable_pair": true,
+      "check_level": "automatic_structural_only"
+    },
+    {
+      "pair_id": "C5:keep_same~shift_same",
+      "scenario_id": "C5",
+      "a": "C5-keep_same",
+      "b": "C5-shift_same",
+      "variants": [
+        "keep_same",
+        "shift_same"
+      ],
+      "claimed_manipulations": [
+        "anchor_entity"
+      ],
+      "differing_variables": {
+        "referent_changed": [
+          false,
+          true
+        ],
+        "most_recent_mentioned_id": [
+          "T1",
+          "T2"
+        ],
+        "distractor_present": [
+          false,
+          true
+        ],
+        "anchor_referent_id": [
+          "T1",
+          "T2"
+        ]
+      },
+      "differing_turns": [
+        2
+      ],
+      "same_target_utterance": true,
+      "same_candidate_set": true,
+      "structural_conditions_met": true,
+      "expected_gold_change": false,
+      "observed_gold_change": false,
+      "gold_change_matches_expectation": true,
+      "unclaimed_differences": [],
+      "evaluable": true,
+      "is_single_variable_pair": true,
+      "check_level": "automatic_structural_only"
+    },
+    {
+      "pair_id": "C5:shift_other~shift_same",
+      "scenario_id": "C5",
+      "a": "C5-shift_other",
+      "b": "C5-shift_same",
+      "variants": [
+        "shift_other",
+        "shift_same"
+      ],
+      "claimed_manipulations": [
+        "anchor_speaker"
+      ],
+      "differing_variables": {
+        "speaker_changed": [
+          true,
+          false
+        ],
+        "anchor_turn": [
+          3,
+          2
+        ]
+      },
+      "differing_turns": [
+        2,
+        3
+      ],
+      "same_target_utterance": true,
+      "same_candidate_set": true,
+      "structural_conditions_met": true,
+      "expected_gold_change": false,
+      "observed_gold_change": false,
+      "gold_change_matches_expectation": true,
+      "unclaimed_differences": [],
+      "evaluable": true,
+      "is_single_variable_pair": true,
+      "check_level": "automatic_structural_only"
+    },
+    {
+      "pair_id": "D1:vocative~adjacency",
+      "scenario_id": "D1",
+      "a": "D1-adjacency",
+      "b": "D1-vocative",
+      "variants": [
+        "adjacency",
+        "vocative"
+      ],
+      "claimed_manipulations": [
+        "linguistic_cue"
+      ],
+      "differing_variables": {
+        "turn_distance": [
+          null,
+          0
+        ],
+        "gold_last_mention_turn": [
+          null,
+          4
+        ],
+        "most_recent_mentioned_id": [
+          null,
+          "P3"
+        ],
+        "linguistic_cues": [
+          [
+            "request",
+            "adjacency"
+          ],
+          [
+            "vocative",
+            "request"
+          ]
+        ]
+      },
+      "differing_turns": [
+        4
+      ],
+      "same_target_utterance": false,
+      "same_candidate_set": true,
+      "structural_conditions_met": true,
+      "expected_gold_change": false,
+      "observed_gold_change": false,
+      "gold_change_matches_expectation": true,
+      "unclaimed_differences": [],
+      "evaluable": true,
+      "is_single_variable_pair": true,
+      "check_level": "automatic_structural_only"
+    },
+    {
+      "pair_id": "D1:vocative~ambiguous",
+      "scenario_id": "D1",
+      "a": "D1-ambiguous",
+      "b": "D1-vocative",
+      "variants": [
+        "ambiguous",
+        "vocative"
+      ],
+      "claimed_manipulations": [
+        "linguistic_cue"
+      ],
+      "differing_variables": {
+        "gold_referent_id": [
+          null,
+          "P3"
+        ],
+        "gold_referent_role": [
+          null,
+          "addressee"
+        ],
+        "addressee_id": [
+          null,
+          "P3"
+        ],
+        "referent_changed": [
+          null,
+          false
+        ],
+        "referent_role_changed": [
+          null,
+          true
+        ],
+        "turn_distance": [
+          null,
+          0
+        ],
+        "gold_last_mention_turn": [
+          null,
+          4
+        ],
+        "most_recent_mentioned_id": [
+          null,
+          "P3"
+        ],
+        "distractor_present": [
+          null,
+          false
+        ],
+        "linguistic_cues": [
+          [
+            "request"
+          ],
+          [
+            "vocative",
+            "request"
+          ]
+        ]
+      },
+      "differing_turns": [
+        2,
+        3,
+        4
+      ],
+      "same_target_utterance": false,
+      "same_candidate_set": true,
+      "structural_conditions_met": true,
+      "expected_gold_change": null,
+      "observed_gold_change": null,
+      "gold_change_matches_expectation": true,
+      "unclaimed_differences": [],
+      "evaluable": false,
+      "is_single_variable_pair": true,
+      "check_level": "automatic_structural_only"
+    },
+    {
+      "pair_id": "D2:vocative~adjacency",
+      "scenario_id": "D2",
+      "a": "D2-adjacency",
+      "b": "D2-vocative",
+      "variants": [
+        "adjacency",
+        "vocative"
+      ],
+      "claimed_manipulations": [
+        "linguistic_cue"
+      ],
+      "differing_variables": {
+        "turn_distance": [
+          null,
+          0
+        ],
+        "gold_last_mention_turn": [
+          null,
+          4
+        ],
+        "most_recent_mentioned_id": [
+          null,
+          "P3"
+        ],
+        "linguistic_cues": [
+          [
+            "request",
+            "adjacency"
+          ],
+          [
+            "vocative",
+            "request"
+          ]
+        ]
+      },
+      "differing_turns": [
+        4
+      ],
+      "same_target_utterance": false,
+      "same_candidate_set": true,
+      "structural_conditions_met": true,
+      "expected_gold_change": false,
+      "observed_gold_change": false,
+      "gold_change_matches_expectation": true,
+      "unclaimed_differences": [],
+      "evaluable": true,
+      "is_single_variable_pair": true,
+      "check_level": "automatic_structural_only"
+    },
+    {
+      "pair_id": "D2:vocative~ambiguous",
+      "scenario_id": "D2",
+      "a": "D2-ambiguous",
+      "b": "D2-vocative",
+      "variants": [
+        "ambiguous",
+        "vocative"
+      ],
+      "claimed_manipulations": [
+        "linguistic_cue"
+      ],
+      "differing_variables": {
+        "gold_referent_id": [
+          null,
+          "P3"
+        ],
+        "gold_referent_role": [
+          null,
+          "addressee"
+        ],
+        "addressee_id": [
+          null,
+          "P3"
+        ],
+        "referent_changed": [
+          null,
+          false
+        ],
+        "referent_role_changed": [
+          null,
+          true
+        ],
+        "turn_distance": [
+          null,
+          0
+        ],
+        "gold_last_mention_turn": [
+          null,
+          4
+        ],
+        "most_recent_mentioned_id": [
+          null,
+          "P3"
+        ],
+        "distractor_present": [
+          null,
+          false
+        ],
+        "linguistic_cues": [
+          [
+            "request"
+          ],
+          [
+            "vocative",
+            "request"
+          ]
+        ]
+      },
+      "differing_turns": [
+        2,
+        3,
+        4
+      ],
+      "same_target_utterance": false,
+      "same_candidate_set": true,
+      "structural_conditions_met": true,
+      "expected_gold_change": null,
+      "observed_gold_change": null,
+      "gold_change_matches_expectation": true,
+      "unclaimed_differences": [],
+      "evaluable": false,
+      "is_single_variable_pair": true,
+      "check_level": "automatic_structural_only"
+    },
+    {
+      "pair_id": "D3:vocative~adjacency",
+      "scenario_id": "D3",
+      "a": "D3-adjacency",
+      "b": "D3-vocative",
+      "variants": [
+        "adjacency",
+        "vocative"
+      ],
+      "claimed_manipulations": [
+        "linguistic_cue"
+      ],
+      "differing_variables": {
+        "turn_distance": [
+          null,
+          0
+        ],
+        "gold_last_mention_turn": [
+          null,
+          4
+        ],
+        "most_recent_mentioned_id": [
+          null,
+          "P3"
+        ],
+        "linguistic_cues": [
+          [
+            "request",
+            "adjacency"
+          ],
+          [
+            "vocative",
+            "request"
+          ]
+        ]
+      },
+      "differing_turns": [
+        4
+      ],
+      "same_target_utterance": false,
+      "same_candidate_set": true,
+      "structural_conditions_met": true,
+      "expected_gold_change": false,
+      "observed_gold_change": false,
+      "gold_change_matches_expectation": true,
+      "unclaimed_differences": [],
+      "evaluable": true,
+      "is_single_variable_pair": true,
+      "check_level": "automatic_structural_only"
+    },
+    {
+      "pair_id": "D3:vocative~ambiguous",
+      "scenario_id": "D3",
+      "a": "D3-ambiguous",
+      "b": "D3-vocative",
+      "variants": [
+        "ambiguous",
+        "vocative"
+      ],
+      "claimed_manipulations": [
+        "linguistic_cue"
+      ],
+      "differing_variables": {
+        "gold_referent_id": [
+          null,
+          "P3"
+        ],
+        "gold_referent_role": [
+          null,
+          "addressee"
+        ],
+        "addressee_id": [
+          null,
+          "P3"
+        ],
+        "referent_changed": [
+          null,
+          false
+        ],
+        "referent_role_changed": [
+          null,
+          true
+        ],
+        "turn_distance": [
+          null,
+          0
+        ],
+        "gold_last_mention_turn": [
+          null,
+          4
+        ],
+        "most_recent_mentioned_id": [
+          null,
+          "P3"
+        ],
+        "distractor_present": [
+          null,
+          false
+        ],
+        "linguistic_cues": [
+          [
+            "request"
+          ],
+          [
+            "vocative",
+            "request"
+          ]
+        ]
+      },
+      "differing_turns": [
+        2,
+        3,
+        4
+      ],
+      "same_target_utterance": false,
+      "same_candidate_set": true,
+      "structural_conditions_met": true,
+      "expected_gold_change": null,
+      "observed_gold_change": null,
+      "gold_change_matches_expectation": true,
+      "unclaimed_differences": [],
+      "evaluable": false,
+      "is_single_variable_pair": true,
+      "check_level": "automatic_structural_only"
+    },
+    {
+      "pair_id": "D4:vocative~adjacency",
+      "scenario_id": "D4",
+      "a": "D4-adjacency",
+      "b": "D4-vocative",
+      "variants": [
+        "adjacency",
+        "vocative"
+      ],
+      "claimed_manipulations": [
+        "linguistic_cue"
+      ],
+      "differing_variables": {
+        "turn_distance": [
+          null,
+          0
+        ],
+        "gold_last_mention_turn": [
+          null,
+          4
+        ],
+        "most_recent_mentioned_id": [
+          null,
+          "P3"
+        ],
+        "linguistic_cues": [
+          [
+            "imperative",
+            "adjacency"
+          ],
+          [
+            "vocative",
+            "imperative"
+          ]
+        ]
+      },
+      "differing_turns": [
+        4
+      ],
+      "same_target_utterance": false,
+      "same_candidate_set": true,
+      "structural_conditions_met": true,
+      "expected_gold_change": false,
+      "observed_gold_change": false,
+      "gold_change_matches_expectation": true,
+      "unclaimed_differences": [],
+      "evaluable": true,
+      "is_single_variable_pair": true,
+      "check_level": "automatic_structural_only"
+    },
+    {
+      "pair_id": "D4:vocative~ambiguous",
+      "scenario_id": "D4",
+      "a": "D4-ambiguous",
+      "b": "D4-vocative",
+      "variants": [
+        "ambiguous",
+        "vocative"
+      ],
+      "claimed_manipulations": [
+        "linguistic_cue"
+      ],
+      "differing_variables": {
+        "gold_referent_id": [
+          null,
+          "P3"
+        ],
+        "gold_referent_role": [
+          null,
+          "addressee"
+        ],
+        "addressee_id": [
+          null,
+          "P3"
+        ],
+        "referent_changed": [
+          null,
+          false
+        ],
+        "referent_role_changed": [
+          null,
+          true
+        ],
+        "turn_distance": [
+          null,
+          0
+        ],
+        "gold_last_mention_turn": [
+          null,
+          4
+        ],
+        "most_recent_mentioned_id": [
+          null,
+          "P3"
+        ],
+        "distractor_present": [
+          null,
+          false
+        ],
+        "linguistic_cues": [
+          [
+            "imperative"
+          ],
+          [
+            "vocative",
+            "imperative"
+          ]
+        ]
+      },
+      "differing_turns": [
+        2,
+        3,
+        4
+      ],
+      "same_target_utterance": false,
+      "same_candidate_set": true,
+      "structural_conditions_met": true,
+      "expected_gold_change": null,
+      "observed_gold_change": null,
+      "gold_change_matches_expectation": true,
+      "unclaimed_differences": [],
+      "evaluable": false,
+      "is_single_variable_pair": true,
+      "check_level": "automatic_structural_only"
+    },
+    {
+      "pair_id": "D5:vocative~adjacency",
+      "scenario_id": "D5",
+      "a": "D5-adjacency",
+      "b": "D5-vocative",
+      "variants": [
+        "adjacency",
+        "vocative"
+      ],
+      "claimed_manipulations": [
+        "linguistic_cue"
+      ],
+      "differing_variables": {
+        "turn_distance": [
+          null,
+          0
+        ],
+        "gold_last_mention_turn": [
+          null,
+          4
+        ],
+        "most_recent_mentioned_id": [
+          null,
+          "P3"
+        ],
+        "linguistic_cues": [
+          [
+            "request",
+            "adjacency"
+          ],
+          [
+            "vocative",
+            "request"
+          ]
+        ]
+      },
+      "differing_turns": [
+        4
+      ],
+      "same_target_utterance": false,
+      "same_candidate_set": true,
+      "structural_conditions_met": true,
+      "expected_gold_change": false,
+      "observed_gold_change": false,
+      "gold_change_matches_expectation": true,
+      "unclaimed_differences": [],
+      "evaluable": true,
+      "is_single_variable_pair": true,
+      "check_level": "automatic_structural_only"
+    },
+    {
+      "pair_id": "D5:vocative~ambiguous",
+      "scenario_id": "D5",
+      "a": "D5-ambiguous",
+      "b": "D5-vocative",
+      "variants": [
+        "ambiguous",
+        "vocative"
+      ],
+      "claimed_manipulations": [
+        "linguistic_cue"
+      ],
+      "differing_variables": {
+        "gold_referent_id": [
+          null,
+          "P3"
+        ],
+        "gold_referent_role": [
+          null,
+          "addressee"
+        ],
+        "addressee_id": [
+          null,
+          "P3"
+        ],
+        "referent_changed": [
+          null,
+          false
+        ],
+        "referent_role_changed": [
+          null,
+          true
+        ],
+        "turn_distance": [
+          null,
+          0
+        ],
+        "gold_last_mention_turn": [
+          null,
+          4
+        ],
+        "most_recent_mentioned_id": [
+          null,
+          "P3"
+        ],
+        "distractor_present": [
+          null,
+          false
+        ],
+        "linguistic_cues": [
+          [
+            "request"
+          ],
+          [
+            "vocative",
+            "request"
+          ]
+        ]
+      },
+      "differing_turns": [
+        2,
+        3,
+        4
+      ],
+      "same_target_utterance": false,
+      "same_candidate_set": true,
+      "structural_conditions_met": true,
+      "expected_gold_change": null,
+      "observed_gold_change": null,
+      "gold_change_matches_expectation": true,
+      "unclaimed_differences": [],
+      "evaluable": false,
+      "is_single_variable_pair": true,
+      "check_level": "automatic_structural_only"
+    }
+  ]
+}
