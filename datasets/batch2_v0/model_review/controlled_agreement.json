@@ -1,0 +1,136 @@
+{
+  "n_rows": 320,
+  "by_condition": {
+    "full": {
+      "annotators": [
+        "gpt",
+        "sonnet"
+      ],
+      "pairs": {
+        "gpt~sonnet": {
+          "n_common": 80,
+          "fields": {
+            "referent_id": {
+              "n": 68,
+              "n_missing": 12,
+              "percent_agreement": 0.9558823529411765,
+              "cohen_kappa": 0.9319773257752585,
+              "kappa_note": null
+            },
+            "addressee_id": {
+              "n": 9,
+              "n_missing": 71,
+              "percent_agreement": 1.0,
+              "cohen_kappa": null,
+              "kappa_note": "undefined: single category"
+            },
+            "context_sufficient": {
+              "n": 80,
+              "n_missing": 0,
+              "percent_agreement": 0.9125,
+              "cohen_kappa": 0.5409836065573771,
+              "kappa_note": null
+            },
+            "ambiguity": {
+              "n": 80,
+              "n_missing": 0,
+              "percent_agreement": 0.925,
+              "cohen_kappa": 0.6250000000000001,
+              "kappa_note": null
+            },
+            "determinable": {
+              "n": 80,
+              "n_missing": 0,
+              "percent_agreement": 0.925,
+              "cohen_kappa": 0.6250000000000001,
+              "kappa_note": null
+            }
+          },
+          "naturalness": {
+            "n": 80,
+            "mean_abs_diff": 0.275,
+            "within_1": 0.9875
+          },
+          "disagreements": [
+            "B2-third",
+            "B2-third_distractor",
+            "B3-third_distractor",
+            "B5-third",
+            "D1-third_in_3p",
+            "D2-third_in_3p",
+            "D3-third_in_3p",
+            "D4-adjacency",
+            "D5-third_in_3p"
+          ]
+        }
+      }
+    },
+    "local": {
+      "annotators": [
+        "gpt",
+        "sonnet"
+      ],
+      "pairs": {
+        "gpt~sonnet": {
+          "n_common": 80,
+          "fields": {
+            "referent_id": {
+              "n": 6,
+              "n_missing": 74,
+              "percent_agreement": 1.0,
+              "cohen_kappa": null,
+              "kappa_note": "undefined: single category"
+            },
+            "addressee_id": {
+              "n": 0,
+              "n_missing": 80,
+              "percent_agreement": null,
+              "cohen_kappa": null,
+              "kappa_note": null
+            },
+            "context_sufficient": {
+              "n": 80,
+              "n_missing": 0,
+              "percent_agreement": 0.95,
+              "cohen_kappa": 0.7241379310344825,
+              "kappa_note": null
+            },
+            "ambiguity": {
+              "n": 80,
+              "n_missing": 0,
+              "percent_agreement": 0.85,
+              "cohen_kappa": 0.452054794520548,
+              "kappa_note": null
+            },
+            "determinable": {
+              "n": 80,
+              "n_missing": 0,
+              "percent_agreement": 0.95,
+              "cohen_kappa": 0.7241379310344825,
+              "kappa_note": null
+            }
+          },
+          "naturalness": {
+            "n": 0,
+            "mean_abs_diff": null,
+            "within_1": null
+          },
+          "disagreements": [
+            "B1-speaker",
+            "B1-third",
+            "B1-third_distractor",
+            "B4-speaker",
+            "B5-speaker",
+            "C2-shift_same",
+            "D1-adjacency",
+            "D1-ambiguous",
+            "D1-third_in_3p",
+            "D3-third_in_3p",
+            "D4-third_in_3p",
+            "D5-third_in_3p"
+          ]
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,706 @@
+{
+  "n_samples": 100,
+  "n_errors": 0,
+  "n_warnings": 5,
+  "n_review_flags": 100,
+  "balance": {
+    "n": 100,
+    "by_dataset": {
+      "controlled": 80,
+      "naturalistic": 20
+    },
+    "by_role": {
+      "None": 5,
+      "addressee": 23,
+      "speaker": 15,
+      "third_party": 57
+    },
+    "by_referent_changed": {
+      "False": 69,
+      "None": 10,
+      "True": 21
+    },
+    "by_speaker_changed": {
+      "False": 11,
+      "None": 5,
+      "True": 84
+    },
+    "by_role_changed": {
+      "False": 52,
+      "None": 10,
+      "True": 38
+    },
+    "by_distractor_present": {
+      "False": 54,
+      "None": 5,
+      "True": 41
+    },
+    "by_turn_distance": {
+      "0": 5,
+      "1": 21,
+      "2": 4,
+      "3": 27,
+      "None": 43
+    },
+    "by_n_participants": {
+      "2": 80,
+      "3": 20
+    },
+    "by_n_turns": {
+      "2": 20,
+      "4": 70,
+      "5": 10
+    },
+    "by_annotation_status": {
+      "candidate": 100
+    },
+    "by_ambiguity_status": {
+      "ambiguous": 5,
+      "unreviewed": 95
+    },
+    "by_creation_method": {
+      "llm_authored": 80,
+      "llm_generated_api": 20
+    },
+    "n_pairs": 55,
+    "n_scenarios": 40
+  },
+  "issues": [
+    {
+      "level": "review",
+      "sample_id": "A1-base",
+      "code": "HUMAN_REVIEW",
+      "message": "gold_unverified"
+    },
+    {
+      "level": "review",
+      "sample_id": "A1-distractor",
+      "code": "HUMAN_REVIEW",
+      "message": "gold_unverified,distractor_check_gold_still_unique"
+    },
+    {
+      "level": "review",
+      "sample_id": "A1-shift",
+      "code": "HUMAN_REVIEW",
+      "message": "gold_unverified"
+    },
+    {
+      "level": "review",
+      "sample_id": "A1-shift_distractor",
+      "code": "HUMAN_REVIEW",
+      "message": "gold_unverified,distractor_check_gold_still_unique"
+    },
+    {
+      "level": "review",
+      "sample_id": "A2-base",
+      "code": "HUMAN_REVIEW",
+      "message": "gold_unverified"
+    },
+    {
+      "level": "review",
+      "sample_id": "A2-distractor",
+      "code": "HUMAN_REVIEW",
+      "message": "gold_unverified,distractor_check_gold_still_unique"
+    },
+    {
+      "level": "review",
+      "sample_id": "A2-shift",
+      "code": "HUMAN_REVIEW",
+      "message": "gold_unverified"
+    },
+    {
+      "level": "review",
+      "sample_id": "A2-shift_distractor",
+      "code": "HUMAN_REVIEW",
+      "message": "gold_unverified,distractor_check_gold_still_unique"
+    },
+    {
+      "level": "review",
+      "sample_id": "A3-base",
+      "code": "HUMAN_REVIEW",
+      "message": "gold_unverified"
+    },
+    {
+      "level": "review",
+      "sample_id": "A3-distractor",
+      "code": "HUMAN_REVIEW",
+      "message": "gold_unverified,distractor_check_gold_still_unique"
+    },
+    {
+      "level": "review",
+      "sample_id": "A3-shift",
+      "code": "HUMAN_REVIEW",
+      "message": "gold_unverified"
+    },
+    {
+      "level": "review",
+      "sample_id": "A3-shift_distractor",
+      "code": "HUMAN_REVIEW",
+      "message": "gold_unverified,distractor_check_gold_still_unique"
+    },
+    {
+      "level": "review",
+      "sample_id": "A4-base",
+      "code": "HUMAN_REVIEW",
+      "message": "gold_unverified"
+    },
+    {
+      "level": "review",
+      "sample_id": "A4-distractor",
+      "code": "HUMAN_REVIEW",
+      "message": "gold_unverified,distractor_check_gold_still_unique"
+    },
+    {
+      "level": "review",
+      "sample_id": "A4-shift",
+      "code": "HUMAN_REVIEW",
+      "message": "gold_unverified"
+    },
+    {
+      "level": "review",
+      "sample_id": "A4-shift_distractor",
+      "code": "HUMAN_REVIEW",
+      "message": "gold_unverified,distractor_check_gold_still_unique"
+    },
+    {
+      "level": "review",
+      "sample_id": "A5-base",
+      "code": "HUMAN_REVIEW",
+      "message": "gold_unverified"
+    },
+    {
+      "level": "review",
+      "sample_id": "A5-distractor",
+      "code": "HUMAN_REVIEW",
+      "message": "gold_unverified,distractor_check_gold_still_unique"
+    },
+    {
+      "level": "review",
+      "sample_id": "A5-shift",
+      "code": "HUMAN_REVIEW",
+      "message": "gold_unverified"
+    },
+    {
+      "level": "review",
+      "sample_id": "A5-shift_distractor",
+      "code": "HUMAN_REVIEW",
+      "message": "gold_unverified,distractor_check_gold_still_unique"
+    },
+    {
+      "level": "warning",
+      "sample_id": "B1-speaker",
+      "code": "ANCHOR_MISSING",
+      "message": "controlled sample without anchor: shift variables are None"
+    },
+    {
+      "level": "review",
+      "sample_id": "B1-speaker",
+      "code": "HUMAN_REVIEW",
+      "message": "gold_unverified,deictic_no_text_mention"
+    },
+    {
+      "level": "review",
+      "sample_id": "B1-addressee",
+      "code": "HUMAN_REVIEW",
+      "message": "gold_unverified,deictic_no_text_mention"
+    },
+    {
+      "level": "review",
+      "sample_id": "B1-third",
+      "code": "HUMAN_REVIEW",
+      "message": "gold_unverified"
+    },
+    {
+      "level": "review",
+      "sample_id": "B1-third_distractor",
+      "code": "HUMAN_REVIEW",
+      "message": "gold_unverified,distractor_check_gold_still_unique"
+    },
+    {
+      "level": "warning",
+      "sample_id": "B2-speaker",
+      "code": "ANCHOR_MISSING",
+      "message": "controlled sample without anchor: shift variables are None"
+    },
+    {
+      "level": "review",
+      "sample_id": "B2-speaker",
+      "code": "HUMAN_REVIEW",
+      "message": "gold_unverified,deictic_no_text_mention"
+    },
+    {
+      "level": "review",
+      "sample_id": "B2-addressee",
+      "code": "HUMAN_REVIEW",
+      "message": "gold_unverified,deictic_no_text_mention"
+    },
+    {
+      "level": "review",
+      "sample_id": "B2-third",
+      "code": "HUMAN_REVIEW",
+      "message": "gold_unverified"
+    },
+    {
+      "level": "review",
+      "sample_id": "B2-third_distractor",
+      "code": "HUMAN_REVIEW",
+      "message": "gold_unverified,distractor_check_gold_still_unique"
+    },
+    {
+      "level": "warning",
+      "sample_id": "B3-speaker",
+      "code": "ANCHOR_MISSING",
+      "message": "controlled sample without anchor: shift variables are None"
+    },
+    {
+      "level": "review",
+      "sample_id": "B3-speaker",
+      "code": "HUMAN_REVIEW",
+      "message": "gold_unverified,deictic_no_text_mention"
+    },
+    {
+      "level": "warning",
+      "sample_id": "B3-addressee",
+      "code": "ANCHOR_MISSING",
+      "message": "controlled sample without anchor: shift variables are None"
+    },
+    {
+      "level": "review",
+      "sample_id": "B3-addressee",
+      "code": "HUMAN_REVIEW",
+      "message": "gold_unverified,deictic_no_text_mention"
+    },
+    {
+      "level": "review",
+      "sample_id": "B3-third",
+      "code": "HUMAN_REVIEW",
+      "message": "gold_unverified"
+    },
+    {
+      "level": "review",
+      "sample_id": "B3-third_distractor",
+      "code": "HUMAN_REVIEW",
+      "message": "gold_unverified,distractor_check_gold_still_unique"
+    },
+    {
+      "level": "warning",
+      "sample_id": "B4-speaker",
+      "code": "ANCHOR_MISSING",
+      "message": "controlled sample without anchor: shift variables are None"
+    },
+    {
+      "level": "review",
+      "sample_id": "B4-speaker",
+      "code": "HUMAN_REVIEW",
+      "message": "gold_unverified,deictic_no_text_mention"
+    },
+    {
+      "level": "review",
+      "sample_id": "B4-addressee",
+      "code": "HUMAN_REVIEW",
+      "message": "gold_unverified,deictic_no_text_mention"
+    },
+    {
+      "level": "review",
+      "sample_id": "B4-third",
+      "code": "HUMAN_REVIEW",
+      "message": "gold_unverified"
+    },
+    {
+      "level": "review",
+      "sample_id": "B4-third_distractor",
+      "code": "HUMAN_REVIEW",
+      "message": "gold_unverified,distractor_check_gold_still_unique"
+    },
+    {
+      "level": "review",
+      "sample_id": "B5-speaker",
+      "code": "HUMAN_REVIEW",
+      "message": "gold_unverified,deictic_no_text_mention"
+    },
+    {
+      "level": "review",
+      "sample_id": "B5-addressee",
+      "code": "HUMAN_REVIEW",
+      "message": "gold_unverified,deictic_no_text_mention"
+    },
+    {
+      "level": "review",
+      "sample_id": "B5-third",
+      "code": "HUMAN_REVIEW",
+      "message": "gold_unverified"
+    },
+    {
+      "level": "review",
+      "sample_id": "B5-third_distractor",
+      "code": "HUMAN_REVIEW",
+      "message": "gold_unverified,distractor_check_gold_still_unique"
+    },
+    {
+      "level": "review",
+      "sample_id": "C1-keep_other",
+      "code": "HUMAN_REVIEW",
+      "message": "gold_unverified"
+    },
+    {
+      "level": "review",
+      "sample_id": "C1-keep_same",
+      "code": "HUMAN_REVIEW",
+      "message": "gold_unverified"
+    },
+    {
+      "level": "review",
+      "sample_id": "C1-shift_other",
+      "code": "HUMAN_REVIEW",
+      "message": "gold_unverified,distractor_check_gold_still_unique"
+    },
+    {
+      "level": "review",
+      "sample_id": "C1-shift_same",
+      "code": "HUMAN_REVIEW",
+      "message": "gold_unverified,distractor_check_gold_still_unique"
+    },
+    {
+      "level": "review",
+      "sample_id": "C2-keep_other",
+      "code": "HUMAN_REVIEW",
+      "message": "gold_unverified"
+    },
+    {
+      "level": "review",
+      "sample_id": "C2-keep_same",
+      "code": "HUMAN_REVIEW",
+      "message": "gold_unverified"
+    },
+    {
+      "level": "review",
+      "sample_id": "C2-shift_other",
+      "code": "HUMAN_REVIEW",
+      "message": "gold_unverified,distractor_check_gold_still_unique"
+    },
+    {
+      "level": "review",
+      "sample_id": "C2-shift_same",
+      "code": "HUMAN_REVIEW",
+      "message": "gold_unverified,distractor_check_gold_still_unique"
+    },
+    {
+      "level": "review",
+      "sample_id": "C3-keep_other",
+      "code": "HUMAN_REVIEW",
+      "message": "gold_unverified"
+    },
+    {
+      "level": "review",
+      "sample_id": "C3-keep_same",
+      "code": "HUMAN_REVIEW",
+      "message": "gold_unverified"
+    },
+    {
+      "level": "review",
+      "sample_id": "C3-shift_other",
+      "code": "HUMAN_REVIEW",
+      "message": "gold_unverified,distractor_check_gold_still_unique"
+    },
+    {
+      "level": "review",
+      "sample_id": "C3-shift_same",
+      "code": "HUMAN_REVIEW",
+      "message": "gold_unverified,distractor_check_gold_still_unique"
+    },
+    {
+      "level": "review",
+      "sample_id": "C4-keep_other",
+      "code": "HUMAN_REVIEW",
+      "message": "gold_unverified"
+    },
+    {
+      "level": "review",
+      "sample_id": "C4-keep_same",
+      "code": "HUMAN_REVIEW",
+      "message": "gold_unverified"
+    },
+    {
+      "level": "review",
+      "sample_id": "C4-shift_other",
+      "code": "HUMAN_REVIEW",
+      "message": "gold_unverified,distractor_check_gold_still_unique"
+    },
+    {
+      "level": "review",
+      "sample_id": "C4-shift_same",
+      "code": "HUMAN_REVIEW",
+      "message": "gold_unverified,distractor_check_gold_still_unique"
+    },
+    {
+      "level": "review",
+      "sample_id": "C5-keep_other",
+      "code": "HUMAN_REVIEW",
+      "message": "gold_unverified"
+    },
+    {
+      "level": "review",
+      "sample_id": "C5-keep_same",
+      "code": "HUMAN_REVIEW",
+      "message": "gold_unverified"
+    },
+    {
+      "level": "review",
+      "sample_id": "C5-shift_other",
+      "code": "HUMAN_REVIEW",
+      "message": "gold_unverified,distractor_check_gold_still_unique"
+    },
+    {
+      "level": "review",
+      "sample_id": "C5-shift_same",
+      "code": "HUMAN_REVIEW",
+      "message": "gold_unverified,distractor_check_gold_still_unique"
+    },
+    {
+      "level": "review",
+      "sample_id": "D1-vocative",
+      "code": "HUMAN_REVIEW",
+      "message": "gold_unverified,multi_party_addressee"
+    },
+    {
+      "level": "review",
+      "sample_id": "D1-adjacency",
+      "code": "HUMAN_REVIEW",
+      "message": "gold_unverified,deictic_no_text_mention,multi_party_addressee"
+    },
+    {
+      "level": "review",
+      "sample_id": "D1-ambiguous",
+      "code": "HUMAN_REVIEW",
+      "message": "multi_party_addressee"
+    },
+    {
+      "level": "review",
+      "sample_id": "D1-third_in_3p",
+      "code": "HUMAN_REVIEW",
+      "message": "gold_unverified,multi_party_addressee,distractor_check_gold_still_unique"
+    },
+    {
+      "level": "review",
+      "sample_id": "D2-vocative",
+      "code": "HUMAN_REVIEW",
+      "message": "gold_unverified,multi_party_addressee"
+    },
+    {
+      "level": "review",
+      "sample_id": "D2-adjacency",
+      "code": "HUMAN_REVIEW",
+      "message": "gold_unverified,deictic_no_text_mention,multi_party_addressee"
+    },
+    {
+      "level": "review",
+      "sample_id": "D2-ambiguous",
+      "code": "HUMAN_REVIEW",
+      "message": "multi_party_addressee"
+    },
+    {
+      "level": "review",
+      "sample_id": "D2-third_in_3p",
+      "code": "HUMAN_REVIEW",
+      "message": "gold_unverified,multi_party_addressee,distractor_check_gold_still_unique"
+    },
+    {
+      "level": "review",
+      "sample_id": "D3-vocative",
+      "code": "HUMAN_REVIEW",
+      "message": "gold_unverified,multi_party_addressee"
+    },
+    {
+      "level": "review",
+      "sample_id": "D3-adjacency",
+      "code": "HUMAN_REVIEW",
+      "message": "gold_unverified,deictic_no_text_mention,multi_party_addressee"
+    },
+    {
+      "level": "review",
+      "sample_id": "D3-ambiguous",
+      "code": "HUMAN_REVIEW",
+      "message": "multi_party_addressee"
+    },
+    {
+      "level": "review",
+      "sample_id": "D3-third_in_3p",
+      "code": "HUMAN_REVIEW",
+      "message": "gold_unverified,multi_party_addressee,distractor_check_gold_still_unique"
+    },
+    {
+      "level": "review",
+      "sample_id": "D4-vocative",
+      "code": "HUMAN_REVIEW",
+      "message": "gold_unverified,multi_party_addressee"
+    },
+    {
+      "level": "review",
+      "sample_id": "D4-adjacency",
+      "code": "HUMAN_REVIEW",
+      "message": "gold_unverified,deictic_no_text_mention,multi_party_addressee"
+    },
+    {
+      "level": "review",
+      "sample_id": "D4-ambiguous",
+      "code": "HUMAN_REVIEW",
+      "message": "multi_party_addressee"
+    },
+    {
+      "level": "review",
+      "sample_id": "D4-third_in_3p",
+      "code": "HUMAN_REVIEW",
+      "message": "gold_unverified,multi_party_addressee,distractor_check_gold_still_unique"
+    },
+    {
+      "level": "review",
+      "sample_id": "D5-vocative",
+      "code": "HUMAN_REVIEW",
+      "message": "gold_unverified,multi_party_addressee"
+    },
+    {
+      "level": "review",
+      "sample_id": "D5-adjacency",
+      "code": "HUMAN_REVIEW",
+      "message": "gold_unverified,deictic_no_text_mention,multi_party_addressee"
+    },
+    {
+      "level": "review",
+      "sample_id": "D5-ambiguous",
+      "code": "HUMAN_REVIEW",
+      "message": "multi_party_addressee"
+    },
+    {
+      "level": "review",
+      "sample_id": "D5-third_in_3p",
+      "code": "HUMAN_REVIEW",
+      "message": "gold_unverified,multi_party_addressee,distractor_check_gold_still_unique"
+    },
+    {
+      "level": "review",
+      "sample_id": "N04-base",
+      "code": "HUMAN_REVIEW",
+      "message": "gold_unverified,deictic_no_text_mention,distractor_check_gold_still_unique"
+    },
+    {
+      "level": "review",
+      "sample_id": "N05-base",
+      "code": "HUMAN_REVIEW",
+      "message": "gold_unverified,deictic_no_text_mention,distractor_check_gold_still_unique"
+    },
+    {
+      "level": "review",
+      "sample_id": "N06-base",
+      "code": "HUMAN_REVIEW",
+      "message": "gold_unverified,deictic_no_text_mention,distractor_check_gold_still_unique"
+    },
+    {
+      "level": "review",
+      "sample_id": "N07-base",
+      "code": "HUMAN_REVIEW",
+      "message": "gold_unverified,deictic_no_text_mention,distractor_check_gold_still_unique"
+    },
+    {
+      "level": "review",
+      "sample_id": "N08-base",
+      "code": "HUMAN_REVIEW",
+      "message": "gold_unverified,deictic_no_text_mention,distractor_check_gold_still_unique"
+    },
+    {
+      "level": "review",
+      "sample_id": "N09-base",
+      "code": "HUMAN_REVIEW",
+      "message": "gold_unverified,deictic_no_text_mention,distractor_check_gold_still_unique"
+    },
+    {
+      "level": "review",
+      "sample_id": "N10-base",
+      "code": "HUMAN_REVIEW",
+      "message": "gold_unverified,deictic_no_text_mention,distractor_check_gold_still_unique"
+    },
+    {
+      "level": "review",
+      "sample_id": "N11-base",
+      "code": "HUMAN_REVIEW",
+      "message": "gold_unverified,deictic_no_text_mention,distractor_check_gold_still_unique"
+    },
+    {
+      "level": "review",
+      "sample_id": "N12-base",
+      "code": "HUMAN_REVIEW",
+      "message": "gold_unverified,deictic_no_text_mention,distractor_check_gold_still_unique"
+    },
+    {
+      "level": "review",
+      "sample_id": "N13-base",
+      "code": "HUMAN_REVIEW",
+      "message": "gold_unverified,deictic_no_text_mention,distractor_check_gold_still_unique"
+    },
+    {
+      "level": "review",
+      "sample_id": "N14-base",
+      "code": "HUMAN_REVIEW",
+      "message": "gold_unverified,deictic_no_text_mention"
+    },
+    {
+      "level": "review",
+      "sample_id": "N15-base",
+      "code": "HUMAN_REVIEW",
+      "message": "gold_unverified,deictic_no_text_mention"
+    },
+    {
+      "level": "review",
+      "sample_id": "N16-base",
+      "code": "HUMAN_REVIEW",
+      "message": "gold_unverified,deictic_no_text_mention"
+    },
+    {
+      "level": "review",
+      "sample_id": "N17-base",
+      "code": "HUMAN_REVIEW",
+      "message": "gold_unverified,deictic_no_text_mention"
+    },
+    {
+      "level": "review",
+      "sample_id": "N18-base",
+      "code": "HUMAN_REVIEW",
+      "message": "gold_unverified,deictic_no_text_mention"
+    },
+    {
+      "level": "review",
+      "sample_id": "N19-base",
+      "code": "HUMAN_REVIEW",
+      "message": "gold_unverified,deictic_no_text_mention"
+    },
+    {
+      "level": "review",
+      "sample_id": "N20-base",
+      "code": "HUMAN_REVIEW",
+      "message": "gold_unverified,deictic_no_text_mention,distractor_check_gold_still_unique"
+    },
+    {
+      "level": "review",
+      "sample_id": "N21-base",
+      "code": "HUMAN_REVIEW",
+      "message": "gold_unverified,deictic_no_text_mention"
+    },
+    {
+      "level": "review",
+      "sample_id": "N22-base",
+      "code": "HUMAN_REVIEW",
+      "message": "gold_unverified"
+    },
+    {
+      "level": "review",
+      "sample_id": "N23-base",
+      "code": "HUMAN_REVIEW",
+      "message": "gold_unverified"
+    },
+    {
+      "level": "info",
+      "sample_id": null,
+      "code": "NO_ACCEPTED",
+      "message": "no accepted samples yet; evaluation payload will be empty without --include-unreviewed"
+    }
+  ]
+}

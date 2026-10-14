@@ -1,24 +1,66 @@
 {
   "project": "KoImplicit",
   "design_version": "2.2",
-  "stage": "pilot_candidates",
+  "stage": "batch2_candidates_reviewed",
   "data_strategy": {
     "corpus_used": false,
     "note": "국립국어원 무형 대용어 복원 말뭉치는 사용하지 않는다. 모든 대화는 독립 설계한 시나리오로 새로 작성한다(docs/데이터셋_구축방법.md)."
   },
   "scope": {
     "language": "ko",
-    "participants": [2, 3],
-    "turns": [2, 6],
+    "participants": [
+      2,
+      3
+    ],
+    "turns": [
+      2,
+      6
+    ],
     "argument_type": "subject",
     "referent_scope": "singular_human",
-    "roles": ["speaker", "addressee", "third_party"],
-    "variables": ["referent_shift", "distractor", "context_distance", "speaker_role", "linguistic_cue"]
+    "roles": [
+      "speaker",
+      "addressee",
+      "third_party"
+    ],
+    "variables": [
+      "referent_shift",
+      "distractor",
+      "context_distance",
+      "speaker_role",
+      "linguistic_cue"
+    ]
   },
   "datasets": {
-    "pilot_v0": {"path": "datasets/pilot_v0", "scenarios": "datasets/scenarios/pilot_v0.jsonl", "target_n": 20, "status": "candidate"},
-    "controlled": {"path": "datasets/controlled", "target_n": null, "status": "planned"},
-    "naturalistic": {"path": "datasets/naturalistic", "target_n": null, "status": "planned"}
+    "pilot_v0": {
+      "path": "datasets/pilot_v0",
+      "scenarios": "datasets/scenarios/pilot_v0.jsonl",
+      "target_n": 20,
+      "status": "candidate"
+    },
+    "controlled": {
+      "path": "datasets/controlled",
+      "target_n": null,
+      "status": "planned"
+    },
+    "naturalistic": {
+      "path": "datasets/naturalistic",
+      "target_n": null,
+      "status": "planned"
+    },
+    "batch2_v0": {
+      "path": "datasets/batch2_v0",
+      "scenarios": "datasets/scenarios/batch2.jsonl",
+      "target_n": 100,
+      "status": "candidate_model_reviewed",
+      "note": "통제 80 작성 + naturalistic 20 Codex 생성. 모델 검수 시트까지 완료, 조정·동결·평가 미수행"
+    },
+    "pilot_v1": {
+      "path": "datasets/pilot_v1",
+      "scenarios": "datasets/scenarios/pilot_v0.jsonl",
+      "target_n": 20,
+      "status": "frozen_accepted_17"
+    }
   },
   "budget": {
     "pilot_candidates": 20,
@@ -26,9 +68,26 @@
     "full_dataset_target": 600,
     "note": "600은 향후 목표이며 pilot 검수 전에는 생성하지 않는다"
   },
-  "conditions": ["full_mcq", "target_only_mcq", "full_qa"],
-  "baselines": ["most_recent_entity", "current_speaker", "current_addressee", "target_only_llm", "full_context_llm"],
-  "primary_metrics": ["overall_accuracy", "accuracy_by_referent_type", "accuracy_by_shift", "distractor_error_rate", "context_benefit", "pair_consistency"],
+  "conditions": [
+    "full_mcq",
+    "target_only_mcq",
+    "full_qa"
+  ],
+  "baselines": [
+    "most_recent_entity",
+    "current_speaker",
+    "current_addressee",
+    "target_only_llm",
+    "full_context_llm"
+  ],
+  "primary_metrics": [
+    "overall_accuracy",
+    "accuracy_by_referent_type",
+    "accuracy_by_shift",
+    "distractor_error_rate",
+    "context_benefit",
+    "pair_consistency"
+  ],
   "cluster_unit": "scenario_id",
   "seed": 20261010,
   "paths": {
