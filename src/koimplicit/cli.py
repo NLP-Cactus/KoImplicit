@@ -161,7 +161,7 @@ def command_annotate(args, parser) -> int:
 
         model = load_model_config(Path(args.models), args.model)
         adapter = get_adapter(model["provider"], **model.get("adapter_options", {}))
-        summary = fill_sheet(Path(args.sheets[0]), Path(args.out), adapter, model, args.condition)
+        summary = fill_sheet(Path(args.sheets[0]), Path(args.out), adapter, model, args.condition, only_empty=args.only_empty)
         _print({**summary, "written": args.out})
     elif args.step == "adjudicate":
         samples = load_dataset(Path(args.dataset))
@@ -324,6 +324,7 @@ def main(argv=None) -> int:
     p.add_argument("--dataset")
     p.add_argument("--annotators", default="annotator1,annotator2")
     p.add_argument("--sheets", nargs="*", default=[])
+    p.add_argument("--only-empty", action="store_true", help="model-fill: 비어 있는 행만 다시 묻는다")
     p.add_argument("--decisions")
     p.add_argument("--out")
     p.add_argument("--seed", type=int, default=20261010)

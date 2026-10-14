@@ -1,0 +1,125 @@
+{
+  "n_rows": 80,
+  "by_condition": {
+    "full": {
+      "annotators": [
+        "gpt",
+        "sonnet"
+      ],
+      "pairs": {
+        "gpt~sonnet": {
+          "n_common": 20,
+          "fields": {
+            "referent_id": {
+              "n": 20,
+              "n_missing": 0,
+              "percent_agreement": 1.0,
+              "cohen_kappa": 1.0,
+              "kappa_note": null
+            },
+            "addressee_id": {
+              "n": 0,
+              "n_missing": 20,
+              "percent_agreement": null,
+              "cohen_kappa": null,
+              "kappa_note": null
+            },
+            "context_sufficient": {
+              "n": 20,
+              "n_missing": 0,
+              "percent_agreement": 1.0,
+              "cohen_kappa": null,
+              "kappa_note": "undefined: single category"
+            },
+            "ambiguity": {
+              "n": 20,
+              "n_missing": 0,
+              "percent_agreement": 1.0,
+              "cohen_kappa": null,
+              "kappa_note": "undefined: single category"
+            },
+            "determinable": {
+              "n": 20,
+              "n_missing": 0,
+              "percent_agreement": 1.0,
+              "cohen_kappa": null,
+              "kappa_note": "undefined: single category"
+            }
+          },
+          "naturalness": {
+            "n": 20,
+            "mean_abs_diff": 0.0,
+            "within_1": 1.0
+          },
+          "disagreements": []
+        }
+      }
+    },
+    "local": {
+      "annotators": [
+        "gpt",
+        "sonnet"
+      ],
+      "pairs": {
+        "gpt~sonnet": {
+          "n_common": 20,
+          "fields": {
+            "referent_id": {
+              "n": 2,
+              "n_missing": 18,
+              "percent_agreement": 1.0,
+              "cohen_kappa": 1.0,
+              "kappa_note": null
+            },
+            "addressee_id": {
+              "n": 0,
+              "n_missing": 20,
+              "percent_agreement": null,
+              "cohen_kappa": null,
+              "kappa_note": null
+            },
+            "context_sufficient": {
+              "n": 20,
+              "n_missing": 0,
+              "percent_agreement": 0.65,
+              "cohen_kappa": 0.23913043478260868,
+              "kappa_note": null
+            },
+            "ambiguity": {
+              "n": 20,
+              "n_missing": 0,
+              "percent_agreement": 0.45,
+              "cohen_kappa": 0.14062500000000003,
+              "kappa_note": null
+            },
+            "determinable": {
+              "n": 20,
+              "n_missing": 0,
+              "percent_agreement": 0.65,
+              "cohen_kappa": 0.23913043478260868,
+              "kappa_note": null
+            }
+          },
+          "naturalness": {
+            "n": 0,
+            "mean_abs_diff": null,
+            "within_1": null
+          },
+          "disagreements": [
+            "N04-base",
+            "N06-base",
+            "N07-base",
+            "N08-base",
+            "N09-base",
+            "N11-base",
+            "N13-base",
+            "N15-base",
+            "N16-base",
+            "N19-base",
+            "N23-base"
+          ]
+        }
+      }
+    }
+  }
+}

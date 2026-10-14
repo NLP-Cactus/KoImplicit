@@ -1,0 +1,1658 @@
+{
+  "review_method": "model judges (claude-sonnet-5-5 via claude -p, gpt-6.1-sol via codex exec), Local→Full 독립 판정. 사람 검수 아님. 조정·동결 전.",
+  "sets": {
+    "controlled": {
+      "agreement": {
+        "full": {
+          "referent_id": {
+            "percent": 0.9558823529411765,
+            "kappa": 0.9319773257752585,
+            "n": 68
+          },
+          "addressee_id": {
+            "percent": 1.0,
+            "kappa": null,
+            "n": 9
+          },
+          "context_sufficient": {
+            "percent": 0.9125,
+            "kappa": 0.5409836065573771,
+            "n": 80
+          },
+          "ambiguity": {
+            "percent": 0.925,
+            "kappa": 0.6250000000000001,
+            "n": 80
+          },
+          "determinable": {
+            "percent": 0.925,
+            "kappa": 0.6250000000000001,
+            "n": 80
+          },
+          "disagreements": [
+            "B2-third",
+            "B2-third_distractor",
+            "B3-third_distractor",
+            "B5-third",
+            "D1-third_in_3p",
+            "D2-third_in_3p",
+            "D3-third_in_3p",
+            "D4-adjacency",
+            "D5-third_in_3p"
+          ]
+        },
+        "local": {
+          "referent_id": {
+            "percent": 1.0,
+            "kappa": null,
+            "n": 6
+          },
+          "context_sufficient": {
+            "percent": 0.95,
+            "kappa": 0.7241379310344825,
+            "n": 80
+          },
+          "ambiguity": {
+            "percent": 0.85,
+            "kappa": 0.452054794520548,
+            "n": 80
+          },
+          "determinable": {
+            "percent": 0.95,
+            "kappa": 0.7241379310344825,
+            "n": 80
+          },
+          "disagreements": [
+            "B1-speaker",
+            "B1-third",
+            "B1-third_distractor",
+            "B4-speaker",
+            "B5-speaker",
+            "C2-shift_same",
+            "D1-adjacency",
+            "D1-ambiguous",
+            "D1-third_in_3p",
+            "D3-third_in_3p",
+            "D4-third_in_3p",
+            "D5-third_in_3p"
+          ]
+        }
+      },
+      "preview_status_counts": {
+        "would_accept": 65,
+        "both_not_determinable": 1,
+        "judges_disagree": 9,
+        "both_not_determinable_as_intended": 5
+      },
+      "per_sample": [
+        {
+          "sample_id": "A1-base",
+          "author_gold": "T1",
+          "sonnet": "T1",
+          "gpt": "T1",
+          "status": "would_accept",
+          "local_determinable": {
+            "sonnet": false,
+            "gpt": false
+          },
+          "naturalness": {
+            "sonnet": "4",
+            "gpt": "5"
+          }
+        },
+        {
+          "sample_id": "A1-distractor",
+          "author_gold": "T1",
+          "sonnet": "T1",
+          "gpt": "T1",
+          "status": "would_accept",
+          "local_determinable": {
+            "sonnet": false,
+            "gpt": false
+          },
+          "naturalness": {
+            "sonnet": "5",
+            "gpt": "5"
+          }
+        },
+        {
+          "sample_id": "A1-shift",
+          "author_gold": "T2",
+          "sonnet": "T2",
+          "gpt": "T2",
+          "status": "would_accept",
+          "local_determinable": {
+            "sonnet": false,
+            "gpt": false
+          },
+          "naturalness": {
+            "sonnet": "5",
+            "gpt": "5"
+          }
+        },
+        {
+          "sample_id": "A1-shift_distractor",
+          "author_gold": "T2",
+          "sonnet": "T2",
+          "gpt": "T2",
+          "status": "would_accept",
+          "local_determinable": {
+            "sonnet": false,
+            "gpt": false
+          },
+          "naturalness": {
+            "sonnet": "5",
+            "gpt": "5"
+          }
+        },
+        {
+          "sample_id": "A2-base",
+          "author_gold": "T1",
+          "sonnet": "T1",
+          "gpt": "T1",
+          "status": "would_accept",
+          "local_determinable": {
+            "sonnet": false,
+            "gpt": false
+          },
+          "naturalness": {
+            "sonnet": "5",
+            "gpt": "5"
+          }
+        },
+        {
+          "sample_id": "A2-distractor",
+          "author_gold": "T1",
+          "sonnet": "T1",
+          "gpt": "T1",
+          "status": "would_accept",
+          "local_determinable": {
+            "sonnet": false,
+            "gpt": false
+          },
+          "naturalness": {
+            "sonnet": "5",
+            "gpt": "5"
+          }
+        },
+        {
+          "sample_id": "A2-shift",
+          "author_gold": "T2",
+          "sonnet": "T2",
+          "gpt": "T2",
+          "status": "would_accept",
+          "local_determinable": {
+            "sonnet": false,
+            "gpt": false
+          },
+          "naturalness": {
+            "sonnet": "5",
+            "gpt": "5"
+          }
+        },
+        {
+          "sample_id": "A2-shift_distractor",
+          "author_gold": "T2",
+          "sonnet": "T2",
+          "gpt": "T2",
+          "status": "would_accept",
+          "local_determinable": {
+            "sonnet": false,
+            "gpt": false
+          },
+          "naturalness": {
+            "sonnet": "5",
+            "gpt": "5"
+          }
+        },
+        {
+          "sample_id": "A3-base",
+          "author_gold": "T1",
+          "sonnet": "T1",
+          "gpt": "T1",
+          "status": "would_accept",
+          "local_determinable": {
+            "sonnet": false,
+            "gpt": false
+          },
+          "naturalness": {
+            "sonnet": "5",
+            "gpt": "5"
+          }
+        },
+        {
+          "sample_id": "A3-distractor",
+          "author_gold": "T1",
+          "sonnet": "T1",
+          "gpt": "T1",
+          "status": "would_accept",
+          "local_determinable": {
+            "sonnet": false,
+            "gpt": false
+          },
+          "naturalness": {
+            "sonnet": "5",
+            "gpt": "4"
+          }
+        },
+        {
+          "sample_id": "A3-shift",
+          "author_gold": "T2",
+          "sonnet": "T2",
+          "gpt": "T2",
+          "status": "would_accept",
+          "local_determinable": {
+            "sonnet": false,
+            "gpt": false
+          },
+          "naturalness": {
+            "sonnet": "5",
+            "gpt": "5"
+          }
+        },
+        {
+          "sample_id": "A3-shift_distractor",
+          "author_gold": "T2",
+          "sonnet": "T2",
+          "gpt": "T2",
+          "status": "would_accept",
+          "local_determinable": {
+            "sonnet": false,
+            "gpt": false
+          },
+          "naturalness": {
+            "sonnet": "5",
+            "gpt": "5"
+          }
+        },
+        {
+          "sample_id": "A4-base",
+          "author_gold": "T1",
+          "sonnet": "T1",
+          "gpt": "T1",
+          "status": "would_accept",
+          "local_determinable": {
+            "sonnet": false,
+            "gpt": false
+          },
+          "naturalness": {
+            "sonnet": "5",
+            "gpt": "5"
+          }
+        },
+        {
+          "sample_id": "A4-distractor",
+          "author_gold": "T1",
+          "sonnet": "ambiguous",
+          "gpt": "ambiguous",
+          "status": "both_not_determinable",
+          "local_determinable": {
+            "sonnet": false,
+            "gpt": false
+          },
+          "naturalness": {
+            "sonnet": "4",
+            "gpt": "5"
+          }
+        },
+        {
+          "sample_id": "A4-shift",
+          "author_gold": "T2",
+          "sonnet": "T2",
+          "gpt": "T2",
+          "status": "would_accept",
+          "local_determinable": {
+            "sonnet": false,
+            "gpt": false
+          },
+          "naturalness": {
+            "sonnet": "5",
+            "gpt": "5"
+          }
+        },
+        {
+          "sample_id": "A4-shift_distractor",
+          "author_gold": "T2",
+          "sonnet": "T2",
+          "gpt": "T2",
+          "status": "would_accept",
+          "local_determinable": {
+            "sonnet": false,
+            "gpt": false
+          },
+          "naturalness": {
+            "sonnet": "4",
+            "gpt": "5"
+          }
+        },
+        {
+          "sample_id": "A5-base",
+          "author_gold": "T1",
+          "sonnet": "T1",
+          "gpt": "T1",
+          "status": "would_accept",
+          "local_determinable": {
+            "sonnet": false,
+            "gpt": false
+          },
+          "naturalness": {
+            "sonnet": "5",
+            "gpt": "5"
+          }
+        },
+        {
+          "sample_id": "A5-distractor",
+          "author_gold": "T1",
+          "sonnet": "T1",
+          "gpt": "T1",
+          "status": "would_accept",
+          "local_determinable": {
+            "sonnet": false,
+            "gpt": false
+          },
+          "naturalness": {
+            "sonnet": "5",
+            "gpt": "5"
+          }
+        },
+        {
+          "sample_id": "A5-shift",
+          "author_gold": "T2",
+          "sonnet": "T2",
+          "gpt": "T2",
+          "status": "would_accept",
+          "local_determinable": {
+            "sonnet": false,
+            "gpt": false
+          },
+          "naturalness": {
+            "sonnet": "5",
+            "gpt": "5"
+          }
+        },
+        {
+          "sample_id": "A5-shift_distractor",
+          "author_gold": "T2",
+          "sonnet": "T2",
+          "gpt": "T2",
+          "status": "would_accept",
+          "local_determinable": {
+            "sonnet": false,
+            "gpt": false
+          },
+          "naturalness": {
+            "sonnet": "4",
+            "gpt": "5"
+          }
+        },
+        {
+          "sample_id": "B1-addressee",
+          "author_gold": "P1",
+          "sonnet": "P1",
+          "gpt": "P1",
+          "status": "would_accept",
+          "local_determinable": {
+            "sonnet": false,
+            "gpt": false
+          },
+          "naturalness": {
+            "sonnet": "5",
+            "gpt": "5"
+          }
+        },
+        {
+          "sample_id": "B1-speaker",
+          "author_gold": "P1",
+          "sonnet": "P1",
+          "gpt": "P1",
+          "status": "would_accept",
+          "local_determinable": {
+            "sonnet": false,
+            "gpt": false
+          },
+          "naturalness": {
+            "sonnet": "5",
+            "gpt": "5"
+          }
+        },
+        {
+          "sample_id": "B1-third",
+          "author_gold": "T1",
+          "sonnet": "T1",
+          "gpt": "T1",
+          "status": "would_accept",
+          "local_determinable": {
+            "sonnet": false,
+            "gpt": false
+          },
+          "naturalness": {
+            "sonnet": "5",
+            "gpt": "5"
+          }
+        },
+        {
+          "sample_id": "B1-third_distractor",
+          "author_gold": "T1",
+          "sonnet": "T1",
+          "gpt": "T1",
+          "status": "would_accept",
+          "local_determinable": {
+            "sonnet": false,
+            "gpt": false
+          },
+          "naturalness": {
+            "sonnet": "5",
+            "gpt": "5"
+          }
+        },
+        {
+          "sample_id": "B2-addressee",
+          "author_gold": "P1",
+          "sonnet": "P1",
+          "gpt": "P1",
+          "status": "would_accept",
+          "local_determinable": {
+            "sonnet": false,
+            "gpt": false
+          },
+          "naturalness": {
+            "sonnet": "5",
+            "gpt": "5"
+          }
+        },
+        {
+          "sample_id": "B2-speaker",
+          "author_gold": "P1",
+          "sonnet": "P1",
+          "gpt": "P1",
+          "status": "would_accept",
+          "local_determinable": {
+            "sonnet": false,
+            "gpt": false
+          },
+          "naturalness": {
+            "sonnet": "5",
+            "gpt": "5"
+          }
+        },
+        {
+          "sample_id": "B2-third",
+          "author_gold": "T1",
+          "sonnet": "P2",
+          "gpt": "T1",
+          "status": "judges_disagree",
+          "local_determinable": {
+            "sonnet": false,
+            "gpt": false
+          },
+          "naturalness": {
+            "sonnet": "5",
+            "gpt": "5"
+          }
+        },
+        {
+          "sample_id": "B2-third_distractor",
+          "author_gold": "T1",
+          "sonnet": "T1",
+          "gpt": "ambiguous",
+          "status": "judges_disagree",
+          "local_determinable": {
+            "sonnet": false,
+            "gpt": false
+          },
+          "naturalness": {
+            "sonnet": "5",
+            "gpt": "5"
+          }
+        },
+        {
+          "sample_id": "B3-addressee",
+          "author_gold": "P1",
+          "sonnet": "P1",
+          "gpt": "P1",
+          "status": "would_accept",
+          "local_determinable": {
+            "sonnet": false,
+            "gpt": false
+          },
+          "naturalness": {
+            "sonnet": "5",
+            "gpt": "5"
+          }
+        },
+        {
+          "sample_id": "B3-speaker",
+          "author_gold": "P1",
+          "sonnet": "P1",
+          "gpt": "P1",
+          "status": "would_accept",
+          "local_determinable": {
+            "sonnet": false,
+            "gpt": false
+          },
+          "naturalness": {
+            "sonnet": "4",
+            "gpt": "5"
+          }
+        },
+        {
+          "sample_id": "B3-third",
+          "author_gold": "T1",
+          "sonnet": "T1",
+          "gpt": "T1",
+          "status": "would_accept",
+          "local_determinable": {
+            "sonnet": false,
+            "gpt": false
+          },
+          "naturalness": {
+            "sonnet": "5",
+            "gpt": "5"
+          }
+        },
+        {
+          "sample_id": "B3-third_distractor",
+          "author_gold": "T1",
+          "sonnet": "ambiguous",
+          "gpt": "T1",
+          "status": "judges_disagree",
+          "local_determinable": {
+            "sonnet": false,
+            "gpt": false
+          },
+          "naturalness": {
+            "sonnet": "4",
+            "gpt": "5"
+          }
+        },
+        {
+          "sample_id": "B4-addressee",
+          "author_gold": "P1",
+          "sonnet": "P1",
+          "gpt": "P1",
+          "status": "would_accept",
+          "local_determinable": {
+            "sonnet": false,
+            "gpt": false
+          },
+          "naturalness": {
+            "sonnet": "4",
+            "gpt": "5"
+          }
+        },
+        {
+          "sample_id": "B4-speaker",
+          "author_gold": "P1",
+          "sonnet": "P1",
+          "gpt": "P1",
+          "status": "would_accept",
+          "local_determinable": {
+            "sonnet": false,
+            "gpt": false
+          },
+          "naturalness": {
+            "sonnet": "5",
+            "gpt": "5"
+          }
+        },
+        {
+          "sample_id": "B4-third",
+          "author_gold": "T1",
+          "sonnet": "T1",
+          "gpt": "T1",
+          "status": "would_accept",
+          "local_determinable": {
+            "sonnet": false,
+            "gpt": false
+          },
+          "naturalness": {
+            "sonnet": "5",
+            "gpt": "5"
+          }
+        },
+        {
+          "sample_id": "B4-third_distractor",
+          "author_gold": "T1",
+          "sonnet": "T1",
+          "gpt": "T1",
+          "status": "would_accept",
+          "local_determinable": {
+            "sonnet": false,
+            "gpt": false
+          },
+          "naturalness": {
+            "sonnet": "5",
+            "gpt": "5"
+          }
+        },
+        {
+          "sample_id": "B5-addressee",
+          "author_gold": "P1",
+          "sonnet": "P1",
+          "gpt": "P1",
+          "status": "would_accept",
+          "local_determinable": {
+            "sonnet": false,
+            "gpt": false
+          },
+          "naturalness": {
+            "sonnet": "5",
+            "gpt": "5"
+          }
+        },
+        {
+          "sample_id": "B5-speaker",
+          "author_gold": "P1",
+          "sonnet": "P1",
+          "gpt": "P1",
+          "status": "would_accept",
+          "local_determinable": {
+            "sonnet": false,
+            "gpt": false
+          },
+          "naturalness": {
+            "sonnet": "5",
+            "gpt": "5"
+          }
+        },
+        {
+          "sample_id": "B5-third",
+          "author_gold": "T1",
+          "sonnet": "P1",
+          "gpt": "T1",
+          "status": "judges_disagree",
+          "local_determinable": {
+            "sonnet": false,
+            "gpt": false
+          },
+          "naturalness": {
+            "sonnet": "5",
+            "gpt": "5"
+          }
+        },
+        {
+          "sample_id": "B5-third_distractor",
+          "author_gold": "T1",
+          "sonnet": "T1",
+          "gpt": "T1",
+          "status": "would_accept",
+          "local_determinable": {
+            "sonnet": false,
+            "gpt": false
+          },
+          "naturalness": {
+            "sonnet": "5",
+            "gpt": "5"
+          }
+        },
+        {
+          "sample_id": "C1-keep_other",
+          "author_gold": "T1",
+          "sonnet": "T1",
+          "gpt": "T1",
+          "status": "would_accept",
+          "local_determinable": {
+            "sonnet": false,
+            "gpt": false
+          },
+          "naturalness": {
+            "sonnet": "5",
+            "gpt": "5"
+          }
+        },
+        {
+          "sample_id": "C1-keep_same",
+          "author_gold": "T1",
+          "sonnet": "T1",
+          "gpt": "T1",
+          "status": "would_accept",
+          "local_determinable": {
+            "sonnet": false,
+            "gpt": false
+          },
+          "naturalness": {
+            "sonnet": "5",
+            "gpt": "5"
+          }
+        },
+        {
+          "sample_id": "C1-shift_other",
+          "author_gold": "T1",
+          "sonnet": "T1",
+          "gpt": "T1",
+          "status": "would_accept",
+          "local_determinable": {
+            "sonnet": false,
+            "gpt": false
+          },
+          "naturalness": {
+            "sonnet": "5",
+            "gpt": "5"
+          }
+        },
+        {
+          "sample_id": "C1-shift_same",
+          "author_gold": "T1",
+          "sonnet": "T1",
+          "gpt": "T1",
+          "status": "would_accept",
+          "local_determinable": {
+            "sonnet": false,
+            "gpt": false
+          },
+          "naturalness": {
+            "sonnet": "5",
+            "gpt": "5"
+          }
+        },
+        {
+          "sample_id": "C2-keep_other",
+          "author_gold": "T1",
+          "sonnet": "T1",
+          "gpt": "T1",
+          "status": "would_accept",
+          "local_determinable": {
+            "sonnet": false,
+            "gpt": false
+          },
+          "naturalness": {
+            "sonnet": "5",
+            "gpt": "5"
+          }
+        },
+        {
+          "sample_id": "C2-keep_same",
+          "author_gold": "T1",
+          "sonnet": "T1",
+          "gpt": "T1",
+          "status": "would_accept",
+          "local_determinable": {
+            "sonnet": false,
+            "gpt": false
+          },
+          "naturalness": {
+            "sonnet": "5",
+            "gpt": "5"
+          }
+        },
+        {
+          "sample_id": "C2-shift_other",
+          "author_gold": "T1",
+          "sonnet": "T1",
+          "gpt": "T1",
+          "status": "would_accept",
+          "local_determinable": {
+            "sonnet": false,
+            "gpt": false
+          },
+          "naturalness": {
+            "sonnet": "5",
+            "gpt": "5"
+          }
+        },
+        {
+          "sample_id": "C2-shift_same",
+          "author_gold": "T1",
+          "sonnet": "T1",
+          "gpt": "T1",
+          "status": "would_accept",
+          "local_determinable": {
+            "sonnet": false,
+            "gpt": false
+          },
+          "naturalness": {
+            "sonnet": "5",
+            "gpt": "5"
+          }
+        },
+        {
+          "sample_id": "C3-keep_other",
+          "author_gold": "T1",
+          "sonnet": "T1",
+          "gpt": "T1",
+          "status": "would_accept",
+          "local_determinable": {
+            "sonnet": false,
+            "gpt": false
+          },
+          "naturalness": {
+            "sonnet": "5",
+            "gpt": "5"
+          }
+        },
+        {
+          "sample_id": "C3-keep_same",
+          "author_gold": "T1",
+          "sonnet": "T1",
+          "gpt": "T1",
+          "status": "would_accept",
+          "local_determinable": {
+            "sonnet": false,
+            "gpt": false
+          },
+          "naturalness": {
+            "sonnet": "5",
+            "gpt": "5"
+          }
+        },
+        {
+          "sample_id": "C3-shift_other",
+          "author_gold": "T1",
+          "sonnet": "T1",
+          "gpt": "T1",
+          "status": "would_accept",
+          "local_determinable": {
+            "sonnet": false,
+            "gpt": false
+          },
+          "naturalness": {
+            "sonnet": "4",
+            "gpt": "5"
+          }
+        },
+        {
+          "sample_id": "C3-shift_same",
+          "author_gold": "T1",
+          "sonnet": "T1",
+          "gpt": "T1",
+          "status": "would_accept",
+          "local_determinable": {
+            "sonnet": false,
+            "gpt": false
+          },
+          "naturalness": {
+            "sonnet": "5",
+            "gpt": "5"
+          }
+        },
+        {
+          "sample_id": "C4-keep_other",
+          "author_gold": "T1",
+          "sonnet": "T1",
+          "gpt": "T1",
+          "status": "would_accept",
+          "local_determinable": {
+            "sonnet": false,
+            "gpt": false
+          },
+          "naturalness": {
+            "sonnet": "5",
+            "gpt": "5"
+          }
+        },
+        {
+          "sample_id": "C4-keep_same",
+          "author_gold": "T1",
+          "sonnet": "T1",
+          "gpt": "T1",
+          "status": "would_accept",
+          "local_determinable": {
+            "sonnet": false,
+            "gpt": false
+          },
+          "naturalness": {
+            "sonnet": "5",
+            "gpt": "5"
+          }
+        },
+        {
+          "sample_id": "C4-shift_other",
+          "author_gold": "T1",
+          "sonnet": "T1",
+          "gpt": "T1",
+          "status": "would_accept",
+          "local_determinable": {
+            "sonnet": false,
+            "gpt": false
+          },
+          "naturalness": {
+            "sonnet": "4",
+            "gpt": "5"
+          }
+        },
+        {
+          "sample_id": "C4-shift_same",
+          "author_gold": "T1",
+          "sonnet": "T1",
+          "gpt": "T1",
+          "status": "would_accept",
+          "local_determinable": {
+            "sonnet": false,
+            "gpt": false
+          },
+          "naturalness": {
+            "sonnet": "4",
+            "gpt": "5"
+          }
+        },
+        {
+          "sample_id": "C5-keep_other",
+          "author_gold": "T1",
+          "sonnet": "T1",
+          "gpt": "T1",
+          "status": "would_accept",
+          "local_determinable": {
+            "sonnet": false,
+            "gpt": false
+          },
+          "naturalness": {
+            "sonnet": "5",
+            "gpt": "5"
+          }
+        },
+        {
+          "sample_id": "C5-keep_same",
+          "author_gold": "T1",
+          "sonnet": "T1",
+          "gpt": "T1",
+          "status": "would_accept",
+          "local_determinable": {
+            "sonnet": false,
+            "gpt": false
+          },
+          "naturalness": {
+            "sonnet": "5",
+            "gpt": "5"
+          }
+        },
+        {
+          "sample_id": "C5-shift_other",
+          "author_gold": "T1",
+          "sonnet": "T1",
+          "gpt": "T1",
+          "status": "would_accept",
+          "local_determinable": {
+            "sonnet": false,
+            "gpt": false
+          },
+          "naturalness": {
+            "sonnet": "5",
+            "gpt": "5"
+          }
+        },
+        {
+          "sample_id": "C5-shift_same",
+          "author_gold": "T1",
+          "sonnet": "T1",
+          "gpt": "T1",
+          "status": "would_accept",
+          "local_determinable": {
+            "sonnet": false,
+            "gpt": false
+          },
+          "naturalness": {
+            "sonnet": "5",
+            "gpt": "5"
+          }
+        },
+        {
+          "sample_id": "D1-adjacency",
+          "author_gold": "P3",
+          "sonnet": "P3",
+          "gpt": "P3",
+          "status": "would_accept",
+          "local_determinable": {
+            "sonnet": false,
+            "gpt": false
+          },
+          "naturalness": {
+            "sonnet": "5",
+            "gpt": "5"
+          }
+        },
+        {
+          "sample_id": "D1-ambiguous",
+          "author_gold": null,
+          "sonnet": "ambiguous",
+          "gpt": "ambiguous",
+          "status": "both_not_determinable_as_intended",
+          "local_determinable": {
+            "sonnet": false,
+            "gpt": false
+          },
+          "naturalness": {
+            "sonnet": "4",
+            "gpt": "5"
+          }
+        },
+        {
+          "sample_id": "D1-third_in_3p",
+          "author_gold": "P3",
+          "sonnet": "P2",
+          "gpt": "ambiguous",
+          "status": "judges_disagree",
+          "local_determinable": {
+            "sonnet": true,
+            "gpt": false
+          },
+          "naturalness": {
+            "sonnet": "4",
+            "gpt": "5"
+          }
+        },
+        {
+          "sample_id": "D1-vocative",
+          "author_gold": "P3",
+          "sonnet": "P3",
+          "gpt": "P3",
+          "status": "would_accept",
+          "local_determinable": {
+            "sonnet": true,
+            "gpt": true
+          },
+          "naturalness": {
+            "sonnet": "5",
+            "gpt": "5"
+          }
+        },
+        {
+          "sample_id": "D2-adjacency",
+          "author_gold": "P3",
+          "sonnet": "P3",
+          "gpt": "P3",
+          "status": "would_accept",
+          "local_determinable": {
+            "sonnet": false,
+            "gpt": false
+          },
+          "naturalness": {
+            "sonnet": "5",
+            "gpt": "5"
+          }
+        },
+        {
+          "sample_id": "D2-ambiguous",
+          "author_gold": null,
+          "sonnet": "ambiguous",
+          "gpt": "ambiguous",
+          "status": "both_not_determinable_as_intended",
+          "local_determinable": {
+            "sonnet": false,
+            "gpt": false
+          },
+          "naturalness": {
+            "sonnet": "4",
+            "gpt": "5"
+          }
+        },
+        {
+          "sample_id": "D2-third_in_3p",
+          "author_gold": "P2",
+          "sonnet": "P2",
+          "gpt": "ambiguous",
+          "status": "judges_disagree",
+          "local_determinable": {
+            "sonnet": true,
+            "gpt": true
+          },
+          "naturalness": {
+            "sonnet": "2",
+            "gpt": "4"
+          }
+        },
+        {
+          "sample_id": "D2-vocative",
+          "author_gold": "P3",
+          "sonnet": "P3",
+          "gpt": "P3",
+          "status": "would_accept",
+          "local_determinable": {
+            "sonnet": true,
+            "gpt": true
+          },
+          "naturalness": {
+            "sonnet": "5",
+            "gpt": "5"
+          }
+        },
+        {
+          "sample_id": "D3-adjacency",
+          "author_gold": "P3",
+          "sonnet": "P3",
+          "gpt": "P3",
+          "status": "would_accept",
+          "local_determinable": {
+            "sonnet": false,
+            "gpt": false
+          },
+          "naturalness": {
+            "sonnet": "5",
+            "gpt": "5"
+          }
+        },
+        {
+          "sample_id": "D3-ambiguous",
+          "author_gold": null,
+          "sonnet": "ambiguous",
+          "gpt": "ambiguous",
+          "status": "both_not_determinable_as_intended",
+          "local_determinable": {
+            "sonnet": false,
+            "gpt": false
+          },
+          "naturalness": {
+            "sonnet": "4",
+            "gpt": "5"
+          }
+        },
+        {
+          "sample_id": "D3-third_in_3p",
+          "author_gold": "P3",
+          "sonnet": "P1",
+          "gpt": "P3",
+          "status": "judges_disagree",
+          "local_determinable": {
+            "sonnet": true,
+            "gpt": false
+          },
+          "naturalness": {
+            "sonnet": "4",
+            "gpt": "5"
+          }
+        },
+        {
+          "sample_id": "D3-vocative",
+          "author_gold": "P3",
+          "sonnet": "P3",
+          "gpt": "P3",
+          "status": "would_accept",
+          "local_determinable": {
+            "sonnet": true,
+            "gpt": true
+          },
+          "naturalness": {
+            "sonnet": "5",
+            "gpt": "5"
+          }
+        },
+        {
+          "sample_id": "D4-adjacency",
+          "author_gold": "P3",
+          "sonnet": "ambiguous",
+          "gpt": "P3",
+          "status": "judges_disagree",
+          "local_determinable": {
+            "sonnet": false,
+            "gpt": false
+          },
+          "naturalness": {
+            "sonnet": "4",
+            "gpt": "5"
+          }
+        },
+        {
+          "sample_id": "D4-ambiguous",
+          "author_gold": null,
+          "sonnet": "ambiguous",
+          "gpt": "ambiguous",
+          "status": "both_not_determinable_as_intended",
+          "local_determinable": {
+            "sonnet": false,
+            "gpt": false
+          },
+          "naturalness": {
+            "sonnet": "4",
+            "gpt": "5"
+          }
+        },
+        {
+          "sample_id": "D4-third_in_3p",
+          "author_gold": "P3",
+          "sonnet": "P3",
+          "gpt": "P3",
+          "status": "would_accept",
+          "local_determinable": {
+            "sonnet": true,
+            "gpt": false
+          },
+          "naturalness": {
+            "sonnet": "4",
+            "gpt": "5"
+          }
+        },
+        {
+          "sample_id": "D4-vocative",
+          "author_gold": "P3",
+          "sonnet": "P3",
+          "gpt": "P3",
+          "status": "would_accept",
+          "local_determinable": {
+            "sonnet": true,
+            "gpt": true
+          },
+          "naturalness": {
+            "sonnet": "5",
+            "gpt": "5"
+          }
+        },
+        {
+          "sample_id": "D5-adjacency",
+          "author_gold": "P3",
+          "sonnet": "P3",
+          "gpt": "P3",
+          "status": "would_accept",
+          "local_determinable": {
+            "sonnet": false,
+            "gpt": false
+          },
+          "naturalness": {
+            "sonnet": "5",
+            "gpt": "5"
+          }
+        },
+        {
+          "sample_id": "D5-ambiguous",
+          "author_gold": null,
+          "sonnet": "ambiguous",
+          "gpt": "ambiguous",
+          "status": "both_not_determinable_as_intended",
+          "local_determinable": {
+            "sonnet": false,
+            "gpt": false
+          },
+          "naturalness": {
+            "sonnet": "4",
+            "gpt": "5"
+          }
+        },
+        {
+          "sample_id": "D5-third_in_3p",
+          "author_gold": "P3",
+          "sonnet": "P2",
+          "gpt": "ambiguous",
+          "status": "judges_disagree",
+          "local_determinable": {
+            "sonnet": true,
+            "gpt": false
+          },
+          "naturalness": {
+            "sonnet": "4",
+            "gpt": "4"
+          }
+        },
+        {
+          "sample_id": "D5-vocative",
+          "author_gold": "P3",
+          "sonnet": "P3",
+          "gpt": "P3",
+          "status": "would_accept",
+          "local_determinable": {
+            "sonnet": true,
+            "gpt": true
+          },
+          "naturalness": {
+            "sonnet": "5",
+            "gpt": "5"
+          }
+        }
+      ]
+    },
+    "naturalistic": {
+      "agreement": {
+        "full": {
+          "referent_id": {
+            "percent": 1.0,
+            "kappa": 1.0,
+            "n": 20
+          },
+          "context_sufficient": {
+            "percent": 1.0,
+            "kappa": null,
+            "n": 20
+          },
+          "ambiguity": {
+            "percent": 1.0,
+            "kappa": null,
+            "n": 20
+          },
+          "determinable": {
+            "percent": 1.0,
+            "kappa": null,
+            "n": 20
+          },
+          "disagreements": []
+        },
+        "local": {
+          "referent_id": {
+            "percent": 1.0,
+            "kappa": 1.0,
+            "n": 2
+          },
+          "context_sufficient": {
+            "percent": 0.65,
+            "kappa": 0.23913043478260868,
+            "n": 20
+          },
+          "ambiguity": {
+            "percent": 0.45,
+            "kappa": 0.14062500000000003,
+            "n": 20
+          },
+          "determinable": {
+            "percent": 0.65,
+            "kappa": 0.23913043478260868,
+            "n": 20
+          },
+          "disagreements": [
+            "N04-base",
+            "N06-base",
+            "N07-base",
+            "N08-base",
+            "N09-base",
+            "N11-base",
+            "N13-base",
+            "N15-base",
+            "N16-base",
+            "N19-base",
+            "N23-base"
+          ]
+        }
+      },
+      "preview_status_counts": {
+        "would_accept": 20
+      },
+      "per_sample": [
+        {
+          "sample_id": "N04-base",
+          "author_gold": "P1",
+          "sonnet": "P1",
+          "gpt": "P1",
+          "status": "would_accept",
+          "local_determinable": {
+            "sonnet": true,
+            "gpt": false
+          },
+          "naturalness": {
+            "sonnet": "5",
+            "gpt": "5"
+          }
+        },
+        {
+          "sample_id": "N05-base",
+          "author_gold": "P2",
+          "sonnet": "P2",
+          "gpt": "P2",
+          "status": "would_accept",
+          "local_determinable": {
+            "sonnet": true,
+            "gpt": true
+          },
+          "naturalness": {
+            "sonnet": "5",
+            "gpt": "5"
+          }
+        },
+        {
+          "sample_id": "N06-base",
+          "author_gold": "P1",
+          "sonnet": "P1",
+          "gpt": "P1",
+          "status": "would_accept",
+          "local_determinable": {
+            "sonnet": true,
+            "gpt": false
+          },
+          "naturalness": {
+            "sonnet": "5",
+            "gpt": "5"
+          }
+        },
+        {
+          "sample_id": "N07-base",
+          "author_gold": "P2",
+          "sonnet": "P2",
+          "gpt": "P2",
+          "status": "would_accept",
+          "local_determinable": {
+            "sonnet": true,
+            "gpt": false
+          },
+          "naturalness": {
+            "sonnet": "5",
+            "gpt": "5"
+          }
+        },
+        {
+          "sample_id": "N08-base",
+          "author_gold": "P2",
+          "sonnet": "P2",
+          "gpt": "P2",
+          "status": "would_accept",
+          "local_determinable": {
+            "sonnet": false,
+            "gpt": false
+          },
+          "naturalness": {
+            "sonnet": "5",
+            "gpt": "5"
+          }
+        },
+        {
+          "sample_id": "N09-base",
+          "author_gold": "P1",
+          "sonnet": "P1",
+          "gpt": "P1",
+          "status": "would_accept",
+          "local_determinable": {
+            "sonnet": true,
+            "gpt": false
+          },
+          "naturalness": {
+            "sonnet": "5",
+            "gpt": "5"
+          }
+        },
+        {
+          "sample_id": "N10-base",
+          "author_gold": "P2",
+          "sonnet": "P2",
+          "gpt": "P2",
+          "status": "would_accept",
+          "local_determinable": {
+            "sonnet": false,
+            "gpt": false
+          },
+          "naturalness": {
+            "sonnet": "5",
+            "gpt": "5"
+          }
+        },
+        {
+          "sample_id": "N11-base",
+          "author_gold": "P1",
+          "sonnet": "P1",
+          "gpt": "P1",
+          "status": "would_accept",
+          "local_determinable": {
+            "sonnet": true,
+            "gpt": false
+          },
+          "naturalness": {
+            "sonnet": "5",
+            "gpt": "5"
+          }
+        },
+        {
+          "sample_id": "N12-base",
+          "author_gold": "P1",
+          "sonnet": "P1",
+          "gpt": "P1",
+          "status": "would_accept",
+          "local_determinable": {
+            "sonnet": false,
+            "gpt": false
+          },
+          "naturalness": {
+            "sonnet": "5",
+            "gpt": "5"
+          }
+        },
+        {
+          "sample_id": "N13-base",
+          "author_gold": "P2",
+          "sonnet": "P2",
+          "gpt": "P2",
+          "status": "would_accept",
+          "local_determinable": {
+            "sonnet": true,
+            "gpt": false
+          },
+          "naturalness": {
+            "sonnet": "5",
+            "gpt": "5"
+          }
+        },
+        {
+          "sample_id": "N14-base",
+          "author_gold": "P2",
+          "sonnet": "P2",
+          "gpt": "P2",
+          "status": "would_accept",
+          "local_determinable": {
+            "sonnet": false,
+            "gpt": false
+          },
+          "naturalness": {
+            "sonnet": "5",
+            "gpt": "5"
+          }
+        },
+        {
+          "sample_id": "N15-base",
+          "author_gold": "P2",
+          "sonnet": "P2",
+          "gpt": "P2",
+          "status": "would_accept",
+          "local_determinable": {
+            "sonnet": false,
+            "gpt": false
+          },
+          "naturalness": {
+            "sonnet": "5",
+            "gpt": "5"
+          }
+        },
+        {
+          "sample_id": "N16-base",
+          "author_gold": "P1",
+          "sonnet": "P1",
+          "gpt": "P1",
+          "status": "would_accept",
+          "local_determinable": {
+            "sonnet": false,
+            "gpt": false
+          },
+          "naturalness": {
+            "sonnet": "5",
+            "gpt": "5"
+          }
+        },
+        {
+          "sample_id": "N17-base",
+          "author_gold": "P2",
+          "sonnet": "P2",
+          "gpt": "P2",
+          "status": "would_accept",
+          "local_determinable": {
+            "sonnet": false,
+            "gpt": false
+          },
+          "naturalness": {
+            "sonnet": "5",
+            "gpt": "5"
+          }
+        },
+        {
+          "sample_id": "N18-base",
+          "author_gold": "P1",
+          "sonnet": "P1",
+          "gpt": "P1",
+          "status": "would_accept",
+          "local_determinable": {
+            "sonnet": false,
+            "gpt": false
+          },
+          "naturalness": {
+            "sonnet": "5",
+            "gpt": "5"
+          }
+        },
+        {
+          "sample_id": "N19-base",
+          "author_gold": "P2",
+          "sonnet": "P2",
+          "gpt": "P2",
+          "status": "would_accept",
+          "local_determinable": {
+            "sonnet": false,
+            "gpt": false
+          },
+          "naturalness": {
+            "sonnet": "5",
+            "gpt": "5"
+          }
+        },
+        {
+          "sample_id": "N20-base",
+          "author_gold": "P2",
+          "sonnet": "P2",
+          "gpt": "P2",
+          "status": "would_accept",
+          "local_determinable": {
+            "sonnet": false,
+            "gpt": false
+          },
+          "naturalness": {
+            "sonnet": "5",
+            "gpt": "5"
+          }
+        },
+        {
+          "sample_id": "N21-base",
+          "author_gold": "P1",
+          "sonnet": "P1",
+          "gpt": "P1",
+          "status": "would_accept",
+          "local_determinable": {
+            "sonnet": true,
+            "gpt": true
+          },
+          "naturalness": {
+            "sonnet": "5",
+            "gpt": "5"
+          }
+        },
+        {
+          "sample_id": "N22-base",
+          "author_gold": "T1",
+          "sonnet": "T1",
+          "gpt": "T1",
+          "status": "would_accept",
+          "local_determinable": {
+            "sonnet": false,
+            "gpt": false
+          },
+          "naturalness": {
+            "sonnet": "5",
+            "gpt": "5"
+          }
+        },
+        {
+          "sample_id": "N23-base",
+          "author_gold": "T1",
+          "sonnet": "T1",
+          "gpt": "T1",
+          "status": "would_accept",
+          "local_determinable": {
+            "sonnet": true,
+            "gpt": false
+          },
+          "naturalness": {
+            "sonnet": "5",
+            "gpt": "5"
+          }
+        }
+      ]
+    }
+  }
+}

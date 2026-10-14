@@ -102,18 +102,37 @@ def parse_judgement(raw: Optional[str], candidate_ids: set[str], condition: str)
     return out
 
 
-def fill_sheet(sheet_path: Path, out_path: Path, adapter, model_config: dict, condition: str, sleep=None) -> dict:
-    """빈 시트를 모델 판정으로 채워 out_path에 쓴다. 원문 응답은 out_path.responses.jsonl에 남긴다."""
+def fill_sheet(sheet_path: Path, out_path: Path, adapter, model_config: dict, condition: str, sleep=None, only_empty: bool = False) -> dict:
+    """빈 시트를 모델 판정으로 채워 out_path에 쓴다. 원문 응답은 out_path.responses.jsonl에 남긴다.
+    only_empty=True면 ambiguity가 비어 있는 행(실패·파싱 불가)만 다시 묻고 나머지는 유지한다."""
     rows = []
     with Path(sheet_path).open(encoding="utf-8-sig", newline="") as f:
         reader = csv.DictReader(f)
         fields = reader.fieldnames or SHEET_FIELDS
         rows = list(reader)
     log_path = Path(str(out_path) + ".responses.jsonl")
-    summary = {"n": len(rows), "ok": 0, "failed": 0, "unparsable": 0}
+    summary = {"n": len(rows), "ok": 0, "failed": 0, "unparsable": 0, "resumed": 0}
     kwargs = {"sleep": sleep} if sleep else {}
-    with log_path.open("w", encoding="utf-8") as log:
+    # 이어하기: 이전 실행 로그에 판정이 남아 있으면 시트에 복구한다(행 단위로 기록되므로 중단된 실행도 재활용 가능)
+    if only_empty and log_path.exists():
+        done = {}
+        for line in log_path.read_text(encoding="utf-8").splitlines():
+            try:
+                entry = json.loads(line)
+            except json.JSONDecodeError:
+                continue
+            j = entry.get("judged") or {}
+            if entry.get("condition") == condition and j.get("ambiguity") and not str(j.get("notes", "")).startswith("(unparsable)"):
+                done[entry.get("review_id")] = j
         for row in rows:
+            if not (row.get("ambiguity") or "").strip() and row.get("review_id") in done:
+                row.update(done[row["review_id"]])
+                summary["resumed"] += 1
+    with log_path.open("a" if only_empty else "w", encoding="utf-8") as log:
+        for row in rows:
+            if only_empty and (row.get("ambiguity") or "").strip():
+                summary["ok"] += 1
+                continue
             cand_ids = {c.split("=", 1)[0].strip() for c in row["candidates"].split(";") if "=" in c}
             request = {"task": "review", "item_id": row.get("review_id"), "condition": condition, "candidate_ids": sorted(cand_ids),
                        "model_id": model_config.get("model_id", "unset"), "system": model_config.get("system", ""),
@@ -130,6 +149,12 @@ def fill_sheet(sheet_path: Path, out_path: Path, adapter, model_config: dict, co
             row.update(judged)
             log.write(json.dumps({"review_id": row.get("review_id"), "condition": condition, "model": (response or {}).get("model") or model_config.get("model_id"),
                                   "raw_text": raw, "retries": retries, "error": error, "judged": judged}, ensure_ascii=False) + "\n")
+            log.flush()  # 중단돼도 행 단위로 남긴다
+            # 시트도 행마다 갱신해 중단 시점까지의 판정을 보존한다
+            with Path(out_path).open("w", encoding="utf-8-sig", newline="") as f:
+                writer = csv.DictWriter(f, fieldnames=fields, extrasaction="ignore")
+                writer.writeheader()
+                writer.writerows(rows)
     with Path(out_path).open("w", encoding="utf-8-sig", newline="") as f:
         writer = csv.DictWriter(f, fieldnames=fields, extrasaction="ignore")
         writer.writeheader()
